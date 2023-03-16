@@ -1,0 +1,15 @@
+{
+    "data": 
+    [
+        {
+            "label": "Мужская стрижка",
+            "data": "hairmale",
+            "price": 30.0
+        },
+        {
+            "label": "Женская стрижка",
+            "data": "hairfemale",
+            "price": 50.0          
+        }       
+    ]
+}

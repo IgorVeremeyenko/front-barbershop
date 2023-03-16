@@ -1,0 +1,10 @@
+// URLS
+export const COSTUMERS = "https://localhost:7062/api/Costumers/"
+export const APPOINTMENT = "https://localhost:7062/api/Appointments"
+export const SERVICE = "https://localhost:7062/api/Services/"
+export const LOGIN = "https://localhost:7062/api/Auth/Login"
+export const TOKEN_VALIDATION = "https://localhost:7062/api/Auth/validate?token="
+export const REGISTRATION = "https://localhost:7062/api/Auth/Register"
+export const FILES_JSON = "assets/files.json"
+export const SERVICES_JSON = "assets/services.json"
+export const SERVICES = "https://localhost:7062/api/Services"

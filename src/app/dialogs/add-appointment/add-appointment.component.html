@@ -1,0 +1,71 @@
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
+    acceptButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast></p-toast>
+<p-dialog header="Бронирование записи" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
+    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
+    <!-- добавление.component.html -->
+    <div class="container">
+        <form [formGroup]="myForm" (ngSubmit)="submit()">
+            <div class="form-container">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-language"></i></span>
+                    <span class="p-inputgroup-addon">Язык клиента(По умолчанию русский)</span>
+                    <p-selectButton [options]="nodes1" formControlName="selectedLang"></p-selectButton>
+                </div>
+
+                <div class="service-group">
+                    <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>
+                    <span class="p-inputgroup-addon" style="text-align: center;">Тип услуги</span>
+                    <p-selectButton [options]="nodes2" formControlName="selectedService"
+                        (onOptionClick)="optionlog($event.option)"></p-selectButton>
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">€</span>
+                        <input type="text" pInputText disabled placeholder="Цена" [value]="selectedNode2.price">
+                        <span class="p-inputgroup-addon">.00</span>
+                    </div>
+                </div>
+                <div class="alert alert-danger"
+                    *ngIf="myForm.controls['selectedService']?.invalid && myForm.controls['selectedService']?.touched">
+                    Пожалуйста, выберите тип услуги
+                </div>
+
+                <div class="inputs">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                        <input type="text" class="form-control" pInputText placeholder="Имя" formControlName="userName"
+                            name="name">
+                    </div>
+                    <div class="alert alert-danger"
+                        *ngIf="myForm.controls['userName']?.invalid && myForm.controls['userName']?.touched">
+                        Не указано имя
+                    </div>
+
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
+                        <input type="text" [value]="date" disabled pInputText name="date">
+                    </div>
+
+                    <!-- [placeholder]="dateAppointment"  -->
+
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+                        
+                        <p-inputMask formControlName="userPhone" mask="(999) 999-9999"
+                            placeholder="(999) 999-9999"></p-inputMask>
+                    </div>
+                </div>
+                <div class="alert alert-danger"
+                    *ngIf="myForm.controls['userPhone']?.invalid && myForm.controls['userPhone']?.touched">
+                    Некорректный номер телефона
+                </div>
+                <div class="spinner-btn">
+                    <button pButton class="submit-btn" type="submit"
+                        [disabled]="myForm.invalid && (myForm.controls['userPhone'].untouched || myForm.controls['userPhone'].touched)"
+                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                            style="font-size: 1rem"></i></button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</p-dialog>

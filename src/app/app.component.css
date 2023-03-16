@@ -1,0 +1,141 @@
+
+h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b { /* used for event dates/times */
+  margin-right: 3px;
+}
+
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  background: #F8F9FA;
+  border-right: 1px solid #E9ECEF;
+  color: black;
+}
+
+.ng-tns-c22-0 {
+  margin-bottom: 2rem;
+}
+
+.select-items, .group {
+  display: flex;
+}
+
+input.ng-touched.ng-invalid {border:solid red 2px;}
+input.ng-touched.ng-valid {border:solid green 2px;}
+
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+
+.demo-app-main {
+  flex-grow: 1;
+  padding: 3em;
+}
+
+.fc { /* the calendar root */
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.form-group > input {
+  width: 100%;
+}
+
+.service-group{
+  display: flex;
+}
+
+:host ::ng-deep .p-selectbutton.p-buttonset.p-component{
+  display: flex;
+}
+
+.inputs {
+  row-gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+:host ::ng-deep .p-element.ng-trigger.ng-trigger-animation.ng-tns-c54-0.p-dialog.p-component.p-dialog-draggable.ng-star-inserted{
+  min-width: 600px;
+}
+
+:host ::ng-deep button.p-element.btn.btn-primary.p-button.p-component{
+  column-gap: 10px;
+}
+
+:host ::ng-deep .p-inputmask.p-element.ng-dirty.ng-touched.ng-valid{
+  width: 100%;
+}
+:host ::ng-deep input.p-inputtext.p-component.p-element.p-inputmask{
+  width: 100%;
+}
+
+.form-container{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  row-gap: 10px;
+  margin: 1rem;
+}
+
+:host ::ng-deep button.p-element.btn.btn-primary.p-button.p-component{
+  margin: 0;
+}
+
+/* block document style */
+:host ::ng-deep button {
+  margin-right: .25em;
+}
+
+:host ::ng-deep .p-component-overlay-enter .pi.pi-lock {
+  animation: enter 150ms forwards;
+}
+
+:host ::ng-deep .p-component-overlay-leave .pi.pi-lock {
+  animation: leave 150ms forwards;
+}
+
+@keyframes enter {
+  from {
+      color: transparent;
+  }
+  to {
+      color: var(--text-color);
+  }
+}
+
+@keyframes leave {
+  from {
+      color: var(--text-color);
+  }
+  to {
+      color: transparent;
+  }
+}
+/* block document style */

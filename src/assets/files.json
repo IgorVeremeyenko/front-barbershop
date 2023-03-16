@@ -1,0 +1,13 @@
+{
+    "data": 
+    [
+        {
+            "label": "Русский",
+            "data": "language"
+        },
+        {
+            "label": "English",
+            "data": "language"            
+        }       
+    ]
+}
