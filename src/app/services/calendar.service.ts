@@ -1,10 +1,5 @@
 import { Injectable, ChangeDetectorRef, AfterContentChecked, Optional } from '@angular/core';
-import interactionPlugin from '@fullcalendar/interaction';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
 import { CalendarOptions, DateSelectArg, EventAddArg, EventApi, EventClickArg } from '@fullcalendar/core';
-import { INITIAL_EVENTS } from 'src/app/event-utils';
 import { Appointment } from '../interfaces/appointment';
 import { HttpClient } from '@angular/common/http';
 import { APPOINTMENT } from 'src/assets/constants';
@@ -14,7 +9,7 @@ import { AppointmentClass, CostumerClass, ServiceClass } from '../classes/classe
 @Injectable({
   providedIn: 'root'
 })
-export class CalendarService implements AfterContentChecked  {
+export class CalendarService  {
 
   dateAppointment!: string;
   selectInfo2!: DateSelectArg;
@@ -28,87 +23,10 @@ export class CalendarService implements AfterContentChecked  {
   service_class: any;
   appointment_class: any;
 
-  constructor(private http: HttpClient, private dataService: DataService, @Optional() private changeDetector: ChangeDetectorRef) {
-    
-    this.calendarOptions = {
-      plugins: [
-        interactionPlugin,
-        dayGridPlugin,
-        timeGridPlugin,
-        listPlugin,
-      ],
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      },
-      initialView: 'dayGridMonth',
-      // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-      events: INITIAL_EVENTS,
-      weekends: true,
-      editable: true,
-      selectable: true,
-      selectMirror: true,
-      dayMaxEvents: true,
-      select: this.handleDateSelect.bind(this),
-      eventClick: this.handleEventClick.bind(this),
-      eventsSet: this.handleEvents.bind(this),
-      eventAdd: this.handleEventAdd.bind(this)
-      /* you can update a remote database when these fire:
-      eventChange:
-      eventRemove:
-      */
-    }
-
-   
+  constructor(private http: HttpClient, private dataService: DataService) {
+     
   }
-  ngAfterContentChecked(): void {
-    this.changeDetector.detectChanges();
-  }
-
-  handleDateSelect(selectInfo: DateSelectArg) {
-    const currentMonth = selectInfo.start.toLocaleDateString();
-    const curDay = selectInfo.start.toTimeString();
-    if(selectInfo.allDay){
-      this.dateAppointment = 'Весь день'
-      this.transferParamsToModal(this.dateAppointment);
-    }else {
-      this.dateAppointment = `${currentMonth} ${curDay}`;
-      
-      this.transferParamsToModal(selectInfo);
-    }
-    this.selectInfo2 = selectInfo;
-    this.calendarApi = selectInfo.view.calendar;
-    this.calendarApi.unselect(); // clear date selection
-    console.log(this.calendarApi)
-    this.openModal(true);
-  }
-
-  
-  transferParamsToModal(param: any) {
-    this.dataService.transferParams.emit(param)
-  }
-
-  handleEventClick(clickInfo: EventClickArg) {
-    this.clickInfoCurrent = clickInfo;
-    this.temporaryForm = this.getAppointmentObject(clickInfo.event.id);
-    //todo open modal
-    console.log(clickInfo)
-  }
-
-  public openModal(value: boolean): void {
-    this.dataService.showModalAddAppointment.emit(value);
-  }
-
-  handleEventAdd(event: EventAddArg) {
-    // todo
-  }
-
-  handleEvents(events: EventApi[]) {
-    this.currentEvents = events;
-    // this.changeDetector.detectChanges();
-  }
-
+ 
   loadCalendarData(){
     return this.http.get<Appointment[]>(APPOINTMENT);
   }

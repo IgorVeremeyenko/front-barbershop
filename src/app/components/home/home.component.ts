@@ -1,9 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
-import { CalendarOptions, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
 import { PrimeNGConfig } from 'primeng/api';
+import interactionPlugin from '@fullcalendar/interaction';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import { INITIAL_EVENTS } from 'src/app/event-utils';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +16,8 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+
+  data$ = this.dataService.data$;
 
   calendarOptions!: CalendarOptions;
   calendarVisible = false;
@@ -20,52 +27,83 @@ export class HomeComponent {
   appointment_class: any;
 
   dataLoaded = false;
-  calendarApi: EventInput[] = [];
+  calendarApi: any;
+  events: EventInput[] = [];
 
   currentEvents: EventApi[] = [];
+
+  dateAppointment!: string;
+  selectInfo2!: DateSelectArg;
+  clickInfoCurrent!: EventClickArg;
 
   constructor(
     private calendarService: CalendarService,
     private primengConfig: PrimeNGConfig,
-    private dataService: DataService
+    private dataService: DataService,
+    private changeDetector: ChangeDetectorRef
   ) {
-    
+    this.calendarOptions = {
+      plugins: [
+        interactionPlugin,
+        dayGridPlugin,
+        timeGridPlugin,
+        listPlugin,
+      ],
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      initialView: 'dayGridMonth',
+      // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+      events: this.events,
+      weekends: true,
+      editable: true,
+      selectable: true,
+      selectMirror: true,
+      dayMaxEvents: true,
+      select: this.handleDateSelect.bind(this),
+      eventClick: this.handleEventClick.bind(this),
+      eventsSet: this.handleEvents.bind(this)
+      /* you can update a remote database when these fire:
+      eventChange:
+      eventRemove:
+      eventAdd:
+      */
+    }
   }
 
   ngOnInit() {
 
-    this.calendarOptions = this.calendarService.calendarOptions;
+    this.data$.subscribe(value => {
+      if(value){
+        setTimeout(() => {
+          this.dataLoaded = true;
+          this.calendarVisible = true;          
+        }, 1500);
+      }
+    })
     
     this.primengConfig.ripple = true;
-
-    this.calendarApi = this.calendarService.calendarApi;
 
     this.calendarService.loadCalendarData().subscribe(calendar => {
       calendar.map(calendar_results => {
         this.dataService.getSericeById(calendar_results.serviceId).subscribe(service_results => {
           const currentDate = new Date(calendar_results.date);
           const minutes = this.addMinutes(currentDate, 30);
-          const event: EventInput = {
-
+          
+          this.events.push({
             start: calendar_results.date,
             end: minutes,
             id: calendar_results.id.toString(),
             title: service_results.name
-
-          }
-          INITIAL_EVENTS.push(event);
-          // INITIAL_EVENTS = [...INITIAL_EVENTS, event]
+          })
         });
-      });      
-      setTimeout(() => {
-        console.log(INITIAL_EVENTS)
-        this.calendarOptions.events = INITIAL_EVENTS;
-        this.currentEvents = this.calendarService.currentEvents;
-        this.dataLoaded = true;   
-        this.calendarVisible = true;     
-      }, 2000);
-
-    }, (error) => console.log(error))
+      }); 
+      console.log(this.events)
+      this.dataService.updateData(true);     
+      
+    }, (error) => console.log(error));
   }
 
   addMinutes(date: Date, minutes: number) {
@@ -77,6 +115,45 @@ export class HomeComponent {
   handleWeekendsToggle() {
     const { calendarOptions } = this;
     calendarOptions.weekends = !calendarOptions.weekends;
+  }
+
+  handleDateSelect(selectInfo: DateSelectArg) {
+    const currentMonth = selectInfo.start.toLocaleDateString();
+    const curDay = selectInfo.start.toTimeString();
+    if(selectInfo.allDay){
+      this.dateAppointment = 'Весь день'
+      this.transferParamsToModal(this.dateAppointment);
+    }else {
+      this.dateAppointment = `${currentMonth} ${curDay}`;
+      
+      this.transferParamsToModal(selectInfo);
+    }
+    this.selectInfo2 = selectInfo;
+    this.calendarApi = selectInfo.view.calendar;
+    this.calendarApi.unselect(); // clear date selection
+    console.log(this.calendarApi)
+    this.openModal(true);
+  }
+
+  
+  transferParamsToModal(param: any) {
+    this.dataService.transferParams.emit(param)
+  }
+
+  handleEventClick(clickInfo: EventClickArg) {
+    this.clickInfoCurrent = clickInfo;
+    // this.temporaryForm = this.getAppointmentObject(clickInfo.event.id);
+    //todo open modal
+    console.log(clickInfo)
+  }
+
+  public openModal(value: boolean): void {
+    this.dataService.showModalAddAppointment.emit(value);
+  }
+
+  handleEvents(events: EventApi[]) {
+    this.currentEvents = events;
+    this.changeDetector.detectChanges();
   }
 
 }

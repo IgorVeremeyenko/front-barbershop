@@ -6,12 +6,17 @@ import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
 import { APPOINTMENT, COSTUMERS, SERVICE, SERVICES } from 'src/assets/constants';
 import { MyNode } from '../interfaces/node';
-import { DateSelectArg } from '@fullcalendar/core';
+import { DateSelectArg, EventInput } from '@fullcalendar/core';
+import { BehaviorSubject } from 'rxjs';
+import { INITIAL_EVENTS } from '../event-utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {  
+
+  dataSubject = new BehaviorSubject(false);
+  data$ = this.dataSubject.asObservable();
 
   public showModalAddAppointment: EventEmitter<boolean> = new EventEmitter<boolean>();
   public transferParams: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
@@ -19,6 +24,10 @@ export class DataService {
   USER_ID = 0
   
   constructor(private http:HttpClient) { }
+
+  updateData(newData: boolean) {
+    this.dataSubject.next(newData);
+  }
 
   getServices(){
     return this.http.get<MyNode[]>(SERVICES);
