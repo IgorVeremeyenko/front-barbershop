@@ -116,9 +116,22 @@ h2 {
   :host ::ng-deep .p-component-overlay-enter .pi.pi-lock {
     animation: enter 150ms forwards;
   }
+
+  :host ::ng-deep full-calendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.ng-star-inserted{
+    max-height: 90vh;
+  }
   
   :host ::ng-deep .p-component-overlay-leave .pi.pi-lock {
     animation: leave 150ms forwards;
+  }
+
+  :host ::ng-deep .app.ng-star-inserted {
+    height: 363px;
+  }
+
+  :host ::ng-deep .app-sidebar-section.ng-star-inserted {
+    max-height: 40%;
+    overflow-y: scroll;
   }
   
   @keyframes enter {

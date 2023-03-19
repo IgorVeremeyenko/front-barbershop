@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AppComponent } from './app.component';
@@ -12,6 +12,10 @@ import { LoginComponent } from './components/account/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
 import { ViewAppointmentComponent } from './dialogs/view-appointment/view-appointment.component';
+import { ToastsComponent } from './components/toasts/toasts.component';
+import { NetworkErrorComponent } from './components/network-error/network-error.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,10 @@ import { ViewAppointmentComponent } from './dialogs/view-appointment/view-appoin
     RegisterComponent,
     LoginComponent,
     HomeComponent,
-    ViewAppointmentComponent
+    ViewAppointmentComponent,
+    ToastsComponent,
+    NetworkErrorComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -29,11 +36,13 @@ import { ViewAppointmentComponent } from './dialogs/view-appointment/view-appoin
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FontAwesomeModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorModule, multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

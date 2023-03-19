@@ -13,7 +13,8 @@ import { NodeService } from 'src/app/services/node.service';
 @Component({
   selector: 'app-add-appointment',
   templateUrl: './add-appointment.component.html',
-  styleUrls: ['./add-appointment.component.css']
+  styleUrls: ['./add-appointment.component.css'],
+  providers: [MyMessageService]
 })
 export class AddAppointmentComponent implements OnInit {
 
@@ -40,7 +41,6 @@ export class AddAppointmentComponent implements OnInit {
 
   constructor(private dataService: DataService, private nodeService: NodeService, private messages: MyMessageService, private calendarService: CalendarService) {
     this.myForm = new FormGroup({
-
       "userName": new FormControl("Ivan", Validators.required),
       "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
       "selectedLang": new FormControl("Русский"),
@@ -50,6 +50,8 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.calendarApi = this.calendarService.calendarApi;
 
     this.dataService.transferParams.subscribe(params => {
       if (typeof (params) === 'string') {
@@ -132,6 +134,10 @@ export class AddAppointmentComponent implements OnInit {
         this.messages.showError(error);
       }
     )
+  }
+
+  showSuccess(){
+    this.messages.showSuccess('Успешно добавлено');
   }
 
   optionlog(event: MyNode) {

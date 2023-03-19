@@ -31,6 +31,10 @@ export class CalendarService  {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
 
+  setCalendarApi(value: any){
+    this.calendarApi = value;
+  }
+
   getAppointmentObject(id: string) : Appointment{
 
     const ID = parseInt(id);

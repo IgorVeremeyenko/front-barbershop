@@ -1,6 +1,8 @@
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
-    acceptButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+<!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
+    acceptButtonStyleClass="p-button-text"></p-confirmDialog> -->
 <p-toast></p-toast>
+<p-blockUI [blocked]="blockedDocument"></p-blockUI>
 <div *ngIf="dataLoaded" class="app">
     <div class='app-sidebar'>
         <div class='app-sidebar-section'>

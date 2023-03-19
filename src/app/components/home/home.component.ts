@@ -5,10 +5,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { INITIAL_EVENTS } from 'src/app/event-utils';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
-import { map } from 'rxjs';
+import { MyMessageService } from 'src/app/services/my-message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -36,11 +36,17 @@ export class HomeComponent {
   selectInfo2!: DateSelectArg;
   clickInfoCurrent!: EventClickArg;
 
+  blockedDocument: boolean = false;
+
+  isLoading = false;
+
   constructor(
     private calendarService: CalendarService,
     private primengConfig: PrimeNGConfig,
     private dataService: DataService,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private messages: MyMessageService,
+    private router: Router
   ) {
     this.calendarOptions = {
       plugins: [
@@ -73,13 +79,18 @@ export class HomeComponent {
     }
   }
 
+
   ngOnInit() {
+
+    this.isLoading = true;
 
     this.data$.subscribe(value => {
       if(value){
         setTimeout(() => {
           this.dataLoaded = true;
-          this.calendarVisible = true;          
+          this.calendarVisible = true; 
+          this.isLoading = false;
+          this.unlockDocument();         
         }, 1500);
       }
     })
@@ -100,11 +111,24 @@ export class HomeComponent {
           })
         });
       }); 
-      console.log(this.events)
       this.dataService.updateData(true);     
       
     }, (error) => console.log(error));
   }
+
+  showSuccess(){
+    this.messages.showSuccess('Успешно добавлено');
+  }
+
+  goToToasts(){
+    this.router.navigateByUrl('toasts');
+  }
+
+  unlockDocument() {
+    setTimeout(() => {
+        this.blockedDocument = false;
+    }, 3000);
+}
 
   addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
@@ -130,8 +154,8 @@ export class HomeComponent {
     }
     this.selectInfo2 = selectInfo;
     this.calendarApi = selectInfo.view.calendar;
+    this.calendarService.calendarApi = this.calendarApi;
     this.calendarApi.unselect(); // clear date selection
-    console.log(this.calendarApi)
     this.openModal(true);
   }
 

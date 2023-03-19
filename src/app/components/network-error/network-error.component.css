@@ -1,0 +1,16 @@
+.network-error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+  }
+  /* стили для иконки ошибки сети */
+  .network-error-icon {
+    font-size: 100px;
+    color: red;
+  }
+
+:host ::ng-deep i.pi.pi-refresh {
+    margin-right: 5px;
+}

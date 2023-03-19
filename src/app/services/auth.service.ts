@@ -3,17 +3,21 @@ import { Injectable } from '@angular/core';
 import { Admin } from '../interfaces/admin';
 import { catchError, map, throwError } from 'rxjs';
 import { LOGIN, REGISTRATION, TOKEN_VALIDATION } from 'src/assets/constants';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   checkAuth(token: any){
     return this.http.get<string>(`${TOKEN_VALIDATION}${token}`).pipe(
       catchError((error: HttpErrorResponse) => {
+        if(error.name === 'HttpErrorResponse'){
+          this.router.navigateByUrl('network-error');
+        }
         if(error.status === 400){
           return error.status.toString();
         }

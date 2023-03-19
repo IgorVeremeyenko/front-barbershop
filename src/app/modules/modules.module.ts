@@ -29,6 +29,7 @@ import {MessageModule} from 'primeng/message';
 import {RippleModule} from 'primeng/ripple';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {InputMaskModule} from 'primeng/inputmask';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 @NgModule({
   declarations: [],
@@ -62,7 +63,8 @@ import {InputMaskModule} from 'primeng/inputmask';
     MessageModule,
     RippleModule,
     ConfirmPopupModule,
-    InputMaskModule
+    InputMaskModule,
+    ProgressBarModule
   ],
   exports: [
     ButtonModule,
@@ -93,7 +95,8 @@ import {InputMaskModule} from 'primeng/inputmask';
     MessageModule,
     RippleModule,
     ConfirmPopupModule,
-    InputMaskModule
+    InputMaskModule,
+    ProgressBarModule
   ],
   providers: [ConfirmationService,MessageService]
 })

@@ -1,0 +1,12 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+}
+
+.icons{
+    font-size: 100px;
+    color: red;
+}
