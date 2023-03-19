@@ -103,16 +103,23 @@ export class ServiceClass implements Service {
   name: any;
   price: number;
   userId: number;
+  masterId: number;
+  category: string;
+  
   constructor(
     id: number,
     name: any,
     price: number,
-    userId: number
+    userId: number,
+    masterId: number,
+    category: string
   ){
     this.id = id;
     this.name = name;
     this.price = price;
     this.userId = userId;
+    this.masterId = masterId;
+    this.category = category
   }
 }
 

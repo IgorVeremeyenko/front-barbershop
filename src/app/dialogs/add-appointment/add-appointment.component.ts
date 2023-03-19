@@ -97,7 +97,9 @@ export class AddAppointmentComponent implements OnInit {
       0,
       this.myForm.value.selectedService.label,
       this.myForm.value.selectedService.price,
-      this.dataService.USER_ID
+      this.dataService.USER_ID,
+      2,
+      this.myForm.value.selectedService.label
     )
     this.costumer_obj = new CostumerClass(
       0,

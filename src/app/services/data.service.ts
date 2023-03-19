@@ -4,11 +4,12 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
-import { APPOINTMENT, COSTUMERS, SERVICE, SERVICES } from 'src/assets/constants';
+import { APPOINTMENT, COSTUMERS, MASTERS, SERVICE, SERVICES } from 'src/assets/constants';
 import { MyNode } from '../interfaces/node';
 import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import { BehaviorSubject } from 'rxjs';
 import { INITIAL_EVENTS } from '../event-utils';
+import { Master } from '../interfaces/master';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class DataService {
   public transferParams: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
 
   USER_ID = 0
+  USER_NAME = ''
   
   constructor(private http:HttpClient) { }
 
@@ -30,12 +32,19 @@ export class DataService {
   }
 
   getServices(){
-    return this.http.get<MyNode[]>(SERVICES);
+    return this.http.get<Service[]>(SERVICES);
   }
 
-  getClients(): any{
+  getMasterById(id: number){
+    return this.http.get<Master>(`${MASTERS}${id}`);
+  }
+
+  getClients(){
     return this.http.get(COSTUMERS);
   }
+  // getClients(){
+  //   return this.http.get<any>('assets/costumers.json');
+  // }
   addNewAppointment(body: Appointment): Observable<any>{
     return this.http.post(APPOINTMENT, body);
   }

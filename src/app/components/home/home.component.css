@@ -31,6 +31,8 @@ h2 {
     background: #F8F9FA;
     border-right: 1px solid #E9ECEF;
     color: black;
+    height: max-content;
+    min-height: 100%;
   }
   
   .ng-tns-c22-0 {
@@ -129,9 +131,16 @@ h2 {
     height: 363px;
   }
 
+  .user {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin-bottom: 1rem;
+  }
+
   :host ::ng-deep .app-sidebar-section.ng-star-inserted {
     max-height: 40%;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   
   @keyframes enter {

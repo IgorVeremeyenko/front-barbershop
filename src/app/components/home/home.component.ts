@@ -13,11 +13,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [MyMessageService]
 })
 export class HomeComponent {
 
   data$ = this.dataService.data$;
+
+  userName!: string;
 
   calendarOptions!: CalendarOptions;
   calendarVisible = false;
@@ -29,6 +32,8 @@ export class HomeComponent {
   dataLoaded = false;
   calendarApi: any;
   events: EventInput[] = [];
+
+  items: any;
 
   currentEvents: EventApi[] = [];
 
@@ -77,6 +82,7 @@ export class HomeComponent {
       eventAdd:
       */
     }
+    
   }
 
 
@@ -85,16 +91,17 @@ export class HomeComponent {
     this.isLoading = true;
 
     this.data$.subscribe(value => {
-      if(value){
+      this.userName = this.dataService.USER_NAME;
+      if (value) {
         setTimeout(() => {
           this.dataLoaded = true;
-          this.calendarVisible = true; 
+          this.calendarVisible = true;
           this.isLoading = false;
-          this.unlockDocument();         
+          this.unlockDocument();
         }, 1500);
       }
     })
-    
+
     this.primengConfig.ripple = true;
 
     this.calendarService.loadCalendarData().subscribe(calendar => {
@@ -102,7 +109,7 @@ export class HomeComponent {
         this.dataService.getSericeById(calendar_results.serviceId).subscribe(service_results => {
           const currentDate = new Date(calendar_results.date);
           const minutes = this.addMinutes(currentDate, 30);
-          
+
           this.events.push({
             start: calendar_results.date,
             end: minutes,
@@ -110,25 +117,33 @@ export class HomeComponent {
             title: service_results.name
           })
         });
-      }); 
-      this.dataService.updateData(true);     
-      
+      });
+      this.dataService.updateData(true);
+
     }, (error) => console.log(error));
   }
 
-  showSuccess(){
+  showSuccess() {
     this.messages.showSuccess('Успешно добавлено');
   }
 
-  goToToasts(){
+  goToToasts() {
     this.router.navigateByUrl('toasts');
   }
 
   unlockDocument() {
     setTimeout(() => {
-        this.blockedDocument = false;
+      this.blockedDocument = false;
     }, 3000);
-}
+  }
+
+  
+
+  editUser() {
+    this.messages.showInfo('This option will be avialable soon');
+  }
+
+  
 
   addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
@@ -144,12 +159,12 @@ export class HomeComponent {
   handleDateSelect(selectInfo: DateSelectArg) {
     const currentMonth = selectInfo.start.toLocaleDateString();
     const curDay = selectInfo.start.toTimeString();
-    if(selectInfo.allDay){
+    if (selectInfo.allDay) {
       this.dateAppointment = 'Весь день'
       this.transferParamsToModal(this.dateAppointment);
-    }else {
+    } else {
       this.dateAppointment = `${currentMonth} ${curDay}`;
-      
+
       this.transferParamsToModal(selectInfo);
     }
     this.selectInfo2 = selectInfo;
@@ -159,7 +174,7 @@ export class HomeComponent {
     this.openModal(true);
   }
 
-  
+
   transferParamsToModal(param: any) {
     this.dataService.transferParams.emit(param)
   }

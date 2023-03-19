@@ -1,2 +1,9 @@
-
+<p-menubar [model]="items">
+    <ng-template pTemplate="start">
+        <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2"  (click)="goToMain()">
+    </ng-template>
+    <ng-template pTemplate="end">
+        <input type="text" pInputText placeholder="Поиск">
+    </ng-template>
+</p-menubar>
 <router-outlet></router-outlet>

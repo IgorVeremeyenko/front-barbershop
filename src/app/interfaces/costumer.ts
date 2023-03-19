@@ -6,3 +6,8 @@ export interface Costumer {
     language: string | any,
     userId: number
 }
+
+export interface Representative {
+    name?: string;
+    image?: string;
+}

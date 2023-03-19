@@ -60,7 +60,9 @@ export class CalendarService  {
           service_results.id,
           service_results.name,
           service_results.price,
-          this.dataService.USER_ID
+          this.dataService.USER_ID,
+          service_results.masterId,
+          service_results.category
         )
       });
 

@@ -16,6 +16,8 @@ import { ToastsComponent } from './components/toasts/toasts.component';
 import { NetworkErrorComponent } from './components/network-error/network-error.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CostumerListComponent } from './components/costumer-list/costumer-list.component';
+import { ServiceListComponent } from './components/service-list/service-list.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ViewAppointmentComponent,
     ToastsComponent,
     NetworkErrorComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    CostumerListComponent,
+    ServiceListComponent
   ],
   imports: [
     BrowserModule,

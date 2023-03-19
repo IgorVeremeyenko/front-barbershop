@@ -22,7 +22,9 @@
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
-      "dom"
+      "dom",
+      "dom.iterable",
+      "es5", "es6",
     ]
   },
   "angularCompilerOptions": {
