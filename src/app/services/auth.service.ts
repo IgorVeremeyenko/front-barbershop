@@ -20,6 +20,7 @@ export class AuthService {
       catchError((error: HttpErrorResponse) => {       
         if(error.name === 'HttpErrorResponse'){
           this.router.navigateByUrl('network-error');
+          return error.status.toString();
         }
         if(error.status === 400){
           if(error.error === 'Token is expired'){
@@ -29,6 +30,7 @@ export class AuthService {
         }
         else {
         }
+
         return throwError(error);
       })
     )

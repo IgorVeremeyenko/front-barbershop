@@ -14,14 +14,23 @@ export class ViewAppointmentComponent {
 
   isSubmiting = false;
 
+  costumer_data$ = this.dataService.costumer_data_subject;
+
+  serviceOption: any;
+
   temporaryForm!: any;
 
   APPOINTMENT_ID!: number;
 
-  displayModalAppointment = true;
+  displayModalAppointment = false;
 
   constructor(private dataService: DataService, private confirmationService: ConfirmationService, private calendarService: CalendarService){
     this.temporaryForm = calendarService.temporaryForm;
+    this.costumer_data$.subscribe(data => {
+      console.log(data)
+      this.displayModalAppointment = true;
+    });
+    
   }
 
   confirm(event: any) {

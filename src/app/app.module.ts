@@ -18,6 +18,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CostumerListComponent } from './components/costumer-list/costumer-list.component';
 import { ServiceListComponent } from './components/service-list/service-list.component';
+import { EditServiceComponent } from './dialogs/edit-service/edit-service.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ServiceListComponent } from './components/service-list/service-list.com
     NetworkErrorComponent,
     NotFoundComponent,
     CostumerListComponent,
-    ServiceListComponent
+    ServiceListComponent,
+    EditServiceComponent
   ],
   imports: [
     BrowserModule,

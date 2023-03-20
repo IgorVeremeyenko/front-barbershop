@@ -7,5 +7,4 @@ export const TOKEN_VALIDATION = "https://localhost:7062/api/Auth/validate?token=
 export const REGISTRATION = "https://localhost:7062/api/Auth/Register"
 export const FILES_JSON = "assets/files.json"
 export const SERVICES_JSON = "assets/services.json"
-export const SERVICES = "https://localhost:7062/api/Services"
 export const MASTERS = "https://localhost:7062/api/Master/"

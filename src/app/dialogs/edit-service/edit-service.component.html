@@ -1,0 +1,45 @@
+<p-toast></p-toast>
+<p-dialog header="Редактирование услуги" [(visible)]="displayModal" [breakpoints]="{'960px': '75vw'}" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false" (onHide)="hide()">
+    <div *ngIf="isLoaded" class="container">
+        <form [formGroup]="myForm" (ngSubmit)="submit()">
+            <div class="form-container">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">Название услуги</span>
+                    <input type="text" class="form-control" pInputText placeholder="Название" formControlName="serviceName"
+                            name="name">
+                </div>
+
+                <div class="service-group">
+                    <span class="p-inputgroup-addon" style="text-align: center;">Категория услуги</span>
+                 
+                    <p-listbox [options]="serviceOptions" emptyFilterMessage="Нет результатов" [checkbox]="false" [filter]="true" [listStyle]="{'max-height':'250px'}" formControlName="serviceCategory" (onClick)="click($event)" optionLabel="name" [style]="{'width':'100%'}">
+                        <ng-template let-service pTemplate="item">
+                            <div class="service-item">
+                                <div>{{service}}</div>
+                            </div>
+                        </ng-template>
+                    </p-listbox>
+                </div>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">€</span>
+                    
+                    <p-inputNumber formControlName="servicePrice" inputId="locale-german" mode="decimal" locale="de-DE" [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+                <div class="alert alert-danger"
+                    *ngIf="myForm.controls['serviceCategory']?.invalid && myForm.controls['serviceCategory']?.touched">
+                    Пожалуйста, выберите категорию услуги
+                </div>
+
+                <div class="spinner-btn">
+                    <button pButton class="submit-btn" type="submit"
+                        [disabled]="!(myForm.valid && myForm.dirty)"
+                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                            style="font-size: 1rem"></i></button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</p-dialog>

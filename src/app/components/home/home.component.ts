@@ -9,6 +9,9 @@ import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
 import { Router } from '@angular/router';
+import { CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
+import { Costumer } from 'src/app/interfaces/costumer';
+import { Appointment } from 'src/app/interfaces/appointment';
 
 @Component({
   selector: 'app-home',
@@ -44,6 +47,7 @@ export class HomeComponent {
   blockedDocument: boolean = false;
 
   isLoading = false;
+  isShown = false;
 
   constructor(
     private calendarService: CalendarService,
@@ -181,8 +185,48 @@ export class HomeComponent {
 
   handleEventClick(clickInfo: EventClickArg) {
     this.clickInfoCurrent = clickInfo;
+    this.calendarService.temporaryForm = clickInfo;
+    const ID = parseInt(clickInfo.event.id);
+    let costumer: CostumerClass = new CostumerClass(
+      0,'','','','',0
+    );
+    let service = new ServiceClass(0,'',0,0,0,'');
+    this.dataService.getAppointmentById(ID).subscribe(result => {
+      this.dataService.getCostumerById(result.costumerId).subscribe(costumer_res => {
+        this.dataService.getSericeById(result.serviceId).subscribe(service_res => {
+          console.log(service_res);
+          costumer = new CostumerClass(
+            result.costumerId,
+            costumer_res.name,
+            costumer_res.email,
+            costumer_res.phone,
+            costumer_res.language,
+            this.dataService.USER_ID
+          )
+          service = new ServiceClass(
+            result.serviceId,
+            service_res.name,
+            service_res.price,
+            this.dataService.USER_ID,
+            service_res.masterId,
+            service_res.category
+          )
+          const appointment: Appointment = {
+            id: 0,
+            date: '',
+            costumer: costumer,
+            service: service,
+            costumerId: costumer_res.id,
+            serviceId: service_res.id,
+            userId: this.dataService.USER_ID
+          }
+          this.dataService.updateCostumerData(costumer);
+          console.log(costumer)
+          this.isShown = true;
+        })
+      })
+    })
     // this.temporaryForm = this.getAppointmentObject(clickInfo.event.id);
-    //todo open modal
     console.log(clickInfo)
   }
 

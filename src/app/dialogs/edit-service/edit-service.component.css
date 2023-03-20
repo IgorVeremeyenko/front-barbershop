@@ -1,0 +1,15 @@
+.service-group {
+    display: flex;
+    min-height: 195px;
+}
+
+:host ::ng-deep p-listbox{
+    width: 100%!important;
+}
+
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}

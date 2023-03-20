@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
-import { APPOINTMENT, COSTUMERS, MASTERS, SERVICE, SERVICES } from 'src/assets/constants';
+import { APPOINTMENT, COSTUMERS, MASTERS, SERVICE } from 'src/assets/constants';
 import { MyNode } from '../interfaces/node';
 import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import { BehaviorSubject } from 'rxjs';
@@ -19,11 +19,22 @@ export class DataService {
   dataSubject = new BehaviorSubject(false);
   data$ = this.dataSubject.asObservable();
 
+  service_data_subject = new BehaviorSubject<any>({});
+  services$ = this.service_data_subject.asObservable();
+
+  costumer_data_subject = new BehaviorSubject<any>({});
+  costumers$ = this.costumer_data_subject.asObservable();
+
   public showModalAddAppointment: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public showModalEditService: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public transferServiceObject: EventEmitter<Service> = new EventEmitter<Service>();
+  public transferCostumerObject: EventEmitter<Costumer> = new EventEmitter<Costumer>();
   public transferParams: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
 
   USER_ID = 0
   USER_NAME = ''
+  SERVICE_ID = 0;
+  MASTER_ID = 0;
   
   constructor(private http:HttpClient) { }
 
@@ -31,8 +42,16 @@ export class DataService {
     this.dataSubject.next(newData);
   }
 
+  updateServData(newData: Service){
+    this.service_data_subject.next(newData);
+  }
+
+  updateCostumerData(newData: Costumer){
+
+  }
+
   getServices(){
-    return this.http.get<Service[]>(SERVICES);
+    return this.http.get<Service[]>(SERVICE);
   }
 
   getMasterById(id: number){
@@ -45,6 +64,10 @@ export class DataService {
   // getClients(){
   //   return this.http.get<any>('assets/costumers.json');
   // }
+
+  changeServiceById(id: number, body: Service){
+    return this.http.put(`${SERVICE}${id}`,body);
+  }
   addNewAppointment(body: Appointment): Observable<any>{
     return this.http.post(APPOINTMENT, body);
   }

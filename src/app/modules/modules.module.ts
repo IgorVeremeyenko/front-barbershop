@@ -32,6 +32,7 @@ import {ProgressBarModule} from 'primeng/progressbar';
 import {PanelMenuModule} from 'primeng/panelmenu';
 import {TableModule} from 'primeng/table';
 import {AvatarModule} from 'primeng/avatar';
+import {InputNumberModule} from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [],
@@ -68,7 +69,8 @@ import {AvatarModule} from 'primeng/avatar';
     ProgressBarModule,
     PanelMenuModule,
     TableModule,
-    AvatarModule
+    AvatarModule,
+    InputNumberModule
   ],
   exports: [
     ButtonModule,
@@ -102,7 +104,8 @@ import {AvatarModule} from 'primeng/avatar';
     ProgressBarModule,
     PanelMenuModule,
     TableModule,
-    AvatarModule
+    AvatarModule,
+    InputNumberModule
   ],
   providers: [ConfirmationService,MessageService]
 })

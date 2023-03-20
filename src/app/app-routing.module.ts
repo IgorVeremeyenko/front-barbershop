@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegisterComponent, canActivate: [AuthGuard] },
   { path: 'toasts', component: ToastsComponent, canActivate: [AuthGuard] },
-  { path: 'network-error', component: NetworkErrorComponent, canActivate: [AuthGuard] },
+  { path: 'network-error', component: NetworkErrorComponent },
   { path: 'costumers', component: CostumerListComponent, canActivate: [AuthGuard] },
   { path: 'services', component: ServiceListComponent, canActivate: [AuthGuard] },
   { path: '**', component: NotFoundComponent }

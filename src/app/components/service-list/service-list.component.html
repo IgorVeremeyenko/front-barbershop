@@ -5,8 +5,9 @@
     </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns">
+            <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
                 {{col.header}}
+                <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
             </th>
             <th style="width: 10rem">
                 <p-button icon="pi pi-cog"></p-button>
@@ -15,12 +16,12 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
         <tr>
-            <td *ngFor="let col of columns; let i = index">
+            <td *ngFor="let col of columns; let i = index" >
                 <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
                 {{rowData[col.field]}}
             </td>
             <td>
-                <p-button icon="pi pi-pencil" styleClass="p-button-warning"></p-button>
+                <p-button icon="pi pi-pencil" (click)="openModal(true, rowData, rowNode)" styleClass="p-button-warning"><i *ngIf="isLoading" class="pi pi-spin pi-spinner"></i></p-button>
             </td>
         </tr>            
     </ng-template>
@@ -30,3 +31,5 @@
             </div>
     </ng-template>
 </p-treeTable>
+
+<app-edit-service></app-edit-service>
