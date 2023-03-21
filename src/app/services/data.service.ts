@@ -16,25 +16,37 @@ import { Master } from '../interfaces/master';
 })
 export class DataService {  
 
+  USER_ID = 0
+  USER_NAME = ''
+  SERVICE_ID = 0;
+  MASTER_ID = 0;
+
   dataSubject = new BehaviorSubject(false);
   data$ = this.dataSubject.asObservable();
 
   service_data_subject = new BehaviorSubject<any>({});
   services$ = this.service_data_subject.asObservable();
 
-  costumer_data_subject = new BehaviorSubject<any>({});
-  costumers$ = this.costumer_data_subject.asObservable();
+  defaults: Appointment = {
+    id: 0,
+    date: "",
+    costumer: {id:0,name:'',email:'',phone: '', userId: this.USER_ID,language:''},
+    service: {id:0,name:'',userId:this.USER_ID,masterId:0,price:0,category:'', status: ''},
+    costumerId: 0,
+    serviceId: 0,
+    userId: 0
+  }
+
+  appointment_data_subject = new BehaviorSubject<Appointment>(this.defaults);
+  costumers$ = this.appointment_data_subject.asObservable();
 
   public showModalAddAppointment: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showModalEditService: EventEmitter<boolean> = new EventEmitter<boolean>();
   public transferServiceObject: EventEmitter<Service> = new EventEmitter<Service>();
-  public transferCostumerObject: EventEmitter<Costumer> = new EventEmitter<Costumer>();
+  public transferCostumerObject: EventEmitter<Appointment> = new EventEmitter<Appointment>();
   public transferParams: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
 
-  USER_ID = 0
-  USER_NAME = ''
-  SERVICE_ID = 0;
-  MASTER_ID = 0;
+  
   
   constructor(private http:HttpClient) { }
 
@@ -46,8 +58,8 @@ export class DataService {
     this.service_data_subject.next(newData);
   }
 
-  updateCostumerData(newData: Costumer){
-
+  updateAppointmentData(newData: Appointment){
+    this.appointment_data_subject.next(newData);
   }
 
   getServices(){
@@ -59,12 +71,13 @@ export class DataService {
   }
 
   getClients(){
-    return this.http.get(COSTUMERS);
+    return this.http.get<Costumer[]>(COSTUMERS);
   }
-  // getClients(){
-  //   return this.http.get<any>('assets/costumers.json');
-  // }
 
+  getAppointments(){
+    return this.http.get<Appointment[]>(APPOINTMENT);
+  }
+ 
   changeServiceById(id: number, body: Service){
     return this.http.put(`${SERVICE}${id}`,body);
   }

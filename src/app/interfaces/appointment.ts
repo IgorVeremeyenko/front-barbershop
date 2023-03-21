@@ -4,8 +4,8 @@ import { Service } from "./service";
 export interface Appointment {
     id: number,
     date: Date | string,
-    costumer: Costumer | undefined,
-    service: Service | undefined,
+    costumer: Costumer,
+    service: Service,
     costumerId: number,
     serviceId: number,
     userId: number

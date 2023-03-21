@@ -1,14 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateSelectArg } from '@fullcalendar/core';
-import { map } from 'rxjs';
+import { TreeNode } from 'primeng/api';
 import { AppointmentClass, CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
+import { Costumer } from 'src/app/interfaces/costumer';
 import { MyNode } from 'src/app/interfaces/node';
-import { Service } from 'src/app/interfaces/service';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
-import { NodeService } from 'src/app/services/node.service';
+
+interface Cat {
+  category: string,
+  services: [{
+    cname: string,
+    cprice: number
+  }]
+}
 
 @Component({
   selector: 'app-add-appointment',
@@ -25,23 +31,53 @@ export class AddAppointmentComponent implements OnInit {
   isSubmiting = false;
   date!: Date | string;
   dateForDB!: Date;
-  selectedNode: any[] = [];
   calendarApi: any;
   allDay: boolean = false;
-  selectedNode2: MyNode = {
-    data: '',
-    label: '',
-    price: 0
-  };
-  nodes1!: any[];
-  nodes2!: any[];
+
+  services: any[] = [];
+
+  clients: Costumer[] = [];
+
+  selectedNodes3: any[] = [];
 
   @Input() displayModal: boolean = false;
-  @Input() arrivedParams: any;
 
-  constructor(private dataService: DataService, private nodeService: NodeService, private messages: MyMessageService, private calendarService: CalendarService) {
+  constructor(private dataService: DataService, private messages: MyMessageService, private calendarService: CalendarService) {
+    
+    dataService.getServices().subscribe(serv_res => {
+      serv_res.map(item => {
+        const children = {
+          cname: item.name,
+          cprice: item.price
+        }
+        const cat: Cat = {
+          category: item.category,
+          services: [children]
+        }
+        let flag = false;
+        this.services.map(items => {
+          if(items.category === cat.category){
+            items.services.push(children);
+            flag = true;
+          }
+        })
+        if(!flag){
+          this.services.push(cat);
+        }
+      })
+      
+    })
+
+    this.dataService.getClients().subscribe(clients => {
+      clients.map(cl => {
+        
+        this.clients.push(cl);
+      });
+      console.log(this.clients)
+    })
+
     this.myForm = new FormGroup({
-      "userName": new FormControl("Ivan", Validators.required),
+      "userName": new FormControl("", Validators.required),
       "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
       "selectedLang": new FormControl("Русский"),
       "selectedService": new FormControl("", Validators.required)
@@ -75,15 +111,16 @@ export class AddAppointmentComponent implements OnInit {
       }
     });
 
-    //todo needs import from db
-    this.nodeService.getFiles().then(files => this.nodes1 = files);
-    this.nodeService.getHairCuts().then(files => this.nodes2 = files);
-
     this.dataService.showModalAddAppointment.subscribe(value => {
+     
       this.displayModal = value;
       this.calendarApi = this.calendarService.calendarApi;
     });
 
+  }
+
+  click(event: any){
+    console.log(event)
   }
 
   closeModal() {
@@ -99,7 +136,8 @@ export class AddAppointmentComponent implements OnInit {
       this.myForm.value.selectedService.price,
       this.dataService.USER_ID,
       2,
-      this.myForm.value.selectedService.label
+      this.myForm.value.selectedService.label,
+      'Выполняется'
     )
     this.costumer_obj = new CostumerClass(
       0,
@@ -143,7 +181,7 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   optionlog(event: MyNode) {
-    this.selectedNode2 = event;
+    
   }
 
   addMinutes(date: Date, minutes: number) {

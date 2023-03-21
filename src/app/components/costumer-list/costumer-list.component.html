@@ -1,5 +1,4 @@
-<p-table [value]="customers" rowGroupMode="rowspan" groupRowsBy="representative.name"
-        sortField="representative.name" sortMode="single">
+<p-table [value]="visits" rowGroupMode="rowspan"  sortMode="single">
         <ng-template pTemplate="header">
             <tr>
                 <th style="width:3rem">#</th>
@@ -16,22 +15,22 @@
             <tr>
                 <td>{{rowIndex}}</td>
                 <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
-                    <span class="p-text-bold p-ml-2">{{customer.name}}</span>
+                    <span class="p-text-bold p-ml-2">{{customer.client}}</span>
                 </td>
                 <td>
-                    {{customer.appointments}}
+                    {{customer.master}}
                 </td>
                 <td>
-                    <span class="image-text">{{customer.language}}</span>
+                    <span class="image-text">{{customer.lang}}</span>
                 </td>
                 <td>
-                    {{customer.language}}
+                    {{customer.service}}
                 </td>
                 <td>
-                    <span [class]="'customer-badge status-' + customer.status">{{customer.email}}</span>
+                    <span [class]="'customer-badge status-' + customer.status">{{customer.status}}</span>
                 </td>
                 <td>
-                    {{customer.email}}
+                    {{customer.date}}
                 </td>
             </tr>
         </ng-template>

@@ -99,7 +99,8 @@ export class ServiceListComponent implements AfterViewInit {
       service_info.price,
       this.dataService.USER_ID,
       service_info.masterId,
-      data.parent.data.name
+      data.parent.data.name,
+      ''
     )
     // this.dataService.updateServData(serv_obj);
     this.dataService.transferServiceObject.emit(serv_obj);

@@ -10,7 +10,7 @@ import { DataService } from 'src/app/services/data.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
 import { Router } from '@angular/router';
 import { CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
-import { Costumer } from 'src/app/interfaces/costumer';
+import ruLocale from '@fullcalendar/core/locales/ru';
 import { Appointment } from 'src/app/interfaces/appointment';
 
 @Component({
@@ -22,6 +22,7 @@ import { Appointment } from 'src/app/interfaces/appointment';
 export class HomeComponent {
 
   data$ = this.dataService.data$;
+  costumer_data$ = this.dataService.appointment_data_subject;
 
   userName!: string;
 
@@ -49,6 +50,8 @@ export class HomeComponent {
   isLoading = false;
   isShown = false;
 
+  appointment_data$ = this.dataService.appointment_data_subject;
+
   constructor(
     private calendarService: CalendarService,
     private primengConfig: PrimeNGConfig,
@@ -58,6 +61,7 @@ export class HomeComponent {
     private router: Router
   ) {
     this.calendarOptions = {
+      locale: ruLocale,
       plugins: [
         interactionPlugin,
         dayGridPlugin,
@@ -91,6 +95,12 @@ export class HomeComponent {
 
 
   ngOnInit() {
+
+    this.costumer_data$.subscribe(value => {
+      if(value.id != 0) {
+        this.isShown = true;
+      }
+    })
 
     this.isLoading = true;
 
@@ -165,17 +175,18 @@ export class HomeComponent {
     const curDay = selectInfo.start.toTimeString();
     if (selectInfo.allDay) {
       this.dateAppointment = 'Весь день'
-      this.transferParamsToModal(this.dateAppointment);
+      // this.transferParamsToModal(this.dateAppointment);
+      this.messages.showInfo('Выберите время бронирования')
     } else {
       this.dateAppointment = `${currentMonth} ${curDay}`;
 
       this.transferParamsToModal(selectInfo);
+      this.openModal(true);
     }
     this.selectInfo2 = selectInfo;
     this.calendarApi = selectInfo.view.calendar;
     this.calendarService.calendarApi = this.calendarApi;
     this.calendarApi.unselect(); // clear date selection
-    this.openModal(true);
   }
 
 
@@ -190,11 +201,10 @@ export class HomeComponent {
     let costumer: CostumerClass = new CostumerClass(
       0,'','','','',0
     );
-    let service = new ServiceClass(0,'',0,0,0,'');
+    let service = new ServiceClass(0,'',0,0,0,'','');
     this.dataService.getAppointmentById(ID).subscribe(result => {
       this.dataService.getCostumerById(result.costumerId).subscribe(costumer_res => {
         this.dataService.getSericeById(result.serviceId).subscribe(service_res => {
-          console.log(service_res);
           costumer = new CostumerClass(
             result.costumerId,
             costumer_res.name,
@@ -209,25 +219,22 @@ export class HomeComponent {
             service_res.price,
             this.dataService.USER_ID,
             service_res.masterId,
-            service_res.category
+            service_res.category,
+            ''
           )
           const appointment: Appointment = {
-            id: 0,
-            date: '',
+            id: result.id,
+            date: result.date,
             costumer: costumer,
             service: service,
             costumerId: costumer_res.id,
             serviceId: service_res.id,
             userId: this.dataService.USER_ID
           }
-          this.dataService.updateCostumerData(costumer);
-          console.log(costumer)
-          this.isShown = true;
+          this.dataService.updateAppointmentData(appointment);
         })
       })
     })
-    // this.temporaryForm = this.getAppointmentObject(clickInfo.event.id);
-    console.log(clickInfo)
   }
 
   public openModal(value: boolean): void {

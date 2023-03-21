@@ -4,5 +4,6 @@ export interface Service {
     price: number,
     userId: number,
     masterId: number,
-    category: string
+    category: string,
+    status: string
 }

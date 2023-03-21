@@ -6,22 +6,30 @@
     <div class="container">
         <form [formGroup]="myForm" (ngSubmit)="submit()">
             <div class="form-container">
-                <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon"><i class="pi pi-language"></i></span>
-                    <span class="p-inputgroup-addon">Язык клиента(По умолчанию русский)</span>
-                    <p-selectButton [options]="nodes1" formControlName="selectedLang"></p-selectButton>
+                <div>
+                    <span class="p-inputgroup-addon" style="text-align: center;">Выбрать клиента из списка</span>
+                    <p-orderList [value]="clients" formControlName="userName">
+                        <ng-template let-client pTemplate="item">
+                            <div>
+                                <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48"> -->
+                                <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{client.name}} - {{client.phone}}</div>
+                            </div>
+                        </ng-template>
+                    </p-orderList>
                 </div>
 
                 <div class="service-group">
                     <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>
                     <span class="p-inputgroup-addon" style="text-align: center;">Тип услуги</span>
-                    <p-selectButton [options]="nodes2" formControlName="selectedService"
+                    <!-- <p-selectButton [options]="nodes2" formControlName="selectedService"
                         (onOptionClick)="optionlog($event.option)"></p-selectButton>
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon">€</span>
                         <input type="text" pInputText disabled placeholder="Цена" [value]="selectedNode2.price">
                         <span class="p-inputgroup-addon">.00</span>
-                    </div>
+                    </div> -->
+                    <p-cascadeSelect formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
+                    [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
                 </div>
                 <div class="alert alert-danger"
                     *ngIf="myForm.controls['selectedService']?.invalid && myForm.controls['selectedService']?.touched">
@@ -29,15 +37,15 @@
                 </div>
 
                 <div class="inputs">
-                    <div class="p-inputgroup">
+                    <!-- <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
                         <input type="text" class="form-control" pInputText placeholder="Имя" formControlName="userName"
                             name="name">
-                    </div>
-                    <div class="alert alert-danger"
+                    </div> -->
+                    <!-- <div class="alert alert-danger"
                         *ngIf="myForm.controls['userName']?.invalid && myForm.controls['userName']?.touched">
                         Не указано имя
-                    </div>
+                    </div> -->
 
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>

@@ -1,42 +1,31 @@
-<p-dialog header="Просмотр записи" [(visible)]="displayModalAppointment" [closeOnEscape]="true" [dismissableMask]="true"
-    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
+<p-dialog position="top" header="Просмотр записи" [(visible)]="displayModalAppointment" (onHide)="hide()" [closeOnEscape]="true" [dismissableMask]="true"
+[modal]="true" [draggable]="true" [resizable]="false">
+<p-toast></p-toast>
+<p-confirmPopup></p-confirmPopup>
     
-    <div class="container">
-        <div class="form-container">
-          <div class="p-inputgroup">
-            <span class="p-inputgroup-addon"><i class="pi pi-language"></i></span>
-            <span class="p-inputgroup-addon">Язык клиента</span>
-            <input [value]="temporaryForm.costumer?.language" disabled>
-          </div>
-  
-          <div class="service-group">
-            <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>
-            <span class="p-inputgroup-addon" style="text-align: center;">Тип услуги</span>
-            <input [value]="temporaryForm.service?.name" disabled>
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon">€</span>
-              <input [value]="temporaryForm.service?.price" disabled>
-              <span class="p-inputgroup-addon">.00</span>
-            </div>
-          </div>
-        
-          <div class="inputs">
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-              <input [value]="temporaryForm.costumer?.name" disabled>
-            </div>
-  
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
-              <input [value]="temporaryForm.date | date: 'MMMM d, h:mm a'" disabled>
-            </div>
-  
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
-              <input [value]="temporaryForm.costumer?.phone" disabled>
-            </div>
-          </div>
-          <button pButton class="submit-btn" type="button" (click)="confirm($event)" icon="pi pi-times" label="Удалить встречу"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i></button>
+    <p-table #dt id="my-table"  [columns]="cols" [value]="user" [exportHeader]="'customExportHeader'" [tableStyle]="{'min-width': '50rem'}">
+      
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th *ngFor="let col of columns">
+                  {{col.header}}
+              </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+              <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="caption">
+        <div class="flex">
+            <button type="button" pButton pRipple icon="pi pi-file" (click)="dt.exportCSV()" class="mr-2" pTooltip="Экспорт в CSV" ></button>
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"  pTooltip="Экспорт в XLS"></button>
+            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="Экспорт в PDF"></button>
         </div>
-    </div>
+        <button pButton type="button" (click)="confirm($event)" class="p-button-outlined p-button-rounded p-button-danger" label="Удалить встречу"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i></button>
+    </ng-template>
+    </p-table>
   </p-dialog>

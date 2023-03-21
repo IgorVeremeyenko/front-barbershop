@@ -33,6 +33,10 @@ import {PanelMenuModule} from 'primeng/panelmenu';
 import {TableModule} from 'primeng/table';
 import {AvatarModule} from 'primeng/avatar';
 import {InputNumberModule} from 'primeng/inputnumber';
+import {TooltipModule} from 'primeng/tooltip';
+import {ContextMenuModule} from 'primeng/contextmenu';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+import {OrderListModule} from 'primeng/orderlist';
 
 @NgModule({
   declarations: [],
@@ -70,7 +74,11 @@ import {InputNumberModule} from 'primeng/inputnumber';
     PanelMenuModule,
     TableModule,
     AvatarModule,
-    InputNumberModule
+    InputNumberModule,
+    TooltipModule,
+    ContextMenuModule,
+    ScrollPanelModule,
+    OrderListModule
   ],
   exports: [
     ButtonModule,
@@ -105,7 +113,11 @@ import {InputNumberModule} from 'primeng/inputnumber';
     PanelMenuModule,
     TableModule,
     AvatarModule,
-    InputNumberModule
+    InputNumberModule,
+    TooltipModule,
+    ContextMenuModule,
+    ScrollPanelModule,
+    OrderListModule
   ],
   providers: [ConfirmationService,MessageService]
 })
