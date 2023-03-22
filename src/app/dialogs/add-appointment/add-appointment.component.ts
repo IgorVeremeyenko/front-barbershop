@@ -43,6 +43,13 @@ export class AddAppointmentComponent implements OnInit {
   @Input() displayModal: boolean = false;
 
   constructor(private dataService: DataService, private messages: MyMessageService, private calendarService: CalendarService) {
+
+    this.myForm = new FormGroup({
+      "userName": new FormControl("", Validators.required),
+      "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
+      "selectedLang": new FormControl("Русский"),
+      "selectedService": new FormControl("", Validators.required)
+    });
     
     dataService.getServices().subscribe(serv_res => {
       serv_res.map(item => {
@@ -76,12 +83,7 @@ export class AddAppointmentComponent implements OnInit {
       console.log(this.clients)
     })
 
-    this.myForm = new FormGroup({
-      "userName": new FormControl("", Validators.required),
-      "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
-      "selectedLang": new FormControl("Русский"),
-      "selectedService": new FormControl("", Validators.required)
-    });
+    
 
   }
 

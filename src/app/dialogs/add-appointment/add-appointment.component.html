@@ -8,14 +8,13 @@
             <div class="form-container">
                 <div>
                     <span class="p-inputgroup-addon" style="text-align: center;">Выбрать клиента из списка</span>
-                    <p-orderList [value]="clients" formControlName="userName">
-                        <ng-template let-client pTemplate="item">
-                            <div>
-                                <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48"> -->
-                                <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{client.name}} - {{client.phone}}</div>
-                            </div>
-                        </ng-template>
-                    </p-orderList>
+                    <mat-form-field appearance="fill">
+                        <mat-select>
+                          <mat-option *ngFor="let client of clients" [value]="client">
+                            {{client.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                 </div>
 
                 <div class="service-group">

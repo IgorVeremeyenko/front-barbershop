@@ -38,6 +38,8 @@ import {ContextMenuModule} from 'primeng/contextmenu';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {OrderListModule} from 'primeng/orderlist';
 
+import {MatSelectModule} from '@angular/material/select';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -78,7 +80,8 @@ import {OrderListModule} from 'primeng/orderlist';
     TooltipModule,
     ContextMenuModule,
     ScrollPanelModule,
-    OrderListModule
+    OrderListModule,
+    MatSelectModule
   ],
   exports: [
     ButtonModule,
@@ -117,7 +120,8 @@ import {OrderListModule} from 'primeng/orderlist';
     TooltipModule,
     ContextMenuModule,
     ScrollPanelModule,
-    OrderListModule
+    OrderListModule,
+    MatSelectModule
   ],
   providers: [ConfirmationService,MessageService]
 })
