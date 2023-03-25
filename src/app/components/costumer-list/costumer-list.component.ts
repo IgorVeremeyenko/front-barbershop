@@ -19,9 +19,19 @@ export class CostumerListComponent {
 
   loading = true;
 
+  sizes: any[] = [];
+
+  selectedSize: any = '';
+
   constructor(private dataService: DataService){}
 
   ngOnInit() {
+    this.sizes = [
+      { name: 'Малая', class: 'p-datatable-sm' },
+      { name: 'Стандарт', class: '' },
+      { name: 'Большая',  class: 'p-datatable-lg' }
+  ];
+
    this.loadData();
     
   }

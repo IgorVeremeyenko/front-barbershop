@@ -1,0 +1,57 @@
+<p-dialog header="Добавление услуги" [(visible)]="displayModal" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false" (onHide)="hide()">
+    <div class="container">
+        <form [formGroup]="myForm" (ngSubmit)="submit()">
+            <div class="form-container">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-users"></i></span>
+                    <p-dropdown [options]="masterList" [style]="{width: '100%'}" [filter]="true"
+                        emptyFilterMessage="Нет совпадений" filterPlaceholder="Поиск" formControlName="masterID"
+                        placeholder="Назначьте мастера" optionLabel="name" [showClear]="true">
+                        <!-- <ng-template pTemplate="selectedItem">
+                                    <div class="master-item master-item-value" *ngIf="selectedMaster">
+                                        <img src="{{selectedCountry.url}}"/>
+                                        <div>{{selectedCountry.name}}</div>
+                                    </div>
+                                </ng-template> -->
+                        <ng-template let-master pTemplate="item">
+                            <div class="master-item">
+                                <div>{{master.name}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <button pButton pRipple type="button" icon="pi pi-plus-circle" pTooltip="Добавить нового мастера" (click)="openNewMasterModal()" class="p-button-info"></button>
+                </div>
+
+                <div class="service-group">
+                    <span class="p-inputgroup-addon" style="text-align: center;"><i class="pi pi-align-right"></i></span>                        
+                    <p-autoComplete formControlName="serviceCategory" class="form-control" placeholder="Название категории" [suggestions]="suggestions" (completeMethod)="search($event)"></p-autoComplete>
+                </div>
+
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon" style="text-align: center;"><i class="pi pi-file-edit"></i></span> 
+                    <p-autoComplete formControlName="serviceName" class="form-control" placeholder="Название услуги" [suggestions]="suggestionNames" (completeMethod)="searchDublicates($event)"></p-autoComplete>
+                </div>
+
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">€</span>
+                    <p-inputNumber [showClear]="true" formControlName="servicePrice" inputId="locale-german" mode="decimal" locale="de-DE"
+                        [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+                <div class="alert alert-danger"
+                    *ngIf="myForm.controls['serviceCategory']?.invalid && myForm.controls['serviceCategory']?.touched">
+                    Пожалуйста, выберите категорию услуги
+                </div>
+
+
+                <div class="spinner-btn">
+                    <button pButton class="submit-btn" type="submit" [disabled]="!(myForm.valid && myForm.dirty)"
+                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                            style="font-size: 1rem"></i></button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</p-dialog>

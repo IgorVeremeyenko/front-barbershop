@@ -41,6 +41,7 @@ export class DataService {
 
   public showModalAddAppointment: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showModalEditService: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public showModalAddService: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showModalAddNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
   public isAddedNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -74,6 +75,10 @@ export class DataService {
     return this.http.get<Costumer[]>(COSTUMERS);
   }
 
+  getMasters(){
+    return this.http.get<Master[]>(MASTERS);
+  }
+
   getAppointments() {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
@@ -83,6 +88,9 @@ export class DataService {
   }
   addNewAppointment(body: Appointment): Observable<any> {
     return this.http.post(APPOINTMENT, body);
+  }
+  addNewService(body: Service){
+    return this.http.post(SERVICE, body);
   }
   addNewCostumer(body: Costumer){
     return this.http.post(COSTUMERS,body);

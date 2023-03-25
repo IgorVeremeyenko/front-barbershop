@@ -21,6 +21,7 @@ import { ServiceListComponent } from './components/service-list/service-list.com
 import { EditServiceComponent } from './dialogs/edit-service/edit-service.component';
 import { AddCostumerComponent } from './dialogs/add-costumer/add-costumer.component';
 import { TestCalendarComponent } from './test-calendar/test-calendar.component';
+import { AddServiceComponent } from './dialogs/add-service/add-service.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { TestCalendarComponent } from './test-calendar/test-calendar.component';
     ServiceListComponent,
     EditServiceComponent,
     AddCostumerComponent,
-    TestCalendarComponent
+    TestCalendarComponent,
+    AddServiceComponent
   ],
   imports: [
     BrowserModule,

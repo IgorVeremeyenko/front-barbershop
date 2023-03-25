@@ -2,8 +2,6 @@
     font-weight: 700;
 }
 
-:host ::ng-deep .p-rowgroup-header {
-}
 span {
     font-weight: 700;
 }
@@ -11,4 +9,12 @@ span {
 .p-row-toggler {
     vertical-align: middle;
     margin-right: .25rem;
+}
+
+:host ::ng-deep .p-selectbutton.p-buttonset.p-component{
+    display: flex   ;
+}
+
+:host ::ng-deep .p-ripple.p-element.p-button.p-component.ng-star-inserted{
+    flex: 1;
 }

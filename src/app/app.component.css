@@ -1,7 +1,17 @@
 img.mr-2 {
     cursor: pointer;
 }
-:host ::ng-deep .p-scrollpanel-content{
-    padding: 0 0 18px 0;
+/* :host ::ng-deep .p-scrollpanel-content{
+    padding: 0;
     width: 100%!important;
+} */
+::ng-deep .ui-scrollpanel-wrapper {
+    border: 1px solid #c8c8c8;
+  }
+  ::ng-deep .ui-scrollpanel-bar {
+    background-color: #007ad9;
+  }
+  
+:host ::ng-deep input.p-inputtext.p-component.p-element.p-inputmask{
+    width: auto;
 }

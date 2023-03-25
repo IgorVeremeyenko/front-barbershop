@@ -1,0 +1,43 @@
+:host ::ng-deep .p-dropdown-panel.p-component.ng-star-inserted {
+    position: fixed;
+}
+
+::ng-deep input.p-dropdown-filter.p-inputtext.p-component {
+    width: 100%;
+}
+
+::ng-deep .p-dropdown.p-component.p-dropdown-clearable{
+    border-radius:0;
+}
+
+::ng-deep span.ng-tns-c73-4.p-autocomplete.p-component{
+    width: 100%;
+}
+
+::ng-deep button.p-element.p-ripple.p-button-info.p-button.p-component.p-button-icon-only{
+    border-top-left-radius: 0!important;
+    border-bottom-left-radius: 0!important;
+}
+
+::ng-deep .ng-tns-c66-2.p-dialog-content{
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.service-group{
+    display: flex;
+}
+
+::ng-deep button.p-element.p-ripple.p-button-info.p-button.p-component.p-button-icon-only{
+    border-radius: 6px;
+}
+
+::ng-deep input.p-element.p-autocomplete-input.p-inputtext.p-component.ng-tns-c73-3.ng-star-inserted{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

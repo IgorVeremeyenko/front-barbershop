@@ -39,6 +39,7 @@ import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {OrderListModule} from 'primeng/orderlist';
 import { TagModule } from 'primeng/tag';
 import {RatingModule} from 'primeng/rating';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [],
@@ -82,7 +83,8 @@ import {RatingModule} from 'primeng/rating';
     ScrollPanelModule,
     OrderListModule,
     TagModule,
-    RatingModule
+    RatingModule,
+    AutoCompleteModule
   ],
   exports: [
     ButtonModule,
@@ -123,7 +125,8 @@ import {RatingModule} from 'primeng/rating';
     ScrollPanelModule,
     OrderListModule,
     TagModule,
-    RatingModule
+    RatingModule,
+    AutoCompleteModule
   ],
   providers: [ConfirmationService,MessageService]
 })

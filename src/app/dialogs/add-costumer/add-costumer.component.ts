@@ -26,7 +26,7 @@ export class AddCostumerComponent {
 
     this.dataService.showModalAddNewCostumer.subscribe(value => {
       this.displayModal = value;
-      console.log('display modal', this.displayModal)
+      console.log(this.myForm.value.userPhone)
     })
 
     this.myForm = new FormGroup({
@@ -35,6 +35,7 @@ export class AddCostumerComponent {
       "userLang": new FormControl("Русский"),
       "userEmail": new FormControl("", Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
     });
+
 
     this.dataService.getCountries().subscribe(result => {
       this.languages = result;
