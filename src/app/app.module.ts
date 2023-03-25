@@ -19,6 +19,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CostumerListComponent } from './components/costumer-list/costumer-list.component';
 import { ServiceListComponent } from './components/service-list/service-list.component';
 import { EditServiceComponent } from './dialogs/edit-service/edit-service.component';
+import { AddCostumerComponent } from './dialogs/add-costumer/add-costumer.component';
+import { TestCalendarComponent } from './test-calendar/test-calendar.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { EditServiceComponent } from './dialogs/edit-service/edit-service.compon
     NotFoundComponent,
     CostumerListComponent,
     ServiceListComponent,
-    EditServiceComponent
+    EditServiceComponent,
+    AddCostumerComponent,
+    TestCalendarComponent
   ],
   imports: [
     BrowserModule,

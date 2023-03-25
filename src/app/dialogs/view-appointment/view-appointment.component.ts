@@ -8,6 +8,8 @@ import { MyMessageService } from 'src/app/services/my-message.service';
 import { saveAs } from 'file-saver';
 import { Appointment } from 'src/app/interfaces/appointment';
 import { font } from 'src/assets/fonts/font';
+import { Costumer } from 'src/app/interfaces/costumer';
+import { Service } from 'src/app/interfaces/service';
 
 @Component({
   selector: 'app-view-appointment',
@@ -37,22 +39,35 @@ export class ViewAppointmentComponent {
 
   displayModalAppointment = false;
 
+  constumer!: Costumer;
+
+  service!: Service;
+
   constructor(private msg: MyMessageService, private dataService: DataService, private confirmationService: ConfirmationService, private calendarService: CalendarService) {
 
     this.costumer_data$.subscribe(data => {
-      const outputDate = this.convertDate(data.date);
-      const obj = {
-        id: data.id,
-        date: outputDate,
-        name: data.costumer?.name,
-        service: `${data.service.category}/${data.service?.name}`,
-        lang: data.costumer?.language,
-        price: data.service?.price,
-        phone: data.costumer?.phone
+      if(data.costumerId === 0){
+        return;
       }
-      this.user.push(obj);
-      this.appointment = data;
-      this.displayModalAppointment = true;
+      this.dataService.getCostumerById(data.costumerId).subscribe(costumer_res => {
+        this.constumer = costumer_res;
+        this.dataService.getSericeById(data.serviceId).subscribe(service_res => {
+          this.service = service_res;
+          const outputDate = this.convertDate(data.date);
+          const obj = {
+            id: data.id,
+            date: outputDate,
+            name: this.constumer.name,
+            service: `${this.service.category}/${this.service.name}`,
+            lang: this.constumer.language,
+            price: this.service.price,
+            phone: this.constumer.phone
+          }
+          this.user.push(obj);
+          this.appointment = data;
+          this.displayModalAppointment = true;
+        })
+      })
     });
 
     this.cols = [
@@ -129,11 +144,11 @@ export class ViewAppointmentComponent {
           head: [['ID', 'Имя', 'Услуга', 'Дата', 'Телефон', 'Цена (€)']],
           body: [
             [this.appointment.id,
-            this.appointment.costumer.name,
-            `${this.appointment.service.category}/${this.appointment.service.name}`,
+             this.constumer.name,
+            `${this.service.category}/${this.service.name}`,
               outputDate,
-            this.appointment.costumer.phone,
-            this.appointment.service.price
+            this.constumer.phone,
+            this.service.price
             ],
           ],
           bodyStyles: {

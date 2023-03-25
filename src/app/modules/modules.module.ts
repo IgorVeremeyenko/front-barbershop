@@ -37,8 +37,8 @@ import {TooltipModule} from 'primeng/tooltip';
 import {ContextMenuModule} from 'primeng/contextmenu';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {OrderListModule} from 'primeng/orderlist';
-
-import {MatSelectModule} from '@angular/material/select';
+import { TagModule } from 'primeng/tag';
+import {RatingModule} from 'primeng/rating';
 
 @NgModule({
   declarations: [],
@@ -81,7 +81,8 @@ import {MatSelectModule} from '@angular/material/select';
     ContextMenuModule,
     ScrollPanelModule,
     OrderListModule,
-    MatSelectModule
+    TagModule,
+    RatingModule
   ],
   exports: [
     ButtonModule,
@@ -121,7 +122,8 @@ import {MatSelectModule} from '@angular/material/select';
     ContextMenuModule,
     ScrollPanelModule,
     OrderListModule,
-    MatSelectModule
+    TagModule,
+    RatingModule
   ],
   providers: [ConfirmationService,MessageService]
 })

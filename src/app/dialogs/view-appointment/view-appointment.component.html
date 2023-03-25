@@ -1,7 +1,7 @@
 <p-dialog position="top" header="Просмотр записи" [(visible)]="displayModalAppointment" (onHide)="hide()" [closeOnEscape]="true" [dismissableMask]="true"
 [modal]="true" [draggable]="true" [resizable]="false">
-<p-toast></p-toast>
-<p-confirmPopup></p-confirmPopup>
+<!-- <p-toast></p-toast> -->
+<!-- <p-confirmPopup></p-confirmPopup> -->
     
     <p-table #dt id="my-table"  [columns]="cols" [value]="user" [exportHeader]="'customExportHeader'" [tableStyle]="{'min-width': '50rem'}">
       

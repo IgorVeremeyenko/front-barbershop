@@ -1,5 +1,5 @@
 <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-<p-toast></p-toast>
+<!-- <p-toast></p-toast> -->
 <p-blockUI [blocked]="blockedDocument"></p-blockUI>
 <div *ngIf="dataLoaded" class="app">
     <div class='app-sidebar'>
@@ -30,7 +30,7 @@
     </div>
     
     <div class='app-main'>
-        <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
+        <full-calendar #calendar *ngIf='calendarVisible' [options]='calendarOptions'>
             <ng-template #eventContent let-arg>
                 <b>{{ arg.timeText }}</b>
                 <i>{{ arg.event.title }}</i>

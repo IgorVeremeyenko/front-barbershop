@@ -1,10 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
-import { APPOINTMENT, COSTUMERS, MASTERS, SERVICE } from 'src/assets/constants';
+import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE } from 'src/assets/constants';
 import { MyNode } from '../interfaces/node';
 import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import { BehaviorSubject } from 'rxjs';
@@ -14,7 +14,7 @@ import { Master } from '../interfaces/master';
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {  
+export class DataService {
 
   USER_ID = 0
   USER_NAME = ''
@@ -30,11 +30,10 @@ export class DataService {
   defaults: Appointment = {
     id: 0,
     date: "",
-    costumer: {id:0,name:'',email:'',phone: '', userId: this.USER_ID,language:''},
-    service: {id:0,name:'',userId:this.USER_ID,masterId:0,price:0,category:'', status: ''},
     costumerId: 0,
     serviceId: 0,
-    userId: 0
+    status: '',
+    userId: 0,
   }
 
   appointment_data_subject = new BehaviorSubject<Appointment>(this.defaults);
@@ -42,62 +41,70 @@ export class DataService {
 
   public showModalAddAppointment: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showModalEditService: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public showModalAddNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public isAddedNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   public transferServiceObject: EventEmitter<Service> = new EventEmitter<Service>();
   public transferCostumerObject: EventEmitter<Appointment> = new EventEmitter<Appointment>();
   public transferParams: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
 
-  
-  
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   updateData(newData: boolean) {
     this.dataSubject.next(newData);
   }
 
-  updateServData(newData: Service){
+  updateServData(newData: Service) {
     this.service_data_subject.next(newData);
   }
 
-  updateAppointmentData(newData: Appointment){
+  updateAppointmentData(newData: Appointment) {
     this.appointment_data_subject.next(newData);
   }
 
-  getServices(){
+  getServices() {
     return this.http.get<Service[]>(SERVICE);
   }
 
-  getMasterById(id: number){
+  getMasterById(id: number) {
     return this.http.get<Master>(`${MASTERS}${id}`);
   }
 
-  getClients(){
+  getClients() {
     return this.http.get<Costumer[]>(COSTUMERS);
   }
 
-  getAppointments(){
+  getAppointments() {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
- 
-  changeServiceById(id: number, body: Service){
-    return this.http.put(`${SERVICE}${id}`,body);
+
+  changeServiceById(id: number, body: Service) {
+    return this.http.put(`${SERVICE}${id}`, body);
   }
-  addNewAppointment(body: Appointment): Observable<any>{
+  addNewAppointment(body: Appointment): Observable<any> {
     return this.http.post(APPOINTMENT, body);
   }
-  loadCalendarData(){
+  addNewCostumer(body: Costumer){
+    return this.http.post(COSTUMERS,body);
+  }
+  loadCalendarData() {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
-  getSericeById(id: number){
+  getSericeById(id: number) {
     return this.http.get<Service>(`${SERVICE}${id}`);
   }
-  getCostumerById(id: number){
+  getCostumerById(id: number) {
     return this.http.get<Costumer>(`${COSTUMERS}${id}`);
   }
-  getAppointmentById(id: number){
+  getAppointmentById(id: number) {
     return this.http.get<Appointment>(`${APPOINTMENT}/${id}`);
   }
 
-  removeAppointment(id: number){
+  removeAppointment(id: number) {
     return this.http.delete(`${APPOINTMENT}/${id}`);
+  }
+
+  getCountries(): Observable<any> {
+    return this.http.get(COUNTRIES_JSON);
   }
 }

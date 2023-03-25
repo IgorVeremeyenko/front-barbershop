@@ -1,34 +1,42 @@
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
-    acceptButtonStyleClass="p-button-text"></p-confirmDialog>
+<!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
+    acceptButtonStyleClass="p-button-text"></p-confirmDialog> -->
     <p-dialog header="Бронирование записи" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
     [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
     <!-- добавление.component.html -->
     <div class="container">
         <form [formGroup]="myForm" (ngSubmit)="submit()">
             <div class="form-container">
-                <div>
-                    <span class="p-inputgroup-addon" style="text-align: center;">Выбрать клиента из списка</span>
-                    <mat-form-field appearance="fill">
-                        <mat-select>
-                          <mat-option *ngFor="let client of clients" [value]="client">
-                            {{client.name}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                <div class="dropdown">
+                    <p-dropdown 
+                    [options]="clients" 
+                    [style]="{width: '100%'}" 
+                    [filter]="true" 
+                    emptyMessage="Нет данных" 
+                    emptyFilterMessage="Нет совпадений" 
+                    filterPlaceholder="Поиск по ном. тел." 
+                    formControlName="userName" 
+                    placeholder="Выбрать клиента" 
+                    optionLabel="phone" 
+                    [showClear]="true">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="country-item country-item-value" *ngIf="selectedCostumer">
+                            <div>"{{selectedCostumer.name}}" {{selectedCostumer.phone}}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-costumer pTemplate="item">
+                        <div class="costumer-item">
+                            <div>"{{costumer.name}}" Тел.: {{costumer.phone}}</div>
+                        </div>
+                    </ng-template>
+                    </p-dropdown>
+                    <button pButton pRipple type="button" label="Добавить нового клиента" (click)="openNewCostumerModal()" class="p-button-info"></button>
                 </div>
 
                 <div class="service-group">
-                    <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>
-                    <span class="p-inputgroup-addon" style="text-align: center;">Тип услуги</span>
-                    <!-- <p-selectButton [options]="nodes2" formControlName="selectedService"
-                        (onOptionClick)="optionlog($event.option)"></p-selectButton>
-                    <div class="p-inputgroup">
-                        <span class="p-inputgroup-addon">€</span>
-                        <input type="text" pInputText disabled placeholder="Цена" [value]="selectedNode2.price">
-                        <span class="p-inputgroup-addon">.00</span>
-                    </div> -->
-                    <p-cascadeSelect formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
+                    <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>                   
+                    <p-cascadeSelect (onGroupChange)="getCategory($event)" (onChange)="getPrice($event.value)" placeholder="Выберите услугу" formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
                     [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
+                    <p-inputNumber *ngIf="priceSelected" formControlName="selectedPrice" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
                 </div>
                 <div class="alert alert-danger"
                     *ngIf="myForm.controls['selectedService']?.invalid && myForm.controls['selectedService']?.touched">
@@ -36,37 +44,18 @@
                 </div>
 
                 <div class="inputs">
-                    <!-- <div class="p-inputgroup">
-                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                        <input type="text" class="form-control" pInputText placeholder="Имя" formControlName="userName"
-                            name="name">
-                    </div> -->
-                    <!-- <div class="alert alert-danger"
-                        *ngIf="myForm.controls['userName']?.invalid && myForm.controls['userName']?.touched">
-                        Не указано имя
-                    </div> -->
-
+                    
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
                         <input type="text" [value]="date" disabled pInputText name="date">
                     </div>
 
-                    <!-- [placeholder]="dateAppointment"  -->
-
-                    <div class="p-inputgroup">
-                        <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
-                        
-                        <p-inputMask formControlName="userPhone" mask="(999) 999-9999"
-                            placeholder="(999) 999-9999"></p-inputMask>
-                    </div>
+                    
                 </div>
-                <div class="alert alert-danger"
-                    *ngIf="myForm.controls['userPhone']?.invalid && myForm.controls['userPhone']?.touched">
-                    Некорректный номер телефона
-                </div>
+                
                 <div class="spinner-btn">
                     <button pButton class="submit-btn" type="submit"
-                        [disabled]="myForm.invalid && (myForm.controls['userPhone'].untouched || myForm.controls['userPhone'].touched)"
+                        [disabled]="myForm.invalid && (myForm.controls['userName'].untouched || myForm.controls['userName'].touched)"
                         class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
                             style="font-size: 1rem"></i></button>
                 </div>
@@ -75,3 +64,4 @@
         </form>
     </div>
 </p-dialog>
+<app-add-costumer></app-add-costumer>

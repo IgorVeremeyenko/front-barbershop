@@ -1,0 +1,23 @@
+:host ::ng-deep .p-dropdown-panel.p-component.ng-star-inserted{
+    position: fixed;
+    width: max-content;
+}
+
+:host ::ng-deep .country-item.country-item-value.ng-star-inserted, .country-item.ng-star-inserted {
+    display: flex;
+    column-gap: 1rem;
+}
+
+:host ::ng-deep .ng-tns-c62-6.p-dialog-content{
+    overflow: hidden;
+}
+
+:host ::ng-deep input.p-dropdown-filter.p-inputtext.p-component{
+    width: 100%;
+}
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}

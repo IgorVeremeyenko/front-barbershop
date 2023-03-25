@@ -1,0 +1,14 @@
+[
+    {
+        "name" : "English",
+        "url" : "https://flagcdn.com/36x27/us.png"
+    },
+    {
+        "name" : "русский",
+        "url" : "https://flagcdn.com/36x27/ru.png"
+    },
+    {
+        "name" : "Українська",
+        "url" : "https://flagcdn.com/36x27/ua.png"
+    }
+]

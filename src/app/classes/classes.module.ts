@@ -18,28 +18,25 @@ import { MyNode } from '../interfaces/node';
 export class AppointmentClass implements Appointment {
   id: number;
   date: string | Date;
-  costumer: Costumer;
-  service: Service;
   costumerId: number;
   serviceId: number;
   userId: number;
+  status: string;
 
   constructor(
     @Inject(Number) id: number, 
     @Inject(String) date: string | Date, 
-    @Inject(String) costumer: Costumer, 
-    @Inject(String) service: Service, 
     @Inject(String) costumerId: number, 
     @Inject(String) serviceId: number,
+    @Inject(String) status: string,
     @Inject(String) userId: number
     ){
       this.id = id;
       this.date = date;
-      this.costumer = costumer;
-      this.service = service;
       this.serviceId = serviceId;
       this.costumerId = costumerId;
-      this.userId = userId
+      this.status = status;
+      this.userId = userId;
   }
 
 }

@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TreeNode } from 'primeng/api';
+import { DateSelectArg } from '@fullcalendar/core';
 import { AppointmentClass, CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
 import { Costumer } from 'src/app/interfaces/costumer';
-import { MyNode } from 'src/app/interfaces/node';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
+import { IN_PROGRESS } from 'src/assets/constants';
 
 interface Cat {
+  id: number,
   category: string,
   services: [{
     cname: string,
@@ -24,6 +25,8 @@ interface Cat {
 })
 export class AddAppointmentComponent implements OnInit {
 
+  @Input() isAddedNewCostumer: boolean = false;
+
   appointment_obj!: AppointmentClass;
   costumer_obj!: CostumerClass;
   service_obj!: ServiceClass;
@@ -38,17 +41,24 @@ export class AddAppointmentComponent implements OnInit {
 
   clients: Costumer[] = [];
 
-  selectedNodes3: any[] = [];
+  selectedCostumer!: Costumer;
+
+  categorySelected: any;
+
+  priceSelected: any;
+
+  params!: DateSelectArg;
 
   @Input() displayModal: boolean = false;
+  @Input() calendarParams: any;
 
   constructor(private dataService: DataService, private messages: MyMessageService, private calendarService: CalendarService) {
 
     this.myForm = new FormGroup({
       "userName": new FormControl("", Validators.required),
-      "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
       "selectedLang": new FormControl("Русский"),
-      "selectedService": new FormControl("", Validators.required)
+      "selectedService": new FormControl("", Validators.required),
+      "selectedPrice": new FormControl({value: '', disabled: true})
     });
     
     dataService.getServices().subscribe(serv_res => {
@@ -58,6 +68,7 @@ export class AddAppointmentComponent implements OnInit {
           cprice: item.price
         }
         const cat: Cat = {
+          id: item.id,
           category: item.category,
           services: [children]
         }
@@ -75,21 +86,30 @@ export class AddAppointmentComponent implements OnInit {
       
     })
 
-    this.dataService.getClients().subscribe(clients => {
-      clients.map(cl => {
-        
-        this.clients.push(cl);
-      });
-      console.log(this.clients)
+    this.dataService.isAddedNewCostumer.subscribe(value => {
+      if(value){
+        this.loadClientsList();
+      }
     })
 
-    
+    dataService.transferParams.subscribe(value => {
+      this.calendarApi = value;
+    })
+
+    this.loadClientsList();
+
+    this.myForm.valueChanges.subscribe(values => {
+      this.selectedCostumer = values.userName;
+    })
 
   }
 
   ngOnInit(): void {
 
-    this.calendarApi = this.calendarService.calendarApi;
+    this.calendarService.transferCalendarApi.subscribe(value => {
+      this.calendarApi = value;
+      console.log('api', this.calendarApi)
+    })
 
     this.dataService.transferParams.subscribe(params => {
       if (typeof (params) === 'string') {
@@ -97,6 +117,7 @@ export class AddAppointmentComponent implements OnInit {
         this.allDay = true;
       }
       else {
+        this.params = params;
         this.dateForDB = params.start;
         const dateObj = new Date(params.start);
         const formatter = new Intl.DateTimeFormat('ru', {
@@ -116,9 +137,21 @@ export class AddAppointmentComponent implements OnInit {
     this.dataService.showModalAddAppointment.subscribe(value => {
      
       this.displayModal = value;
-      this.calendarApi = this.calendarService.calendarApi;
     });
 
+  }
+
+  // ngAfterViewInit() {
+  //   let calendarApi = this.fullCalendar.getApi();
+  //   console.log(calendarApi)
+  // }
+
+  loadClientsList(){
+    this.dataService.getClients().subscribe(clients => {
+      clients.map(cl => {        
+        this.clients.push(cl);
+      });
+    })
   }
 
   click(event: any){
@@ -129,61 +162,68 @@ export class AddAppointmentComponent implements OnInit {
     this.displayModal = false;
   }
 
-  addAppointment() {
-    const phoneNumber = this.myForm.value.userPhone;
-    const cleanNumber = phoneNumber.replace(/[^\d]/g, "");
-    this.service_obj = new ServiceClass(
-      0,
-      this.myForm.value.selectedService.label,
-      this.myForm.value.selectedService.price,
-      this.dataService.USER_ID,
-      2,
-      this.myForm.value.selectedService.label,
-      'Выполняется'
-    )
-    this.costumer_obj = new CostumerClass(
-      0,
-      this.myForm.value.userName,
-      "",
-      cleanNumber,
-      this.myForm.value.selectedLang.label,
-      this.dataService.USER_ID
-    );
+  getCategory(event: any){
+    this.categorySelected = event.value;
+  }
+
+  getPrice(event: any){
+    this.priceSelected = event.cprice;
+    this.myForm.get('selectedPrice')?.enable();
+    this.myForm.get('selectedPrice')?.setValue(this.priceSelected);
+    this.myForm.get('selectedPrice')?.disable();
+  }
+
+  addAppointment() {        
     this.appointment_obj = new AppointmentClass(
       0,
       this.dateForDB,
-      this.costumer_obj,
-      this.service_obj,
-      this.costumer_obj.id,
-      this.service_obj.id,
+      this.selectedCostumer.id,
+      this.categorySelected.id,
+      IN_PROGRESS,
       this.dataService.USER_ID
     );
-    this.dataService.addNewAppointment(this.appointment_obj).subscribe(
-      result => {
-        const currentDate = new Date(this.appointment_obj.date);
-        const minutes = this.addMinutes(currentDate, 30);
-        this.calendarApi.addEvent({
-          id: result.id,
-          title: this.service_obj.name,
-          start: this.date,
-          end: minutes,
-          allDay: this.allDay
-        });
-        this.messages.showSuccess('Успешно добавлено');
-        this.isSubmiting = false;
-        this.closeModal();
-      }, error => {
-        this.messages.showError(error);
-      }
-    )
+    const calendar_event = {
+      id: this.selectedCostumer.id.toString(),
+      title: 'service_name',
+      start: this.date,
+      end: this.date,
+      allDay: this.allDay
+    }
+    this.addEventToCalendarApi(calendar_event, this.params);
+    this.displayModal = false;
+    // this.dataService.addNewAppointment(this.appointment_obj).subscribe(
+    //   result => {
+    //     try {
+    //       const service_name = this.dataService.getSericeById(this.appointment_obj.serviceId).subscribe(service => service.name);
+    //       const currentDate = new Date(this.appointment_obj.date);
+    //       const minutes = this.addMinutes(currentDate, 30);
+    //       const calendar_event = {
+    //         id: result.id,
+    //         title: service_name,
+    //         start: this.date,
+    //         end: minutes,
+    //         allDay: this.allDay
+    //       }
+    //       this.addEventToCalendarApi(calendar_event, this.params);
+    //       this.messages.showSuccess('Успешно добавлено');
+    //       this.isSubmiting = false;
+    //       this.closeModal();
+          
+    //     } catch (error) {
+    //       console.log('catch add appointment', error);
+    //     }
+    //   }, error => {
+    //     this.messages.showError(error);
+    //   }
+    // )
+  }
+
+  addEventToCalendarApi(event: any, params: DateSelectArg){
+    this.calendarService.addEventToCalendar.emit({event, params});
   }
 
   showSuccess(){
     this.messages.showSuccess('Успешно добавлено');
-  }
-
-  optionlog(event: MyNode) {
-    
   }
 
   addMinutes(date: Date, minutes: number) {
@@ -192,8 +232,12 @@ export class AddAppointmentComponent implements OnInit {
     return date;
   }
 
+  openNewCostumerModal(){
+    this.dataService.showModalAddNewCostumer.emit(true);
+  }
+
   submit() {
-    this.isSubmiting = true;
+    // this.isSubmiting = true;
     this.addAppointment();
   }
 

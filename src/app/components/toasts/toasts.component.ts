@@ -7,20 +7,4 @@ import { MyMessageService } from 'src/app/services/my-message.service';
   styleUrls: ['./toasts.component.css'],
   providers: [MyMessageService]
 })
-export class ToastsComponent {
-
-  constructor(private messages: MyMessageService){}
-
-  showSuccess(){
-    this.messages.showSuccess('Успешно добавлено');
-  }
-
-  onConfirm() {
-    
-}
-
-onReject() {
-   
-}
-
-}
+export class ToastsComponent {}
