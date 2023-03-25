@@ -9,6 +9,7 @@ import { NetworkErrorComponent } from './components/network-error/network-error.
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { CostumerListComponent } from './components/costumer-list/costumer-list.component';
 import { ServiceListComponent } from './components/service-list/service-list.component';
+import { MasterListComponent } from './components/master-list/master-list.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'network-error', component: NetworkErrorComponent },
   { path: 'costumers', component: CostumerListComponent, canActivate: [AuthGuard] },
   { path: 'services', component: ServiceListComponent, canActivate: [AuthGuard] },
+  { path: 'colleagues', component: MasterListComponent, canActivate: [AuthGuard] },
   { path: '**', component: NotFoundComponent }
 ];
 

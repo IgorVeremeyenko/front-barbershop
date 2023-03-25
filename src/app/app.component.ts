@@ -13,7 +13,9 @@ import { DataService } from './services/data.service';
 export class AppComponent implements OnChanges {
   isLogged$ = this.authService.authInfo;
   showToolbar = true;
-  items: MenuItem[];
+  items: MenuItem[] = [];
+  searchMenuItems: MenuItem[] = [];
+  searchQuery!: string;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -22,6 +24,51 @@ export class AppComponent implements OnChanges {
     private primengConfig: PrimeNGConfig
   ) {
     this.primengConfig.ripple = true;
+    this.resetMenu();
+    this.searchMenuItems = [...this.items];
+    this.isLogged$.subscribe(value => {
+      this.showToolbar = value;
+    })
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes.isLogged$.currentValue)
+  }
+
+  goToMain() {
+    this.router.navigateByUrl('');
+  }
+
+  confirm() {
+    this.confirmationService.confirm({
+      acceptLabel: 'Да',
+      rejectLabel: 'Нет',
+      message: 'Вы действительно хотите выйти?',
+      icon: 'fas fa-exclamation-triangle',
+      accept: () => { this.logOut() }
+    });
+  }
+
+  logOut() {
+    this.authService.logout();
+  }
+
+  filterMenuItems(value: any) {
+    // применяем поиск к элементам меню
+    this.searchMenuItems = this.items.filter((item) =>
+      item.label?.toLowerCase().includes(value.target.value.toLowerCase())
+    );
+    
+    if(this.searchMenuItems.length < 1 || value.target.value === ""){
+      this.resetMenu();
+    }
+    else {
+      this.items = this.searchMenuItems
+    }
+  }
+
+  resetMenu(){
+    this.searchMenuItems = [];
     this.items = [
       {
         label: 'Меню',
@@ -78,14 +125,17 @@ export class AppComponent implements OnChanges {
             label: 'Добавить клиента',
             icon: 'pi pi-fw pi-user-plus',
             command: () => {
+              this.searchQuery = '';
+              this.resetMenu();
               this.dataService.showModalAddNewCostumer.emit(true);
-              console.log('add costumer')
             }
           },
           {
             icon: 'pi pi-fw pi-users',
             label: 'Список',
             command: () => {
+              this.searchQuery = '';
+              this.resetMenu();
               this.router.navigateByUrl('costumers');
             }
           }
@@ -99,6 +149,8 @@ export class AppComponent implements OnChanges {
             label: 'Добавить услугу',
             icon: 'pi pi-plus',
             command: () => {
+              this.searchQuery = '';
+              this.resetMenu();
               this.dataService.showModalAddService.emit(true);
             }
           },
@@ -106,7 +158,9 @@ export class AppComponent implements OnChanges {
             label: 'Все услуги',
             icon: 'pi pi-shopping-bag',
             command: () => {
-              router.navigateByUrl('services');
+              this.searchQuery = '';
+              this.resetMenu();
+              this.router.navigateByUrl('services');
             }
           }
         ]
@@ -115,35 +169,12 @@ export class AppComponent implements OnChanges {
         label: 'Выход',
         icon: 'pi pi-sign-out',
         command: () => {
+          this.searchQuery = '';
+          this.resetMenu();
           this.confirm();
         }
       }
     ];
-    this.isLogged$.subscribe(value => {
-      this.showToolbar = value;
-    })
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes.isLogged$.currentValue)
-  }
-
-  goToMain() {
-    this.router.navigateByUrl('');
-  }
-
-  confirm() {
-    this.confirmationService.confirm({
-      acceptLabel: 'Да',
-      rejectLabel: 'Нет',
-      message: 'Вы действительно хотите выйти?',
-      icon: 'fas fa-exclamation-triangle',
-      accept: () => { this.logOut() }
-    });
-  }
-
-  logOut() {
-    this.authService.logout();
   }
 
 }

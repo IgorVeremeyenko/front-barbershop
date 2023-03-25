@@ -22,6 +22,7 @@ import { EditServiceComponent } from './dialogs/edit-service/edit-service.compon
 import { AddCostumerComponent } from './dialogs/add-costumer/add-costumer.component';
 import { TestCalendarComponent } from './test-calendar/test-calendar.component';
 import { AddServiceComponent } from './dialogs/add-service/add-service.component';
+import { MasterListComponent } from './components/master-list/master-list.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { AddServiceComponent } from './dialogs/add-service/add-service.component
     EditServiceComponent,
     AddCostumerComponent,
     TestCalendarComponent,
-    AddServiceComponent
+    AddServiceComponent,
+    MasterListComponent
   ],
   imports: [
     BrowserModule,

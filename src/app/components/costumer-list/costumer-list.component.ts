@@ -27,9 +27,9 @@ export class CostumerListComponent {
 
   ngOnInit() {
     this.sizes = [
-      { name: 'Малая', class: 'p-datatable-sm' },
+      { name: 'Уменьшенная', class: 'p-datatable-sm' },
       { name: 'Стандарт', class: '' },
-      { name: 'Большая',  class: 'p-datatable-lg' }
+      { name: 'Увеличенная',  class: 'p-datatable-lg' }
   ];
 
    this.loadData();

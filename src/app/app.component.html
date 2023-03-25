@@ -5,7 +5,7 @@
         <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2"  (click)="goToMain()">
     </ng-template>
     <ng-template pTemplate="end">
-        <input type="text" pInputText placeholder="Поиск">
+        <input type="text" [(ngModel)]="searchQuery" (input)="filterMenuItems($event)" pInputText placeholder="Поиск" name="search"/>
     </ng-template>
 </p-menubar>
     <router-outlet></router-outlet>

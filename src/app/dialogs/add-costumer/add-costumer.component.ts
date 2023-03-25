@@ -30,7 +30,7 @@ export class AddCostumerComponent {
     })
 
     this.myForm = new FormGroup({
-      "userName": new FormControl("", Validators.required),
+      "userName": new FormControl("new costumer", Validators.required),
       "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
       "userLang": new FormControl("Русский"),
       "userEmail": new FormControl("", Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
