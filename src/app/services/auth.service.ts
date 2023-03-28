@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Admin } from '../interfaces/admin';
 import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
 import { LOGIN, REGISTRATION, TOKEN_VALIDATION } from 'src/assets/constants';
@@ -12,6 +12,8 @@ export class AuthService {
 
   authInfo = new BehaviorSubject(true);
   dataUserAuth$ = this.authInfo.asObservable();
+
+  public blockMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient, private router: Router) { }
 

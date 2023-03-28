@@ -40,6 +40,9 @@ import {OrderListModule} from 'primeng/orderlist';
 import { TagModule } from 'primeng/tag';
 import {RatingModule} from 'primeng/rating';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { OrganizationChartModule } from 'primeng/organizationchart';
+import { ChipModule } from 'primeng/chip';
+import { ChipsModule } from 'primeng/chips';
 
 @NgModule({
   declarations: [],
@@ -84,7 +87,10 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     OrderListModule,
     TagModule,
     RatingModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    OrganizationChartModule,
+    ChipModule,
+    ChipsModule
   ],
   exports: [
     ButtonModule,
@@ -126,7 +132,10 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     OrderListModule,
     TagModule,
     RatingModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    OrganizationChartModule,
+    ChipModule,
+    ChipsModule
   ],
   providers: [ConfirmationService,MessageService]
 })

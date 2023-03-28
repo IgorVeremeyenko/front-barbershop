@@ -7,14 +7,18 @@
         <ng-template pTemplate="caption">
             <div class="table-header">
                 Список клиентов
+                <p-button icon="pi pi-refresh" (click)="loadData()"></p-button>
             </div>
         </ng-template>
+       
+       
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 5rem"></th>
                 <th pSortableColumn="name">Имя <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="phone">Телефон <p-sortIcon field="phone"></p-sortIcon></th>
                 <th pSortableColumn="rating">Ранг <p-sortIcon field="rating"></p-sortIcon></th>
+                <th pSortableColumn="total">Кол. встреч <p-sortIcon field="total"></p-sortIcon></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-client let-expanded="expanded">
@@ -25,6 +29,7 @@
                 <td>{{client.name}}</td>
                 <td>{{client.phone}}</td>
                 <td><p-rating [ngModel]="client.rating" [readonly]="true" [cancel]="false"></p-rating></td>
+                <td>{{client.total}}</td>
                 </tr>
         </ng-template>
         <ng-template pTemplate="rowexpansion" let-appointment>
@@ -58,7 +63,7 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="6">There are no order for this product yet.</td>
+                                    <td colspan="6">Пока нету записей с данным клиентом</td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -67,10 +72,10 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="summary">
-            <div style="text-align:left">
+            <!-- <div style="text-align:left">
                 <p-button icon="pi pi-refresh" (click)="loadData()"></p-button>
-            </div>
-    </ng-template>
+            </div> -->
+        </ng-template>
     </p-table>
 </div>
 <app-add-costumer></app-add-costumer>

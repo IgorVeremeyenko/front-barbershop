@@ -24,6 +24,10 @@ h2 {
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
   }
+
+  .no-events {
+    background-color: gray;
+  }
   
   .app-sidebar {
     width: 300px;

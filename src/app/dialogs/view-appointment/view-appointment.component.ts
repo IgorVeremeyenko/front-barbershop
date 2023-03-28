@@ -10,6 +10,7 @@ import { Appointment } from 'src/app/interfaces/appointment';
 import { font } from 'src/assets/fonts/font';
 import { Costumer } from 'src/app/interfaces/costumer';
 import { Service } from 'src/app/interfaces/service';
+import { COMPLETED, CURRENT, MISSED, REJECTED, SUCCESS, WARNING } from 'src/assets/constants';
 
 @Component({
   selector: 'app-view-appointment',
@@ -41,13 +42,22 @@ export class ViewAppointmentComponent {
 
   constumer!: Costumer;
 
+  selectedChoise: any;
+
+  optionsChoise: any[] = [];
+
   service!: Service;
+
+  isConfirmedStatus = false;
 
   constructor(private msg: MyMessageService, private dataService: DataService, private confirmationService: ConfirmationService, private calendarService: CalendarService) {
 
     this.costumer_data$.subscribe(data => {
       if(data.costumerId === 0){
         return;
+      }
+      if(data.status === REJECTED || data.status === COMPLETED || data.status === MISSED){
+        this.isConfirmedStatus = true;
       }
       this.dataService.getCostumerById(data.costumerId).subscribe(costumer_res => {
         this.constumer = costumer_res;
@@ -59,7 +69,7 @@ export class ViewAppointmentComponent {
             date: outputDate,
             name: this.constumer.name,
             service: `${this.service.category}/${this.service.name}`,
-            lang: this.constumer.language,
+            status: data.status,
             price: this.service.price,
             phone: this.constumer.phone
           }
@@ -70,11 +80,15 @@ export class ViewAppointmentComponent {
       })
     });
 
+    dataService.getButtonItems().subscribe(items => {
+      this.optionsChoise = items;
+    })
+
     this.cols = [
       { field: 'date', header: 'Дата' },
       { field: 'name', header: 'Имя' },
       { field: 'service', header: 'Услуга' },
-      { field: 'lang', header: 'Язык' },
+      { field: 'status', header: 'Статус' },
       { field: 'price', header: 'Стоимость' },
       { field: 'phone', header: 'Телефон' }
     ];
@@ -117,6 +131,37 @@ export class ViewAppointmentComponent {
         // this.msgs = [{ severity: 'info', summary: 'info', detail: 'Вы отменили удаление' }];
       }
     });
+  }
+
+  save(){
+    let eventColour = '';
+    let status = '';
+    switch(this.selectedChoise.code){
+      case "canceled" : {
+        eventColour = WARNING;
+        status = REJECTED;
+      }
+      break;
+      case "success" : {
+        eventColour = SUCCESS;
+        status = COMPLETED;
+      }
+      break;
+      case "missed" : {
+        eventColour = WARNING;
+        status = MISSED;
+      }
+      break;
+    }
+    this.calendarService.addEventToCalendarClickInfo.emit({
+      info: this.calendarService.temporaryForm, 
+      col: eventColour, 
+      status: status,
+      costumerId: this.constumer.id
+    });
+    this.optionsChoise = [];
+    this.selectedChoise = undefined;
+    this.displayModalAppointment = false;
   }
 
   convertDate(date: Date | string) {
@@ -186,6 +231,7 @@ export class ViewAppointmentComponent {
     this.dataService.updateAppointmentData(this.dataService.defaults);
     this.user = [];
     this.displayModalAppointment = false;
+    this.isConfirmedStatus = false;
   }
 
 }

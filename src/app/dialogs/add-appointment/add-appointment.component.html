@@ -20,12 +20,12 @@
                     [showClear]="true">
                     <ng-template pTemplate="selectedItem">
                         <div class="country-item country-item-value" *ngIf="selectedCostumer">
-                            <div>"{{selectedCostumer.name}}" {{selectedCostumer.phone}}</div>
+                            <div>"{{selectedCostumer.name}}" | {{selectedCostumer.phone}}</div>
                         </div>
                     </ng-template>
                     <ng-template let-costumer pTemplate="item">
                         <div class="costumer-item">
-                            <div>"{{costumer.name}}" Тел.: {{costumer.phone}}</div>
+                            <div>"{{costumer.name}}" | Тел.: {{costumer.phone}}</div>
                         </div>
                     </ng-template>
                     </p-dropdown>

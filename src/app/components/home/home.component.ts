@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { Appointment } from 'src/app/interfaces/appointment';
 import { FullCalendarComponent } from '@fullcalendar/angular';
+import { COMPLETED, CURRENT, IN_PROGRESS, MISSED, OLD, REJECTED, SUCCESS, WARNING } from 'src/assets/constants';
+import { AuthService } from 'src/app/services/auth.service';
+import { Statistics } from 'src/app/interfaces/statistics';
 
 @Component({
   selector: 'app-home',
@@ -29,30 +32,7 @@ export class HomeComponent {
   userName!: string;
   events: EventInput[] = [];
 
-  calendarOptions: CalendarOptions = {
-    locale: ruLocale,
-    plugins: [
-      interactionPlugin,
-      dayGridPlugin,
-      timeGridPlugin,
-      listPlugin,
-    ],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-    },
-    initialView: 'dayGridMonth',
-    initialEvents: this.events,
-    weekends: true,
-    editable: true,
-    selectable: true,
-    selectMirror: true,
-    dayMaxEvents: true,
-    select: this.handleDateSelect.bind(this),
-    eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
-  }
+  calendarOptions!: CalendarOptions;
 
   calendarVisible = false;
 
@@ -73,10 +53,14 @@ export class HomeComponent {
 
   blockedDocument: boolean = false;
 
+  calendarEvent: any;
+
   isLoading = false;
   isShown = false;
 
   appointment_data$ = this.dataService.appointment_data_subject;
+
+  statistic_obj!: Statistics;
 
   constructor(
     private calendarService: CalendarService,
@@ -84,62 +68,62 @@ export class HomeComponent {
     private dataService: DataService,
     private changeDetector: ChangeDetectorRef,
     private messages: MyMessageService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
 
+    this.primengConfig.ripple = true;
+
+    
     
   }
 
 
   ngOnInit() {
 
-    // let calendarApi = this.fullCalendar.getApi();
-    // console.log(calendarApi)
+    this.authService.blockMenu.emit(false);
 
-    this.calendarService.addEventToCalendar.subscribe(add_event => {
-      const api = add_event.params.view.calendar;
-      api.addEvent(add_event.event);
-    })
+    this.updateData();
 
-    this.costumer_data$.subscribe(value => {
-      if(value.id != 0) {
-        this.isShown = true;
+    this.calendarService.addEventToCalendarClickInfo.subscribe(value => {
+      const ID = parseInt(value.info.event.id)
+      const costumer_ID = value.costumerId;
+      const isComplete = value.status == COMPLETED;
+      const ev: EventInput = {
+        id: value.info.event.id,
+        backgroundColor: value.col
       }
-    })
-
-    this.isLoading = true;
-
-    this.data$.subscribe(value => {
-      this.userName = this.dataService.USER_NAME;
-      if (value) {
-        setTimeout(() => {
-          this.dataLoaded = true;
-          this.calendarVisible = true;
-          this.isLoading = false;
-          this.unlockDocument();
-        }, 1500);
+      let temp: Appointment = {
+        id: 0,
+        date: '',
+        costumerId: 0,
+        serviceId: 0,
+        status: '',
+        userId: 0
       }
-    })
-
-    this.primengConfig.ripple = true;
-
-    this.calendarService.loadCalendarData().subscribe(calendar => {
-      calendar.map(calendar_results => {
-        this.dataService.getSericeById(calendar_results.serviceId).subscribe(service_results => {
-          const currentDate = new Date(calendar_results.date);
-          const minutes = this.addMinutes(currentDate, 30);
-
-          this.events.push({
-            start: calendar_results.date,
-            end: minutes,
-            id: calendar_results.id.toString(),
-            title: service_results.name
+      this.statistic_obj = {
+        id: 0,
+        costumerId: costumer_ID,
+        userId: this.dataService.USER_ID,
+        complete: isComplete ? 1 : 0
+      }
+      this.dataService.getAppointmentById(ID).subscribe(app => {
+        temp = app;
+        temp.status = value.status;
+        this.dataService.changeAppointmentById(ID,temp).subscribe(() => {
+          this.dataService.postStatistic(this.statistic_obj).subscribe(res => {
+            console.log('home 114', res);
+            this.messages.showSuccess('Статус изменен')
+            this.handleEventChange(ev);
           })
-        });
-      });
-      this.dataService.updateData(true);
-
-    }, (error) => console.log(error));
+        }, error => console.log(error))
+      },error => console.log(error));
+    })
+        
+    this.calendarService.addEventToCalendar.subscribe(() => {
+      if(this.events.length > 0) this.events = [];
+      this.updateData();
+    })
   }
 
   showSuccess() {
@@ -156,13 +140,104 @@ export class HomeComponent {
     }, 3000);
   }
 
-  
+  updateData(){
+
+    this.calendarOptions = {
+      locale: ruLocale,
+      plugins: [
+        interactionPlugin,
+        dayGridPlugin,
+        timeGridPlugin,
+        listPlugin,
+      ],
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      initialView: 'dayGridMonth',
+      initialEvents: this.events,
+      weekends: true,
+      editable: true,
+      selectable: true,
+      selectMirror: true,
+      dayMaxEvents: true,
+      select: this.handleDateSelect.bind(this),
+      eventClick: this.handleEventClick.bind(this),
+      eventsSet: this.handleEvents.bind(this),
+      eventChange: this.handleEventChange.bind(this)
+    }
+
+    this.costumer_data$.subscribe(value => {
+      if(value.id != 0) {
+        this.isShown = true;
+      }
+    })
+    
+    this.dataLoaded = false;
+    this.isLoading = true;
+    this.calendarVisible = false;
+    this.calendarService.loadCalendarData().subscribe(calendar => {
+      calendar.map(calendar_results => {
+        this.dataService.getSericeById(calendar_results.serviceId).subscribe(service_results => {
+          const currentDate = new Date(calendar_results.date);
+          const minutes = this.addMinutes(currentDate, 30);
+          let colors = {
+            background: '',
+            color: ''
+          };
+          const selectedDate = new Date(calendar_results.date);
+          const today = new Date();
+          switch(calendar_results.status){
+            case IN_PROGRESS: {
+              if (selectedDate < today) {
+                 colors.background = OLD;
+               }
+               else {
+                 colors.background = CURRENT;
+               }
+            }
+            break;
+            case REJECTED: {
+              colors.background = WARNING;
+            }
+            break;
+            case COMPLETED: {
+              colors.background = SUCCESS;
+            }
+            break;
+            case MISSED: {
+              colors.background = WARNING;
+            }
+            break;
+          }
+          
+         
+          this.events.push({
+            start: calendar_results.date,
+            end: minutes,
+            id: calendar_results.id.toString(),
+            title: service_results.name,
+            backgroundColor: colors.background,
+            color: colors.color
+          })
+        });
+      });
+      this.userName = this.dataService.USER_NAME;
+      // this.dataService.updateData(true);
+      setTimeout(() => {
+        this.dataLoaded = true;
+        this.calendarVisible = true;
+        this.isLoading = false;
+        this.unlockDocument();
+      }, 1000);
+
+    }, (error) => console.log(error));
+  }
 
   editUser() {
     this.messages.showInfo('This option will be avialable soon');
   }
-
-  
 
   addMinutes(date: Date, minutes: number) {
     date.setMinutes(date.getMinutes() + minutes);
@@ -170,29 +245,25 @@ export class HomeComponent {
     return date;
   }
 
-  autoDateSelect(selectInfo: DateSelectArg, event: DateSelectArg){
-    const api = selectInfo.view.calendar;
-    // api.unselect();
-    api.addEvent(event);
-  }
-
   handleDateSelect(selectInfo: DateSelectArg) {
-    const title = 'event';
-    const calendarApi = selectInfo.view.calendar;
-
-    calendarApi.unselect(); // clear date selection
-    this.calendarService.transferCalendarApi.emit(calendarApi);
+    const today = new Date();
+    if(selectInfo.allDay){
+      this.messages.showInfo('Выберите конкретное время');
+      return;
+    }
+    else if(selectInfo.start < today){
+      this.calendarApi = selectInfo.view.calendar;
+      this.messages.showInfo('Это старая дата');
+      this.calendarApi.unselect(); // clear date selection
+      return;
+    }
+    this.selectInfo2 = selectInfo;
+    this.calendarApi = selectInfo.view.calendar;
+    this.calendarApi.unselect(); // clear date selection
+    this.calendarService.transferCalendarApi.emit(this.calendarApi);
     this.transferParamsToModal(selectInfo);
-    this.openModal(true); 
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: "0",
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   });
-    // }
+    this.openModal(true);
+    
   }
 
 
@@ -200,38 +271,9 @@ export class HomeComponent {
     this.dataService.transferParams.emit(param)
   }
 
-  // myEventClick(selectInfo: DateSelectArg){
-    // const currentMonth = selectInfo.start.toLocaleDateString();
-    // const curDay = selectInfo.start.toTimeString();
-    // if (selectInfo.allDay) {
-    //   this.dateAppointment = 'Весь день';
-    //   this.messages.showInfo('Выберите время бронирования');
-    //   return;
-    // } 
-    // this.dateAppointment = `${currentMonth} ${curDay}`;
-    // this.selectInfo2 = selectInfo;
-    // const api = selectInfo.view.calendar;
-    // const calendar_event = {
-    //   id: "0",
-    //   title: 'service_name',
-    //   start: this.dateAppointment,
-    //   end: this.dateAppointment,
-    //   allDay: false
-    // }
-    // // api.unselect();
-    // setTimeout(() => {
-    //   api.addEvent({
-    //     id: "0",
-    //     title: 'service_name',
-    //     start: this.dateAppointment,
-    //     end: this.dateAppointment,
-    //     allDay: false
-    //   });      
-    // }, 1000);
-    // this.calendarService.transferCalendarApi.emit(api);
-    // this.transferParamsToModal(selectInfo);
-    // this.openModal(true);   
-  // }
+  handleEventChange(eventInfo: EventInput){
+    console.log(eventInfo)
+  }
 
   handleEventClick(clickInfo: EventClickArg) {
     this.clickInfoCurrent = clickInfo;

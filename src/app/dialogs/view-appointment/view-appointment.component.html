@@ -25,7 +25,22 @@
             <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"  pTooltip="Экспорт в XLS"></button>
             <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="Экспорт в PDF"></button>
         </div>
-        <button pButton type="button" (click)="confirm($event)" class="p-button-outlined p-button-rounded p-button-danger" label="Удалить встречу"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i></button>
+        <!-- <button pButton type="button" (click)="confirm($event)" class="p-button-outlined p-button-rounded p-button-danger" label="Завершить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i></button> -->
+        <p-dropdown [disabled]="isConfirmedStatus" [options]="optionsChoise" [(ngModel)]="selectedChoise" optionLabel="name" placeholder="Завершить">
+            <ng-template pTemplate="selectedItem">
+                <div class="flex align-items-center gap-2" *ngIf="selectedChoise">
+                    <div>{{ selectedChoise.name }}</div>
+                    <i [class]="selectedChoise.icon" [style]="selectedChoise.styleIcon"></i>
+                </div>
+            </ng-template>
+            <ng-template let-button pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                    <div>{{ button.name }}</div>
+                    <i [class]="button.icon" [style]="button.styleIcon"></i>
+                </div>
+            </ng-template>
+        </p-dropdown>
     </ng-template>
-    </p-table>
+</p-table>
+<p-button label="Сохранить" (click)="save()" styleClass="p-button-outlined p-button-success" [disabled]="!selectedChoise" icon="pi pi-check"></p-button>
   </p-dialog>

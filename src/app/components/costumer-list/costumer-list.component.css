@@ -18,3 +18,9 @@ span {
 :host ::ng-deep .p-ripple.p-element.p-button.p-component.ng-star-inserted{
     flex: 1;
 }
+
+::ng-deep .table-header.ng-star-inserted{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

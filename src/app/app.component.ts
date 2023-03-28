@@ -16,6 +16,7 @@ export class AppComponent implements OnChanges {
   items: MenuItem[] = [];
   searchMenuItems: MenuItem[] = [];
   searchQuery!: string;
+  blockMenu = false;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -28,7 +29,10 @@ export class AppComponent implements OnChanges {
     this.searchMenuItems = [...this.items];
     this.isLogged$.subscribe(value => {
       this.showToolbar = value;
-    })
+    });
+    this.authService.blockMenu.subscribe(value => {
+      this.blockMenu = value;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -112,7 +116,10 @@ export class AppComponent implements OnChanges {
           },
           {
             label: 'Список',
-            icon: 'pi pi-fw pi-list'
+            icon: 'pi pi-fw pi-list',
+            command: () => {
+              this.router.navigateByUrl('colleagues')
+            }
           }
 
         ]
@@ -172,7 +179,8 @@ export class AppComponent implements OnChanges {
           this.searchQuery = '';
           this.resetMenu();
           this.confirm();
-        }
+        },
+        disabled: this.blockMenu
       }
     ];
   }

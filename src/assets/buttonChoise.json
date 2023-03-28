@@ -1,0 +1,5 @@
+[
+    { "name": "Успешно завершена", "icon": "pi pi-check-square", "styleIcon": "color: green; font-size: 2rem", "code": "success" },
+    { "name": "Клиент не пришел", "icon": "pi pi-exclamation-triangle", "styleIcon": "color: red; font-size: 2rem", "code": "missed" },
+    { "name": "Отменено", "icon": "pi pi-file-excel", "styleIcon": "color: orange; font-size: 2rem", "code": "canceled" }
+]

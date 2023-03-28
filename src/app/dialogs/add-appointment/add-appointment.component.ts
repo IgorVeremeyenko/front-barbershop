@@ -108,7 +108,6 @@ export class AddAppointmentComponent implements OnInit {
 
     this.calendarService.transferCalendarApi.subscribe(value => {
       this.calendarApi = value;
-      console.log('api', this.calendarApi)
     })
 
     this.dataService.transferParams.subscribe(params => {
@@ -180,46 +179,28 @@ export class AddAppointmentComponent implements OnInit {
       this.selectedCostumer.id,
       this.categorySelected.id,
       IN_PROGRESS,
-      this.dataService.USER_ID
+      this.dataService.USER_ID,
     );
-    const calendar_event = {
-      id: this.selectedCostumer.id.toString(),
-      title: 'service_name',
-      start: this.date,
-      end: this.date,
-      allDay: this.allDay
-    }
-    this.addEventToCalendarApi(calendar_event, this.params);
-    this.displayModal = false;
-    // this.dataService.addNewAppointment(this.appointment_obj).subscribe(
-    //   result => {
-    //     try {
-    //       const service_name = this.dataService.getSericeById(this.appointment_obj.serviceId).subscribe(service => service.name);
-    //       const currentDate = new Date(this.appointment_obj.date);
-    //       const minutes = this.addMinutes(currentDate, 30);
-    //       const calendar_event = {
-    //         id: result.id,
-    //         title: service_name,
-    //         start: this.date,
-    //         end: minutes,
-    //         allDay: this.allDay
-    //       }
-    //       this.addEventToCalendarApi(calendar_event, this.params);
-    //       this.messages.showSuccess('Успешно добавлено');
-    //       this.isSubmiting = false;
-    //       this.closeModal();
-          
-    //     } catch (error) {
-    //       console.log('catch add appointment', error);
-    //     }
-    //   }, error => {
-    //     this.messages.showError(error);
-    //   }
-    // )
+    
+    this.dataService.addNewAppointment(this.appointment_obj).subscribe(
+      () => {
+        try {
+          this.addEventToCalendarApi(this.params);
+          this.messages.showSuccess('Успешно добавлено');
+          this.isSubmiting = false;
+          this.dataService.updateData(true);
+          this.closeModal();
+        } catch (error) {
+          console.log('catch add appointment', error);
+        }
+      }, error => {
+        this.messages.showError(error);
+      }
+    )
   }
 
-  addEventToCalendarApi(event: any, params: DateSelectArg){
-    this.calendarService.addEventToCalendar.emit({event, params});
+  addEventToCalendarApi(params: DateSelectArg){
+    this.calendarService.addEventToCalendar.emit(params);
   }
 
   showSuccess(){

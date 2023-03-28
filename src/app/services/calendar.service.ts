@@ -25,7 +25,8 @@ export class CalendarService  {
 
   public transferCalendarApi: EventEmitter<any> = new EventEmitter<any>();
   public addEventToCalendar: EventEmitter<any> = new EventEmitter<any>();
-  public addEventToCalendarClickInfo: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
+  public addEventToCalendarClickInfo: EventEmitter<any> = new EventEmitter<any>();
+  public changeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient, private dataService: DataService) {
      

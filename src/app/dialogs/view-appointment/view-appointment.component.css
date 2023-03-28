@@ -22,3 +22,42 @@
     display: flex;
     flex-direction: column-reverse;
 }
+
+::ng-deep .flex.align-items-center.gap-2.ng-star-inserted{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 10px;
+}
+
+::ng-deep .p-dropdown-panel.p-component.ng-star-inserted{
+    position: fixed;
+}
+
+::ng-deep .p-dropdown.p-component.p-dropdown-open{
+    position: relative;
+}
+
+::ng-deep .ng-tns-c66-13.p-dialog-content{
+    height: 286px;
+}
+
+::ng-deep p-dropdown.p-element.p-inputwrapper.ng-valid.ng-star-inserted.ng-touched.p-inputwrapper-filled.ng-dirty{
+    margin-right: 2rem;
+}
+
+::ng-deep p-dropdown.p-element.p-inputwrapper.ng-pristine.ng-valid.ng-star-inserted.ng-touched{
+    margin-right: 4rem;
+}
+
+::ng-deep .p-dropdown-trigger{
+    width: 2rem!important;
+}
+
+::ng-deep p-dropdown.p-element.p-inputwrapper.ng-untouched.ng-pristine.ng-valid.ng-star-inserted{
+    margin-right: 4rem;
+}
+
+::ng-deep button.p-ripple.p-element.p-button-outlined.p-button-success.p-button.p-component{
+    margin-top: 1rem;
+}
