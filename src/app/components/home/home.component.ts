@@ -179,49 +179,52 @@ export class HomeComponent {
     this.calendarVisible = false;
     this.calendarService.loadCalendarData().subscribe(calendar => {
       calendar.map(calendar_results => {
-        this.dataService.getSericeById(calendar_results.serviceId).subscribe(service_results => {
-          const currentDate = new Date(calendar_results.date);
-          const minutes = this.addMinutes(currentDate, 30);
-          let colors = {
-            background: '',
-            color: ''
-          };
-          const selectedDate = new Date(calendar_results.date);
-          const today = new Date();
-          switch(calendar_results.status){
-            case IN_PROGRESS: {
-              if (selectedDate < today) {
-                 colors.background = OLD;
-               }
-               else {
-                 colors.background = CURRENT;
-               }
+        if(calendar_results.userId === this.dataService.USER_ID){
+          this.dataService.getSericeById(calendar_results.serviceId).subscribe(service_results => {
+            const currentDate = new Date(calendar_results.date);
+            const minutes = this.addMinutes(currentDate, 30);
+            let colors = {
+              background: '',
+              color: ''
+            };
+            const selectedDate = new Date(calendar_results.date);
+            const today = new Date();
+            switch(calendar_results.status){
+              case IN_PROGRESS: {
+                if (selectedDate < today) {
+                   colors.background = OLD;
+                 }
+                 else {
+                   colors.background = CURRENT;
+                 }
+              }
+              break;
+              case REJECTED: {
+                colors.background = WARNING;
+              }
+              break;
+              case COMPLETED: {
+                colors.background = SUCCESS;
+              }
+              break;
+              case MISSED: {
+                colors.background = WARNING;
+              }
+              break;
             }
-            break;
-            case REJECTED: {
-              colors.background = WARNING;
-            }
-            break;
-            case COMPLETED: {
-              colors.background = SUCCESS;
-            }
-            break;
-            case MISSED: {
-              colors.background = WARNING;
-            }
-            break;
-          }
-          
-         
-          this.events.push({
-            start: calendar_results.date,
-            end: minutes,
-            id: calendar_results.id.toString(),
-            title: service_results.name,
-            backgroundColor: colors.background,
-            color: colors.color
-          })
-        });
+            
+           
+            this.events.push({
+              start: calendar_results.date,
+              end: minutes,
+              id: calendar_results.id.toString(),
+              title: service_results.name,
+              backgroundColor: colors.background,
+              color: colors.color
+            })
+          });
+        }
+        
       });
       this.userName = this.dataService.USER_NAME;
       // this.dataService.updateData(true);

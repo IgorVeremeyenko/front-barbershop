@@ -43,6 +43,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { ChipModule } from 'primeng/chip';
 import { ChipsModule } from 'primeng/chips';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [],
@@ -90,7 +92,9 @@ import { ChipsModule } from 'primeng/chips';
     AutoCompleteModule,
     OrganizationChartModule,
     ChipModule,
-    ChipsModule
+    ChipsModule,
+    PasswordModule,
+    DividerModule
   ],
   exports: [
     ButtonModule,
@@ -135,7 +139,9 @@ import { ChipsModule } from 'primeng/chips';
     AutoCompleteModule,
     OrganizationChartModule,
     ChipModule,
-    ChipsModule
+    ChipsModule,
+    PasswordModule,
+    DividerModule
   ],
   providers: [ConfirmationService,MessageService]
 })

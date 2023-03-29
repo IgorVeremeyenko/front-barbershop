@@ -14,7 +14,7 @@ import { MasterListComponent } from './components/master-list/master-list.compon
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'registration', component: RegisterComponent, canActivate: [AuthGuard] },
+  { path: 'registration', component: RegisterComponent },
   { path: 'toasts', component: ToastsComponent, canActivate: [AuthGuard] },
   { path: 'network-error', component: NetworkErrorComponent },
   { path: 'costumers', component: CostumerListComponent, canActivate: [AuthGuard] },

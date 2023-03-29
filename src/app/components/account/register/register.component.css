@@ -1,0 +1,30 @@
+/* ::ng-deep .ng-tns-c171-8.p-password.p-component.p-inputwrapper.p-input-icon-right{
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+::nd-deep .ng-tns-c171-11.p-password.p-component.p-inputwrapper.p-input-icon-right{
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+::ng-deep input.p-inputtext.p-component.p-element.ng-tns-c171-11.p-password-input{
+    width: 100%;
+}
+
+::ng-deep input.p-inputtext.p-component.p-element.ng-tns-c171-8.p-password-input{
+    width: 100%;
+}
+
+::ng-deep .ng-tns-c171-9.p-password.p-component.p-inputwrapper.p-input-icon-right{
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+::ng-deep input.p-inputtext.p-component.p-element.ng-tns-c171-9.p-password-input{
+    width: 100%;
+} */
+
+::ng-deep .surface-card.p-4.shadow-2.border-round.w-full.lg\:w-6{
+    margin-left: 26vw;
+}

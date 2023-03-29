@@ -1,4 +1,4 @@
-<h1>Регистрация</h1>
+<!-- <h1>Регистрация</h1>
 
 <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
   <div class="form-group">
@@ -28,4 +28,38 @@
   </div>
 
   <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+</form> -->
+<div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+  <div class="text-center mb-5">
+      <div class="text-900 text-3xl font-medium mb-3">Регистрация</div>
+  </div>
+  <form [formGroup]="registerForm">
+  <div>
+      <label for="username" class="block text-900 font-medium mb-2">Логин</label>
+      <input type="text" pInputText class="form-control" id="username" formControlName="username" placeholder="Введите логин" class="w-full mb-3">
+      <label for="password" class="block text-900 font-medium mb-2">Пароль</label>
+      <p-password [inputStyle]="{'width':'100%'}" class="form-control" [feedback]="true" [toggleMask]="true" id="password" formControlName="password" placeholder="Введите пароль" [style]="{'width':'100%'}">
+        <ng-template pTemplate="header">
+            <h4>Надежность пароля</h4>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <p-divider></p-divider>
+          <p class="mt-2">Требования</p>
+          <p class="pl-2 ml-2 mt-0" style="line-height: 1.5">Минимум 6 символов</p>
+        </ng-template>
+      </p-password>
+      <label for="confirmPassword" class="block text-900 font-medium mb-2">Повторите пароль</label>
+      <p-password [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" class="form-control" [feedback]="false" [toggleMask]="true" id="confirmPassword" formControlName="confirmPassword" placeholder="Введите пароль" class="w-full mb-3"></p-password>
+      <div class="flex align-items-center justify-content-between mb-6">
+          <div class="flex align-items-center">
+              <!-- <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox> -->
+              <!-- <label for="rememberme1" class="text-900">Запомнить меня</label> -->
+          </div>
+      </div>
+      <button *ngIf="isShown" disabled="true" pButton pRipple label="Войти" icon="pi pi-spin pi-spinner" class="w-full"></button>
+      <button *ngIf="!isShown" [disabled]="!isValid" type="submit" (click)="onSubmit()" pButton pRipple label="Зарегистрироваться" icon="pi pi-user" class="w-full"></button>
+  </div>
 </form>
+</div>
+  
+

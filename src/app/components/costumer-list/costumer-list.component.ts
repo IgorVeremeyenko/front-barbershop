@@ -66,94 +66,97 @@ export class CostumerListComponent {
     this.loading = true;
     this.dataService.getClients().subscribe(app_res => {
       app_res.map(app => {
-        this.dataService.getAppointments().subscribe(appointment => {
+        if(app.userId === this.dataService.USER_ID){
+          this.dataService.getAppointments().subscribe(appointment => {
 
-          if (!appointment.length) {
-
-            this.dataService.getStatistics().subscribe(stat => {
-              this.statistic = stat;
-              const rating = this.calculateRating(app.id);
-              const obj_appointment = {
-                id: app.id,
-                name: app.name,
-                phone: app.phone,
-                rating: rating,
-                total: this.total,
-                appointments: []
-              };
-              this.visits.push(obj_appointment);
-            })
-          }
-          else {
-            appointment.map(app_result => {
-              if (app_result.costumerId === app.id) {
-                this.total = this.totalAppointments(app.id);
-                this.dataService.getSericeById(app_result.serviceId).subscribe(service => {
-                  const dateObj = new Date(app_result.date);
-                  const formatter = new Intl.DateTimeFormat('ru', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    hour: 'numeric',
-                    minute: 'numeric'
-                  });
+            if (!appointment.length) {
+  
+              this.dataService.getStatistics().subscribe(stat => {
+                this.statistic = stat;
+                const rating = this.calculateRating(app.id);
+                const obj_appointment = {
+                  id: app.id,
+                  name: app.name,
+                  phone: app.phone,
+                  rating: rating,
+                  total: this.total,
+                  appointments: []
+                };
+                this.visits.push(obj_appointment);
+              })
+            }
+            else {
+              appointment.map(app_result => {
+                if (app_result.costumerId === app.id) {
+                  this.total = this.totalAppointments(app.id);
+                  this.dataService.getSericeById(app_result.serviceId).subscribe(service => {
+                    const dateObj = new Date(app_result.date);
+                    const formatter = new Intl.DateTimeFormat('ru', {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long',
+                      hour: 'numeric',
+                      minute: 'numeric'
+                    });
+                    this.dataService.getStatistics().subscribe(stat => {
+                      this.statistic = stat;
+                      const rating = this.calculateRating(app.id);
+                      const result = formatter.format(dateObj);
+                      const obj_appointment = {
+                        id: app.id,
+                        name: app.name,
+                        phone: app.phone,
+                        rating: rating,
+                        total: this.total,
+                        appointments: [
+                          {
+                            id: app_result.id,
+                            name: `${service.category}/${service.name}`,
+                            date: result,
+                            amount: service.price,
+                            status: app_result.status
+                          }
+                        ]
+                      }
+                      if(this.visits.length > 0){
+                        this.visits.map(items => {
+                          if(items.id === obj_appointment.id){
+                            obj_appointment.appointments?.map(obj_children => {
+                              items.appointments.push(obj_children);
+                            })
+                          }
+                          else {
+                            this.visits.push(obj_appointment);
+                          }
+                        })
+                      }
+                      
+                    })
+  
+                  })
+                }
+                else {
                   this.dataService.getStatistics().subscribe(stat => {
                     this.statistic = stat;
                     const rating = this.calculateRating(app.id);
-                    const result = formatter.format(dateObj);
                     const obj_appointment = {
                       id: app.id,
                       name: app.name,
                       phone: app.phone,
                       rating: rating,
                       total: this.total,
-                      appointments: [
-                        {
-                          id: app_result.id,
-                          name: `${service.category}/${service.name}`,
-                          date: result,
-                          amount: service.price,
-                          status: app_result.status
-                        }
-                      ]
-                    }
-                    if(this.visits.length > 0){
-                      this.visits.map(items => {
-                        if(items.id === obj_appointment.id){
-                          obj_appointment.appointments?.map(obj_children => {
-                            items.appointments.push(obj_children);
-                          })
-                        }
-                        else {
-                          this.visits.push(obj_appointment);
-                        }
-                      })
-                    }
-                    
+                      appointments: []
+                    };
+                    this.visits.push(obj_appointment);
                   })
-
-                })
-              }
-              else {
-                this.dataService.getStatistics().subscribe(stat => {
-                  this.statistic = stat;
-                  const rating = this.calculateRating(app.id);
-                  const obj_appointment = {
-                    id: app.id,
-                    name: app.name,
-                    phone: app.phone,
-                    rating: rating,
-                    total: this.total,
-                    appointments: []
-                  };
-                  this.visits.push(obj_appointment);
-                })
-
-              }
-            })
-          }
-
-        })
+  
+                }
+              })
+            }
+  
+          })
+        }
+        
 
       });
       setTimeout(() => {

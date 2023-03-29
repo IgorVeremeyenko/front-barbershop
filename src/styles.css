@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import "primeflex/primeflex.css";
 html,
 body,
 html {
@@ -6,4 +7,4 @@ html {
 }
 
 html, body { height: 100%;  overflow: hidden;}
-body { margin: 0;}
+body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}

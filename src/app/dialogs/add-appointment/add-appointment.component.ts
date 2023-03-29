@@ -62,26 +62,30 @@ export class AddAppointmentComponent implements OnInit {
     });
     
     dataService.getServices().subscribe(serv_res => {
+      
       serv_res.map(item => {
-        const children = {
-          cname: item.name,
-          cprice: item.price
-        }
-        const cat: Cat = {
-          id: item.id,
-          category: item.category,
-          services: [children]
-        }
-        let flag = false;
-        this.services.map(items => {
-          if(items.category === cat.category){
-            items.services.push(children);
-            flag = true;
+        if(item.userId === dataService.USER_ID){
+          const children = {
+            cname: item.name,
+            cprice: item.price
           }
-        })
-        if(!flag){
-          this.services.push(cat);
+          const cat: Cat = {
+            id: item.id,
+            category: item.category,
+            services: [children]
+          }
+          let flag = false;
+          this.services.map(items => {
+            if(items.category === cat.category){
+              items.services.push(children);
+              flag = true;
+            }
+          })
+          if(!flag){
+            this.services.push(cat);
+          }
         }
+        
       })
       
     })
@@ -147,8 +151,10 @@ export class AddAppointmentComponent implements OnInit {
 
   loadClientsList(){
     this.dataService.getClients().subscribe(clients => {
-      clients.map(cl => {        
-        this.clients.push(cl);
+      clients.map(cl => {  
+        if(cl.userId === this.dataService.USER_ID){
+          this.clients.push(cl);
+        }      
       });
     })
   }

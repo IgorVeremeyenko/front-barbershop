@@ -39,39 +39,43 @@ export class ServiceListComponent implements AfterViewInit {
     this.files = [];
     this.dataService.getServices().subscribe(serviceArray => {
       serviceArray.map(object => {
-        this.dataService.getMasterById(object.masterId).subscribe(master => {
-          const node: TreeNode = {
-            data: {
-              name: object.category
-            },
-            children: [{
+        if(object.userId === this.dataService.USER_ID){
+          console.log(this.dataService.USER_ID)
+          this.dataService.getMasterById(object.masterId).subscribe(master => {
+            const node: TreeNode = {
               data: {
-                id: object.id,
-                masterId: object.masterId,
-                name: object.name,
-                price: object.price,
-                master: master.name
-              }
-            }]
-          };
-  
-          if(this.files.length > 0){
-            this.files.map(items => {
-              if(items.data.name === node.data.name){
-                node.children?.map(node_children => {
-                  items.children?.push(node_children);
-                })
-              }
-              else{
-                this.files.push(node);
-              }
-            })
-          }
-          else {
-            this.files.push(node);
-          }
-          
-        })
+                name: object.category
+              },
+              children: [{
+                data: {
+                  id: object.id,
+                  masterId: object.masterId,
+                  name: object.name,
+                  price: object.price,
+                  master: master.name
+                }
+              }]
+            };
+    
+            if(this.files.length > 0){
+              this.files.map(items => {
+                if(items.data.name === node.data.name){
+                  node.children?.map(node_children => {
+                    items.children?.push(node_children);
+                  })
+                }
+                else{
+                  this.files.push(node);
+                }
+              })
+            }
+            else {
+              this.files.push(node);
+            }
+            
+          })
+        }
+        
         
       });      
       

@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MenuItem, MessageService, PrimeNGConfig } from 'primeng/api';
 import { AuthService } from './services/auth.service';
@@ -10,7 +10,7 @@ import { DataService } from './services/data.service';
   styleUrls: ['./app.component.css'],
   providers: [ConfirmationService]
 })
-export class AppComponent implements OnChanges {
+export class AppComponent implements OnChanges  {
   isLogged$ = this.authService.authInfo;
   showToolbar = true;
   items: MenuItem[] = [];
@@ -30,8 +30,13 @@ export class AppComponent implements OnChanges {
     this.isLogged$.subscribe(value => {
       this.showToolbar = value;
     });
+    
+  }
+  
+  ngOnInit(){
     this.authService.blockMenu.subscribe(value => {
       this.blockMenu = value;
+      this.resetMenu();
     });
   }
 

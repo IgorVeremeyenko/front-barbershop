@@ -18,6 +18,7 @@ export class AuthGuard {
       if(res === '4'){
         localStorage.removeItem('access_token');
         this.router.navigateByUrl('login');
+        this.authService.blockMenu.emit(true);
         return false
       }
       else {

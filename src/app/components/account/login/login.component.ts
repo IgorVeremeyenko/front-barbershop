@@ -15,33 +15,62 @@ export class LoginComponent {
 
   loginForm!: FormGroup;
 
+  isValid = false;
+
+  isShown = false;
+
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private mesgs: MyMessageService) { }
 
   ngOnInit() {
     this.authService.setAuthStatus(false);
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
-      Password: ['', Validators.required]
+      Password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    this.loginForm.valueChanges.subscribe(changed => {
+      if(this.loginForm.valid){
+        this.isValid = true;
+      }
+      else {
+        this.isValid = false
+      }
+    })
+    this.authService.blockMenu.emit(true);
   }
 
   submitLoginForm() {
+    this.isShown = true;
     const body: Admin = {
       userName: this.loginForm.value.userName,
       Password: this.loginForm.value.Password
     }
     this.authService.login(body).subscribe(items => {
-      console.log(items);
       this.router.navigateByUrl('');
+      this.isShown = false;
     },error => {
-      this.mesgs.showError(error.error)
-      if(error.status === 404){
-      }
+      setTimeout(() => {
+        if(error.error === "User not found"){
+
+          this.mesgs.showError("Логин и/или пароль неверные");
+        }
+        else {
+          
+          this.mesgs.showError(error.error);
+        }
+        this.isShown = false;
+        if(error.status === 404){
+        }
+      }, 500);
     })
   }
 
   click(){
     this.mesgs.showError('click')
+  }
+
+  goToRegistration(){
+    this.router.navigateByUrl('registration');
   }
   
 }

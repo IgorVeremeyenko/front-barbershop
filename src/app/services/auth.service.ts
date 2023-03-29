@@ -21,15 +21,18 @@ export class AuthService {
     return this.http.get<string>(`${TOKEN_VALIDATION}${token}`).pipe(
       catchError((error: HttpErrorResponse) => { 
         if(error.error === 'Token is expired'){
+          this.blockMenu.emit(true);
           this.router.navigateByUrl('login');
           return throwError(error);
         }    
         if(error.name === 'HttpErrorResponse'){
+          this.blockMenu.emit(true);
           this.router.navigateByUrl('network-error');
           return error.status.toString();
         }
         if(error.status === 400){
           if(error.error === 'Token is expired'){
+            this.blockMenu.emit(true);
             this.router.navigateByUrl('login');
           }
           return error.status.toString();
