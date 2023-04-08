@@ -2,6 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { ServiceClass } from 'src/app/classes/classes.module';
 import { DataService } from 'src/app/services/data.service';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-service-list',
@@ -24,7 +25,7 @@ export class ServiceListComponent implements AfterViewInit {
     { field: 'master', header: 'Мастер' }
   ];
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private dialogService: DialogService) { }
 
 
   ngAfterViewInit(): void {
@@ -107,8 +108,8 @@ export class ServiceListComponent implements AfterViewInit {
       ''
     )
     // this.dataService.updateServData(serv_obj);
-    this.dataService.transferServiceObject.emit(serv_obj);
-    this.dataService.showModalEditService.emit(value);
+    this.dialogService.transferServiceObject.emit(serv_obj);
+    this.dialogService.showModalEditService.emit(value);
     this.isLoading = false;
     this.isShown = true;
   }

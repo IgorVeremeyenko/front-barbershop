@@ -1,4 +1,5 @@
 export interface Master {
     id: number,
-    name: string
+    name: string,
+    phone: string
 }

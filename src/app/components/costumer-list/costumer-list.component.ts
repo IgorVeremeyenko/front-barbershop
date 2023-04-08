@@ -28,6 +28,8 @@ export class CostumerListComponent {
 
   total = 0;
 
+  appointments: Appointment[] = [];
+
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
@@ -61,6 +63,7 @@ export class CostumerListComponent {
   }
 
   loadData() {
+    
     this.visits = [];
     this.displayTable = false;
     this.loading = true;
@@ -68,7 +71,7 @@ export class CostumerListComponent {
       app_res.map(app => {
         if(app.userId === this.dataService.USER_ID){
           this.dataService.getAppointments().subscribe(appointment => {
-
+            
             if (!appointment.length) {
   
               this.dataService.getStatistics().subscribe(stat => {
@@ -86,9 +89,10 @@ export class CostumerListComponent {
               })
             }
             else {
+              this.appointments = appointment;
               appointment.map(app_result => {
                 if (app_result.costumerId === app.id) {
-                  this.total = this.totalAppointments(app.id);
+                  this.totalAppointments(app.id, this.appointments);
                   this.dataService.getSericeById(app_result.serviceId).subscribe(service => {
                     const dateObj = new Date(app_result.date);
                     const formatter = new Intl.DateTimeFormat('ru', {
@@ -138,6 +142,7 @@ export class CostumerListComponent {
                 else {
                   this.dataService.getStatistics().subscribe(stat => {
                     this.statistic = stat;
+                    this.totalAppointments(app.id, this.appointments);
                     const rating = this.calculateRating(app.id);
                     const obj_appointment = {
                       id: app.id,
@@ -173,18 +178,30 @@ export class CostumerListComponent {
   }
 
   calculateRating(costumerId: number) {
-    let a = 0;
-    let b = 0;
-    a = this.statistic.filter(item => item.complete > 0 && item.costumerId === costumerId).reduce(acc => acc + 1, 0);
-    b = this.statistic.filter(item => item.costumerId === costumerId).reduce(acc => acc + 1, 0);
-    const avg = (a + b) / 2;
-    const rating = Math.round(avg / 2);
+    let successfulVisits = 0;
+    let totalVisits = 0;
+    successfulVisits = this.statistic.filter(item => item.complete > 0 && item.costumerId === costumerId).reduce(acc => acc + 1, 0);
+    totalVisits = this.statistic.filter(item => item.costumerId === costumerId).reduce(acc => acc + 1, 0);
+    let rating = 0;
+    const successRate = (successfulVisits / totalVisits) * 100;
+    
+    if (successRate >= 90) {
+      rating = 5;
+    } else if (successRate >= 80) {
+      rating = 4;
+    } else if (successRate >= 70) {
+      rating = 3;
+    } else if (successRate >= 60) {
+      rating = 2;
+    } else {
+      rating = 1;
+    }
     return rating;
   }
 
-  totalAppointments(costumerId: number){
-    console.log(this.visits)
-    return this.visits.filter(item => item.costumerId === costumerId && item.appointments.length > 0).reduce(acc => acc + 1, 0);
+  totalAppointments(costumerId: number, array: Appointment[]){
+    const size = array.length;
+    this.total = array.filter(item => item.costumerId === costumerId && size > 0).reduce(acc => acc + 1, 0);
   }
 
 }

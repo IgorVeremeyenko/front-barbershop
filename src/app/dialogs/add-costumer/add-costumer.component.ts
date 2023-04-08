@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Costumer } from 'src/app/interfaces/costumer';
 import { DataService } from 'src/app/services/data.service';
+import { DialogService } from 'src/app/services/dialog.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
 
 @Component({
@@ -22,16 +23,16 @@ export class AddCostumerComponent {
 
   selectedCountry: any;
 
-  constructor(private dataService: DataService, private msg: MyMessageService){
+  constructor(private dataService: DataService, private msg: MyMessageService, private dialogService: DialogService){
 
-    this.dataService.showModalAddNewCostumer.subscribe(value => {
+    this.dialogService.showModalAddNewCostumer.subscribe(value => {
       this.displayModal = value;
       console.log(this.myForm.value.userPhone)
     })
 
     this.myForm = new FormGroup({
       "userName": new FormControl("new costumer", Validators.required),
-      "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)]),
+      "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\+\d{2}\s\(\d{3}\)\s\d{3}-\d{5}$/)]),
       "userLang": new FormControl("Русский"),
       "userEmail": new FormControl("", Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
     });
@@ -62,7 +63,7 @@ export class AddCostumerComponent {
       this.isSubmiting = false;
       this.msg.showSuccess('Успешно добавлен');
       this.displayModal = false;
-      this.dataService.isAddedNewCostumer.emit(true);
+      this.dialogService.isAddedNewCostumer.emit(true);
     }, error => {
       this.msg.showError('Что-то погло не так...');
       console.log(error);

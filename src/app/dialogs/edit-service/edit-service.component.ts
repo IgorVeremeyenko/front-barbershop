@@ -2,6 +2,7 @@ import { AfterViewInit, Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Service } from 'src/app/interfaces/service';
 import { DataService } from 'src/app/services/data.service';
+import { DialogService } from 'src/app/services/dialog.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
 
 @Component({
@@ -26,9 +27,9 @@ export class EditServiceComponent implements AfterViewInit {
 
   isLoaded = false;
 
-  constructor(private dataService: DataService, private msg: MyMessageService){
+  constructor(private dataService: DataService, private msg: MyMessageService, private dialogService: DialogService){
 
-    this.dataService.transferServiceObject.subscribe(obj => {
+    this.dialogService.transferServiceObject.subscribe(obj => {
       this.service_object = obj;
       this.dataService.getServices().subscribe(ser => {
         const arr = new Array;
@@ -52,7 +53,7 @@ export class EditServiceComponent implements AfterViewInit {
   }
 
   ngOnInit(){   
-    this.dataService.showModalEditService.subscribe(modal => {      
+    this.dialogService.showModalEditService.subscribe(modal => {      
       this.displayModal = modal;
       this.isLoaded = true;     
     });   
@@ -87,7 +88,7 @@ export class EditServiceComponent implements AfterViewInit {
 
   hide(){
     this.serviceOptions = [];
-    this.dataService.showModalEditService.emit(false);
+    this.dialogService.showModalEditService.emit(false);
     this.myForm.reset();
   }
 

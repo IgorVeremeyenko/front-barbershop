@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ServiceClass } from 'src/app/classes/classes.module';
 import { DataService } from 'src/app/services/data.service';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-add-service',
@@ -28,7 +29,7 @@ export class AddServiceComponent {
 
   selectedMaster: any;
 
-  constructor(private dataService: DataService){
+  constructor(private dataService: DataService, private dialogService: DialogService){
 
     this.dataService.getMasters().subscribe(masters => {
       const arr = new Array;
@@ -63,7 +64,7 @@ export class AddServiceComponent {
   }
 
   ngOnInit(){
-    this.dataService.showModalAddService.subscribe(value => {
+    this.dialogService.showModalAddService.subscribe(value => {
       this.displayModal = value;  
     });
   }

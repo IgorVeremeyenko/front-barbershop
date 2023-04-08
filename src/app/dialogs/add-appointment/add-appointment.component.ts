@@ -3,8 +3,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateSelectArg } from '@fullcalendar/core';
 import { AppointmentClass, CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
 import { Costumer } from 'src/app/interfaces/costumer';
+import { Master } from 'src/app/interfaces/master';
+import { Schedule } from 'src/app/interfaces/schedule';
+import { Service } from 'src/app/interfaces/service';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
+import { DialogService } from 'src/app/services/dialog.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
 import { IN_PROGRESS } from 'src/assets/constants';
 
@@ -49,17 +53,34 @@ export class AddAppointmentComponent implements OnInit {
 
   params!: DateSelectArg;
 
+  masters: Master[] = [];
+
+  servicesList: Service[] = [];
+
+  schedules: Schedule[] = [];
+
+  available: any;
+
+  today = new Date();
+
+  freeMaster = true;
+
   @Input() displayModal: boolean = false;
   @Input() calendarParams: any;
 
-  constructor(private dataService: DataService, private messages: MyMessageService, private calendarService: CalendarService) {
+  constructor(private dataService: DataService, private messages: MyMessageService, private calendarService: CalendarService, private dialogService: DialogService) {
 
     this.myForm = new FormGroup({
       "userName": new FormControl("", Validators.required),
       "selectedLang": new FormControl("Русский"),
       "selectedService": new FormControl("", Validators.required),
-      "selectedPrice": new FormControl({value: '', disabled: true})
+      "selectedPrice": new FormControl({value: '', disabled: true}),
+      "isAvailable": new FormControl(null, Validators.required)
     });
+
+    this.dataService.getMasters().subscribe(masters => this.masters = masters);
+    this.dataService.getServices().subscribe(services => this.servicesList = services);
+    this.dataService.getSchedules().subscribe(schedules => this.schedules = schedules);
     
     dataService.getServices().subscribe(serv_res => {
       
@@ -90,13 +111,13 @@ export class AddAppointmentComponent implements OnInit {
       
     })
 
-    this.dataService.isAddedNewCostumer.subscribe(value => {
+    this.dialogService.isAddedNewCostumer.subscribe(value => {
       if(value){
         this.loadClientsList();
       }
     })
 
-    dataService.transferParams.subscribe(value => {
+    dialogService.transferParams.subscribe(value => {
       this.calendarApi = value;
     })
 
@@ -114,7 +135,7 @@ export class AddAppointmentComponent implements OnInit {
       this.calendarApi = value;
     })
 
-    this.dataService.transferParams.subscribe(params => {
+    this.dialogService.transferParams.subscribe(params => {
       if (typeof (params) === 'string') {
         this.date = params;
         this.allDay = true;
@@ -137,7 +158,7 @@ export class AddAppointmentComponent implements OnInit {
       }
     });
 
-    this.dataService.showModalAddAppointment.subscribe(value => {
+    this.dialogService.showModalAddAppointment.subscribe(value => {
      
       this.displayModal = value;
     });
@@ -168,14 +189,54 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   getCategory(event: any){
-    this.categorySelected = event.value;
+    const currentDayOfWeek = this.today.getDay();
+    const dayOfWeek = this.getDayOfWeek(currentDayOfWeek);
+    const result = this.servicesList.filter(item => item.category === event.value.category);
+    result.map(res => {
+      const m = this.masters.filter(mast => mast.id === res.masterId);
+      m.map(mast => {
+        const mst = this.schedules.filter(item => item.dayOfWeek === dayOfWeek && item.masterId === mast.id);
+        if(mst.length > 0){
+          this.available = mast.id;
+        }
+      })
+    })
+    console.log(this.available)
+    if(this.available) {
+      this.freeMaster = true;
+      this.categorySelected = event.value;
+    }
+    else {
+      this.freeMaster = false;
+      this.categorySelected = null;
+      this.available = null;
+      this.myForm.get('isAvailable')?.reset();
+    }
+    this.available = null;
+    this.priceSelected = null;
+    this.myForm.get('selectedPrice')?.reset();
+  }
+
+  getDayOfWeek(dayIndex: number) {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return daysOfWeek[dayIndex];
   }
 
   getPrice(event: any){
-    this.priceSelected = event.cprice;
-    this.myForm.get('selectedPrice')?.enable();
-    this.myForm.get('selectedPrice')?.setValue(this.priceSelected);
-    this.myForm.get('selectedPrice')?.disable();
+    // console.log(event)
+    if(!this.freeMaster){
+      this.priceSelected = null;
+      this.myForm.get('selectedPrice')?.enable();
+      this.myForm.get('selectedPrice')?.setValue('Сегодня мастер недоступен');
+      this.myForm.get('selectedPrice')?.disable();
+    }
+    else {
+      this.priceSelected = event.value?.cprice;
+      this.myForm.get('selectedPrice')?.enable();
+      this.myForm.get('selectedPrice')?.setValue(this.priceSelected);
+      this.myForm.get('selectedPrice')?.disable();
+      this.myForm.get('isAvailable')?.setValue(true);
+    }
   }
 
   addAppointment() {        
@@ -220,12 +281,16 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   openNewCostumerModal(){
-    this.dataService.showModalAddNewCostumer.emit(true);
+    this.dialogService.showModalAddNewCostumer.emit(true);
   }
 
   submit() {
     // this.isSubmiting = true;
     this.addAppointment();
+  }
+
+  onHide(){
+    this.available = null;
   }
 
 }

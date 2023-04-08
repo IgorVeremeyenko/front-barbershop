@@ -1,7 +1,7 @@
 <!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
     acceptButtonStyleClass="p-button-text"></p-confirmDialog> -->
     <p-dialog header="Бронирование записи" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
-    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
+    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false" (onHide)="onHide()">
     <!-- добавление.component.html -->
     <div class="container">
         <form [formGroup]="myForm" (ngSubmit)="submit()">
@@ -34,9 +34,12 @@
 
                 <div class="service-group">
                     <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>                   
-                    <p-cascadeSelect (onGroupChange)="getCategory($event)" (onChange)="getPrice($event.value)" placeholder="Выберите услугу" formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
+                    <p-cascadeSelect (onGroupChange)="getCategory($event)" (onChange)="getPrice($event)" placeholder="Выберите услугу" formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
                     [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
-                    <p-inputNumber *ngIf="priceSelected" formControlName="selectedPrice" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
+                    <p-inputNumber class="w-11" *ngIf="priceSelected && freeMaster" formControlName="selectedPrice" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
+                    <div class="w-full card flex justify-content-center">
+                        <input class="w-11" pInputText type="text" *ngIf="!freeMaster" formControlName="selectedPrice" />                        
+                    </div>
                 </div>
                 <div class="alert alert-danger"
                     *ngIf="myForm.controls['selectedService']?.invalid && myForm.controls['selectedService']?.touched">

@@ -1,5 +1,5 @@
 <div class="cont">
-    <div class="flex mb-3">
+    <div class="m-3">
         <p-selectButton [options]="sizes" [(ngModel)]="selectedSize" [multiple]="false" optionLabel="name" optionValue="class"></p-selectButton>
     </div>
     <p-table #dt_costumers [loading]="loading" [value]="visits" dataKey="name" [tableStyle]="{'min-width': '60rem'}"
@@ -18,7 +18,7 @@
                 <th pSortableColumn="name">Имя <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="phone">Телефон <p-sortIcon field="phone"></p-sortIcon></th>
                 <th pSortableColumn="rating">Ранг <p-sortIcon field="rating"></p-sortIcon></th>
-                <th pSortableColumn="total">Кол. встреч <p-sortIcon field="total"></p-sortIcon></th>
+                <th pSortableColumn="total">Кол. посещений <p-sortIcon field="total"></p-sortIcon></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-client let-expanded="expanded">

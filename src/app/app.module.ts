@@ -20,9 +20,12 @@ import { CostumerListComponent } from './components/costumer-list/costumer-list.
 import { ServiceListComponent } from './components/service-list/service-list.component';
 import { EditServiceComponent } from './dialogs/edit-service/edit-service.component';
 import { AddCostumerComponent } from './dialogs/add-costumer/add-costumer.component';
-import { TestCalendarComponent } from './test-calendar/test-calendar.component';
 import { AddServiceComponent } from './dialogs/add-service/add-service.component';
 import { MasterListComponent } from './components/master-list/master-list.component';
+import { MasterEditComponent } from './dialogs/master-edit/master-edit.component';
+import { PhoneFieldComponent } from './components/master-edit-fields/phone-field/phone-field.component';
+import { DaysFieldComponent } from './components/master-edit-fields/days-field/days-field.component';
+import { AddMasterComponent } from './dialogs/add-master/add-master.component';
 
 @NgModule({
   declarations: [
@@ -39,9 +42,12 @@ import { MasterListComponent } from './components/master-list/master-list.compon
     ServiceListComponent,
     EditServiceComponent,
     AddCostumerComponent,
-    TestCalendarComponent,
     AddServiceComponent,
-    MasterListComponent
+    MasterListComponent,
+    MasterEditComponent,
+    PhoneFieldComponent,
+    DaysFieldComponent,
+    AddMasterComponent,
   ],
   imports: [
     BrowserModule,

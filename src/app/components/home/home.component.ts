@@ -15,6 +15,7 @@ import { FullCalendarComponent } from '@fullcalendar/angular';
 import { COMPLETED, CURRENT, IN_PROGRESS, MISSED, OLD, REJECTED, SUCCESS, WARNING } from 'src/assets/constants';
 import { AuthService } from 'src/app/services/auth.service';
 import { Statistics } from 'src/app/interfaces/statistics';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-home',
@@ -69,7 +70,8 @@ export class HomeComponent {
     private changeDetector: ChangeDetectorRef,
     private messages: MyMessageService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialogService: DialogService
   ) {
 
     this.primengConfig.ripple = true;
@@ -155,10 +157,12 @@ export class HomeComponent {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },
+      slotMinTime: '09:00:00',
+      slotMaxTime: '20:00:00',
       initialView: 'dayGridMonth',
       initialEvents: this.events,
       weekends: true,
-      editable: true,
+      editable: false,
       selectable: true,
       selectMirror: true,
       dayMaxEvents: true,
@@ -271,7 +275,7 @@ export class HomeComponent {
 
 
   transferParamsToModal(param: any) {
-    this.dataService.transferParams.emit(param)
+    this.dialogService.transferParams.emit(param)
   }
 
   handleEventChange(eventInfo: EventInput){
@@ -297,7 +301,7 @@ export class HomeComponent {
   }
 
   public openModal(value: boolean): void {
-    this.dataService.showModalAddAppointment.emit(value);
+    this.dialogService.showModalAddAppointment.emit(value);
   }
 
   handleEvents(events: EventApi[]) {

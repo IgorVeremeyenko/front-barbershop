@@ -77,4 +77,8 @@ export class RegisterComponent {
     
   }
 
+  goToLogin(){
+    this.router.navigateByUrl('login');
+  }
+
 }

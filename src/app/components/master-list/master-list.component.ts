@@ -4,6 +4,7 @@ import { Master } from 'src/app/interfaces/master';
 import { Schedule } from 'src/app/interfaces/schedule';
 import { Service } from 'src/app/interfaces/service';
 import { DataService } from 'src/app/services/data.service';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-master-list',
@@ -25,20 +26,12 @@ export class MasterListComponent {
 
   isLoading = true;
 
-  days: any[] = [
-    {day: 'Monday'},
-    {day: 'Tuesday'},
-    {day: 'Wednesday'},
-    {day: 'Thursday'},
-    {day: 'Friday'},
-    {day: 'Saturday'},
-    {day: 'Sunday'}
-  ];
+  
   
 
   selectedDays: string[] = [];
 
-  constructor(private dataService: DataService){
+  constructor(private dataService: DataService, private dialogService: DialogService){
     
     this.dataService.getMasters().subscribe(masters => this.masters = masters);
     this.dataService.getServices().subscribe(services => this.services = services);
@@ -52,13 +45,14 @@ export class MasterListComponent {
         const obj = {
           id: iterator.id,
           name: iterator.name,
-          category: foundService?.category,
+          category: this.services.filter(obj => obj.masterId === iterator.id),
           service: this.services.filter(obj => obj.masterId === iterator.id),
           days: this.schedules.filter(schedule => {          
             if(schedule.masterId === iterator.id)
               return schedule;
             return
-          })
+          }),
+          phone: iterator.phone
         }
         if(this.options === undefined){
           this.options = [...[obj]]
@@ -87,6 +81,11 @@ onRowEditSave(product: any){
 onRowEditCancel(product: any, id: any){
   console.log(product, id)
   this.selectedDays = [];
+}
+
+openDetails(master: any){
+  this.dialogService.transferEditMasterDetails.emit(master);
+  this.dialogService.showModalEditMaster.emit(true);
 }
 
 }

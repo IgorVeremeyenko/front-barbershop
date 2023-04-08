@@ -41,3 +41,7 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
+
+::ng-deep span.ng-tns-c75-4.p-autocomplete.p-component{
+    width: 100%;
+}

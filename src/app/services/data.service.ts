@@ -1,14 +1,11 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
 import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS } from 'src/assets/constants';
-import { MyNode } from '../interfaces/node';
-import { DateSelectArg, EventInput } from '@fullcalendar/core';
-import { BehaviorSubject } from 'rxjs';
-import { INITIAL_EVENTS } from '../event-utils';
+import { BehaviorSubject, map } from 'rxjs';
 import { Master } from '../interfaces/master';
 import { Schedule } from '../interfaces/schedule';
 import { Statistics } from '../interfaces/statistics';
@@ -41,15 +38,6 @@ export class DataService {
   appointment_data_subject = new BehaviorSubject<Appointment>(this.defaults);
   costumers$ = this.appointment_data_subject.asObservable();
 
-  public showModalAddAppointment: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public showModalEditService: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public showModalAddService: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public showModalAddNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
-  public isAddedNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  public transferServiceObject: EventEmitter<Service> = new EventEmitter<Service>();
-  public transferCostumerObject: EventEmitter<Appointment> = new EventEmitter<Appointment>();
-  public transferParams: EventEmitter<DateSelectArg> = new EventEmitter<DateSelectArg>();
 
   constructor(private http: HttpClient) { }
 
@@ -85,6 +73,18 @@ export class DataService {
     return this.http.get<Schedule[]>(SCHEDULES);
   }
 
+  editSchedule(id: number, body: Schedule){
+    return this.http.put(`${SCHEDULES}${id}`, body);
+  }
+
+  postSchedule(body: Schedule){
+    return this.http.post(SCHEDULES, body);
+  }
+
+  deleteSchedule(masterId: number){
+    return this.http.delete(`${SCHEDULES}${masterId}`);
+  }
+
   getAppointments() {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
@@ -94,6 +94,9 @@ export class DataService {
   }
   changeAppointmentById(id: number, body: any){
     return this.http.put(`${APPOINTMENT}/${id}`,body);
+  }
+  changeMasterById(id: number, body: Master){
+    return this.http.put(`${MASTERS}${id}`, body);
   }
   addNewAppointment(body: Appointment): Observable<any> {
     return this.http.post(APPOINTMENT, body);

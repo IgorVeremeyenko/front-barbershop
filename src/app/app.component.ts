@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmationService, MenuItem, MessageService, PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService, MenuItem, PrimeNGConfig } from 'primeng/api';
 import { AuthService } from './services/auth.service';
 import { DataService } from './services/data.service';
+import { DialogService } from './services/dialog.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent implements OnChanges  {
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private dataService: DataService,
-    private primengConfig: PrimeNGConfig
+    private primengConfig: PrimeNGConfig,
+    private dialogService: DialogService
   ) {
     this.primengConfig.ripple = true;
     this.resetMenu();
@@ -139,7 +141,7 @@ export class AppComponent implements OnChanges  {
             command: () => {
               this.searchQuery = '';
               this.resetMenu();
-              this.dataService.showModalAddNewCostumer.emit(true);
+              this.dialogService.showModalAddNewCostumer.emit(true);
             }
           },
           {
@@ -163,7 +165,7 @@ export class AppComponent implements OnChanges  {
             command: () => {
               this.searchQuery = '';
               this.resetMenu();
-              this.dataService.showModalAddService.emit(true);
+              this.dialogService.showModalAddService.emit(true);
             }
           },
           {

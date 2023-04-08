@@ -1,7 +1,4 @@
-<!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
-    acceptButtonStyleClass="p-button-text"></p-confirmDialog> -->
-    <!-- <p-toast></p-toast> -->
-    <p-dialog header="Добавление пользователя" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
+<p-dialog header="Добавление пользователя" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
     [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
     <!-- добавление.component.html -->
     <div class="container">
@@ -20,42 +17,35 @@
                     </div>
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-language"></i></span>
-                            <p-dropdown 
-                                [options]="languages" 
-                                [style]="{width: '100%'}" 
-                                [filter]="true"
-                                emptyFilterMessage="Нет совпадений" 
-                                filterPlaceholder="Поиск" 
-                                formControlName="userLang" 
-                                placeholder="Выбрать язык(По умолчанию русский)" 
-                                optionLabel="name" 
-                                [showClear]="true">
-                                <ng-template pTemplate="selectedItem">
-                                    <div class="country-item country-item-value" *ngIf="selectedCountry">
-                                        <img src="{{selectedCountry.url}}"/>
-                                        <div>{{selectedCountry.name}}</div>
-                                    </div>
-                                </ng-template>
-                                <ng-template let-country pTemplate="item">
-                                    <div class="country-item">
-                                        <img src="{{country.url}}"  />
-                                        <div>{{country.name}}</div>
-                                    </div>
-                                </ng-template>
-                            </p-dropdown>
+                        <p-dropdown [options]="languages" [style]="{width: '100%'}" [filter]="true"
+                            emptyFilterMessage="Нет совпадений" filterPlaceholder="Поиск" formControlName="userLang"
+                            placeholder="Выбрать язык(По умолчанию русский)" optionLabel="name" [showClear]="true">
+                            <ng-template pTemplate="selectedItem">
+                                <div class="country-item country-item-value" *ngIf="selectedCountry">
+                                    <img src="{{selectedCountry.url}}" />
+                                    <div>{{selectedCountry.name}}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-country pTemplate="item">
+                                <div class="country-item">
+                                    <img src="{{country.url}}" />
+                                    <div>{{country.name}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
                     </div>
 
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-comment"></i></span>
-                        <input type="text" class="form-control" pInputText placeholder="Email" formControlName="userEmail"
-                            name="name">
+                        <input type="text" class="form-control" pInputText placeholder="Email"
+                            formControlName="userEmail" name="name">
                     </div>
-                                        
+
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
-                        
-                        <p-inputMask formControlName="userPhone" mask="(999) 999-9999"
-                            placeholder="(999) 999-9999"></p-inputMask>
+
+                        <p-inputMask formControlName="userPhone" mask="+99 (999) 999-99999"
+                            placeholder="+99 (999) 999-99999"></p-inputMask>
                     </div>
                     <div class="alert alert-danger"
                         *ngIf="myForm.controls['userPhone']?.invalid && myForm.controls['userPhone']?.touched">

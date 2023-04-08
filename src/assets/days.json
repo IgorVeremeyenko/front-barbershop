@@ -1,0 +1,30 @@
+[
+    {
+        "day": "Понедельник",
+        "payload": "Monday"
+    },
+    {
+        "day": "Вторник",
+        "payload": "Tuesday"
+    },
+    {
+        "day": "Среда",
+        "payload": "Wednesday"
+    },
+    {
+        "day": "Четверг",
+        "payload": "Thursday"
+    },
+    {
+        "day": "Пятница",
+        "payload": "Friday"
+    },
+    {
+        "day": "Суббота",
+        "payload": "Saturday"
+    },
+    {
+        "day": "Воскресенье",
+        "payload": "Sunday"
+    }
+]
