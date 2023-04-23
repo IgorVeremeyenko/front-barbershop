@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ServiceClass } from 'src/app/classes/classes.module';
+import { Service } from 'src/app/interfaces/service';
 import { DataService } from 'src/app/services/data.service';
 import { DialogService } from 'src/app/services/dialog.service';
+import { MyMessageService } from 'src/app/services/my-message.service';
 
 @Component({
   selector: 'app-add-service',
   templateUrl: './add-service.component.html',
-  styleUrls: ['./add-service.component.css']
+  styleUrls: ['./add-service.component.css'],
+  providers: [MyMessageService]
 })
 export class AddServiceComponent {
 
@@ -29,7 +31,13 @@ export class AddServiceComponent {
 
   selectedMaster: any;
 
-  constructor(private dataService: DataService, private dialogService: DialogService){
+  isLoading = false;
+
+  constructor(
+    private dataService: DataService, 
+    private dialogService: DialogService, 
+    private msg: MyMessageService
+    ){
 
     this.dataService.getMasters().subscribe(masters => {
       const arr = new Array;
@@ -55,7 +63,8 @@ export class AddServiceComponent {
       "serviceName": new FormControl("", Validators.required),
       "servicePrice": new FormControl("", Validators.required),
       "serviceCategory": new FormControl("", Validators.required),
-      "masterID": new FormControl("", Validators.required)
+      "masterID": new FormControl("", Validators.required),
+      "isSubmiting": new FormControl(true, Validators.required)
     });
 
     this.myForm.valueChanges.subscribe(res => {
@@ -70,17 +79,26 @@ export class AddServiceComponent {
   }
 
   hide(){
-    //
+    this.displayModal = false;
   }
 
   submit(){
-    // const service_obj: ServiceClass = new ServiceClass(
-    //   0,
-    //   this.myForm.value.serviceName,
-    //   this.myForm.value.servicePrice,
-    //   0,
-    //   this.myForm.value.masterID
-    // )
+    this.myForm.get('isSubmiting')?.setValue(null);
+    const body: Service = {
+      id: 0,
+      name: this.myForm.value.serviceName,
+      price: this.myForm.value.servicePrice,
+      userId: this.dataService.USER_ID,
+      masterId: this.myForm.value.masterID.id,
+      category: this.myForm.value.serviceCategory,
+      status: ''
+    }
+    this.dataService.addNewService(body).subscribe(result => {
+      console.log(result);
+      this.msg.showSuccess('Успешно добавлено');
+      this.myForm.get('isSubmiting')?.setValue(true);
+      this.hide();
+    }, error => console.log(error))
     console.log(this.myForm)
   }
 
@@ -89,7 +107,7 @@ export class AddServiceComponent {
   }
 
   openNewMasterModal(){
-
+    this.dialogService.showModalAddNewMaster.emit(true);
   }
 
   search(event: any){

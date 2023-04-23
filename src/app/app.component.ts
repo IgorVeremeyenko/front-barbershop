@@ -82,44 +82,16 @@ export class AppComponent implements OnChanges  {
     this.searchMenuItems = [];
     this.items = [
       {
-        label: 'Меню',
-        icon: 'pi pi-fw pi-file',
-        items: [
-          {
-            label: 'New',
-            icon: 'pi pi-fw pi-plus',
-            items: [
-              {
-                label: 'Bookmark',
-                icon: 'pi pi-fw pi-bookmark'
-              },
-              {
-                label: 'Video',
-                icon: 'pi pi-fw pi-video'
-              },
-
-            ]
-          },
-          {
-            label: 'Delete',
-            icon: 'pi pi-fw pi-trash'
-          },
-          {
-            separator: true
-          },
-          {
-            label: 'Export',
-            icon: 'pi pi-fw pi-external-link'
-          }
-        ]
-      },
-      {
         label: 'Мастера',
         icon: 'pi pi-users',
         items: [
           {
             label: 'Добавить',
-            icon: 'pi pi-fw pi-user-plus'
+            icon: 'pi pi-fw pi-user-plus',
+            disabled: this.blockMenu,
+            command: () => {
+              this.dialogService.showModalAddNewMaster.emit(true);
+            }
           },
           {
             label: 'Список',
@@ -142,7 +114,8 @@ export class AppComponent implements OnChanges  {
               this.searchQuery = '';
               this.resetMenu();
               this.dialogService.showModalAddNewCostumer.emit(true);
-            }
+            },
+            disabled: this.blockMenu
           },
           {
             icon: 'pi pi-fw pi-users',
@@ -166,7 +139,8 @@ export class AppComponent implements OnChanges  {
               this.searchQuery = '';
               this.resetMenu();
               this.dialogService.showModalAddService.emit(true);
-            }
+            },
+            disabled: this.blockMenu
           },
           {
             label: 'Все услуги',

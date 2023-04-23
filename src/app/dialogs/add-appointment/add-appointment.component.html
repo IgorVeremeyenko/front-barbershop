@@ -35,7 +35,7 @@
                 <div class="service-group">
                     <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>                   
                     <p-cascadeSelect (onGroupChange)="getCategory($event)" (onChange)="getPrice($event)" placeholder="Выберите услугу" formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
-                    [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
+                    [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem', 'borderTopLeftRadius': 0, 'borderBottomLeftRadius': 0}"></p-cascadeSelect>
                     <p-inputNumber class="w-11" *ngIf="priceSelected && freeMaster" formControlName="selectedPrice" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
                     <div class="w-full card flex justify-content-center">
                         <input class="w-11" pInputText type="text" *ngIf="!freeMaster" formControlName="selectedPrice" />                        

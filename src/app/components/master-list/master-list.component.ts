@@ -41,7 +41,7 @@ export class MasterListComponent {
       //  console.log(this.masters);
        for (const iterator of this.masters) {
         
-        const foundService = this.services.find(obj => obj.masterId === iterator.id);
+        // const foundService = this.services.find(obj => obj.masterId === iterator.id);
         const obj = {
           id: iterator.id,
           name: iterator.name,
@@ -66,22 +66,6 @@ export class MasterListComponent {
      }, 1000);
     
   }
-
-selectProduct(product: any){
-  console.log(product)
-}
-
-onRowEditInit(product: any){
-  
-}
-onRowEditSave(product: any){
-  console.log(this.selectedDays)
-  this.selectedDays = [];
-}
-onRowEditCancel(product: any, id: any){
-  console.log(product, id)
-  this.selectedDays = [];
-}
 
 openDetails(master: any){
   this.dialogService.transferEditMasterDetails.emit(master);

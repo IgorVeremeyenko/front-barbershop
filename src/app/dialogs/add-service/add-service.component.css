@@ -45,3 +45,8 @@
 ::ng-deep span.ng-tns-c75-4.p-autocomplete.p-component{
     width: 100%;
 }
+
+::ng-deep input.p-element.p-autocomplete-input.p-inputtext.p-component.ng-tns-c75-3.ng-star-inserted{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

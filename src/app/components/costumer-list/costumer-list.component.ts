@@ -184,7 +184,7 @@ export class CostumerListComponent {
     totalVisits = this.statistic.filter(item => item.costumerId === costumerId).reduce(acc => acc + 1, 0);
     let rating = 0;
     const successRate = (successfulVisits / totalVisits) * 100;
-    
+    console.log(successfulVisits)
     if (successRate >= 90) {
       rating = 5;
     } else if (successRate >= 80) {

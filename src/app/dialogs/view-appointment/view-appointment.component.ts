@@ -106,33 +106,6 @@ export class ViewAppointmentComponent {
 
   }
 
-  confirm(event: any) {
-    this.confirmationService.confirm({
-      target: event.target,
-      header: 'Подтверждение удаления',
-      message: 'Вы действительно хотите удалить запись?',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.isSubmiting = true;
-        this.dataService.removeAppointment(this.appointment.id).subscribe(res => {
-          this.msg.showSuccess('Запись удалена');
-          this.isSubmiting = false;
-          this.calendarService.clickInfoCurrent.event.remove();
-          // this.closeAppointmentModal();
-          // this.showInfo('Запись удалена')
-        }, error => {
-          console.log(error)
-          // this.showError(error);
-          this.msg.showError(error);
-          this.isSubmiting = false;
-        })
-      },
-      reject: () => {
-        // this.msgs = [{ severity: 'info', summary: 'info', detail: 'Вы отменили удаление' }];
-      }
-    });
-  }
-
   save(){
     let eventColour = '';
     let status = '';

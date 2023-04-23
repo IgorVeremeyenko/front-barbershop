@@ -114,7 +114,6 @@ export class HomeComponent {
         temp.status = value.status;
         this.dataService.changeAppointmentById(ID,temp).subscribe(() => {
           this.dataService.postStatistic(this.statistic_obj).subscribe(res => {
-            console.log('home 114', res);
             this.messages.showSuccess('Статус изменен')
             this.handleEventChange(ev);
           })

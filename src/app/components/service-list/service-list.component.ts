@@ -25,7 +25,12 @@ export class ServiceListComponent implements AfterViewInit {
     { field: 'master', header: 'Мастер' }
   ];
 
-  constructor(private dataService: DataService, private dialogService: DialogService) { }
+  constructor(private dataService: DataService, private dialogService: DialogService) {
+    this.dialogService.reloadPageServiceList.subscribe(() => {
+      this.files = [];
+      this.loadData();
+    })
+   }
 
 
   ngAfterViewInit(): void {
@@ -41,7 +46,6 @@ export class ServiceListComponent implements AfterViewInit {
     this.dataService.getServices().subscribe(serviceArray => {
       serviceArray.map(object => {
         if(object.userId === this.dataService.USER_ID){
-          console.log(this.dataService.USER_ID)
           this.dataService.getMasterById(object.masterId).subscribe(master => {
             const node: TreeNode = {
               data: {

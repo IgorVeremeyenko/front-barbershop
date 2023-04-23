@@ -78,33 +78,33 @@ export class MasterEditComponent {
       this.total += this.appointments.filter(t => t.serviceId === item.id && t.status === IN_PROGRESS).reduce(acc => acc + 1, 0);
     })
   }
-  onEdit(content: any){
-    switch(content){
-      case 'phone': {
-        this.editingPhone = true;
-        // this.dataService.changeMasterById(this.master.id, this.master)
-      }
-    }
+  // onEdit(content: any){
+  //   switch(content){
+  //     case 'phone': {
+  //       this.editingPhone = true;
+  //       // this.dataService.changeMasterById(this.master.id, this.master)
+  //     }
+  //   }
     
     
-  }
-  onSave(){
+  // }
+  // onSave(){
 
-  }
-  onCancel(){
-    this.editingPhone = false;
-  }
-  onComplete(){
-    if(this.editField.length < 19){
-      this.isEditing = true;
-    }
-    else {
-      this.isEditing = false;
-    }
-  }
+  // }
+  // onCancel(){
+  //   this.editingPhone = false;
+  // }
+  // onComplete(){
+  //   if(this.editField.length < 19){
+  //     this.isEditing = true;
+  //   }
+  //   else {
+  //     this.isEditing = false;
+  //   }
+  // }
 
-  onInput(ev: any){
-    // console.log(ev)
-  }
+  // onInput(ev: any){
+  //   // console.log(ev)
+  // }
   
 }

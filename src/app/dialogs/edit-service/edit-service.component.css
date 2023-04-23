@@ -13,3 +13,9 @@
     flex-direction: column;
     row-gap: 1rem;
 }
+
+::ng-deep .p-listbox.p-component{
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

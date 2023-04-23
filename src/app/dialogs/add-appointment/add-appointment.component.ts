@@ -61,8 +61,6 @@ export class AddAppointmentComponent implements OnInit {
 
   available: any;
 
-  today = new Date();
-
   freeMaster = true;
 
   @Input() displayModal: boolean = false;
@@ -181,7 +179,6 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   click(event: any){
-    console.log(event)
   }
 
   closeModal() {
@@ -189,7 +186,8 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   getCategory(event: any){
-    const currentDayOfWeek = this.today.getDay();
+    const today = new Date(this.params.start);
+    const currentDayOfWeek = today.getDay();
     const dayOfWeek = this.getDayOfWeek(currentDayOfWeek);
     const result = this.servicesList.filter(item => item.category === event.value.category);
     result.map(res => {
@@ -201,7 +199,6 @@ export class AddAppointmentComponent implements OnInit {
         }
       })
     })
-    console.log(this.available)
     if(this.available) {
       this.freeMaster = true;
       this.categorySelected = event.value;
@@ -242,7 +239,7 @@ export class AddAppointmentComponent implements OnInit {
   addAppointment() {        
     this.appointment_obj = new AppointmentClass(
       0,
-      this.dateForDB,
+      this.params.start,
       this.selectedCostumer.id,
       this.categorySelected.id,
       IN_PROGRESS,

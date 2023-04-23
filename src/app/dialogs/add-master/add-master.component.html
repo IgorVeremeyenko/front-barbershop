@@ -1,1 +1,40 @@
-<p>add-master works!</p>
+<p-dialog header="Добавление мастера" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
+    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
+    <!-- добавление.component.html -->
+    <div class="container">
+        <form [formGroup]="myForm" (ngSubmit)="submit()">
+            <div class="form-container">
+
+                <div class="inputs">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                        <input type="text" class="form-control" pInputText placeholder="Имя" formControlName="userName"
+                            name="name" required>
+                    </div>
+                    <div class="alert alert-danger"
+                        *ngIf="myForm.controls['userName']?.invalid && myForm.controls['userName']?.touched">
+                        Не указано имя
+                    </div>
+
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+
+                        <p-inputMask formControlName="userPhone" mask="+99 (999) 999-99999"
+                            placeholder="+99 (999) 999-99999"></p-inputMask>
+                    </div>
+                    <div class="alert alert-danger"
+                        *ngIf="myForm.controls['userPhone']?.invalid && myForm.controls['userPhone']?.touched">
+                        Некорректный номер телефона
+                    </div>
+                </div>
+                <div class="spinner-btn">
+                    <button pButton class="submit-btn" type="submit"
+                        [disabled]="myForm.invalid && (myForm.controls['userPhone'].untouched || myForm.controls['userPhone'].touched)"
+                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                            style="font-size: 1rem"></i></button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</p-dialog>

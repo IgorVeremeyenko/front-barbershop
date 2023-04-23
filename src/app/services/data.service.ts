@@ -107,6 +107,9 @@ export class DataService {
   addNewCostumer(body: Costumer){
     return this.http.post(COSTUMERS,body);
   }
+  addNewMaster(body: Master){
+    return this.http.post(MASTERS, body);
+  }
   loadCalendarData() {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
