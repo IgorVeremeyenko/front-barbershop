@@ -72,5 +72,9 @@ export class LoginComponent {
   goToRegistration(){
     this.router.navigateByUrl('registration');
   }
+
+  resetPassword(){
+    this.router.navigateByUrl('reset-password');
+  }
   
 }

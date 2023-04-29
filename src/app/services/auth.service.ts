@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Admin } from '../interfaces/admin';
 import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
-import { LOGIN, REGISTRATION, TOKEN_VALIDATION } from 'src/assets/constants';
+import { LOGIN, REGISTRATION, RESET, TOKEN_VALIDATION } from 'src/assets/constants';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -59,6 +59,10 @@ export class AuthService {
   
   registerUser(body: Admin){
     return this.http.post(REGISTRATION, body);
+  }
+
+  resetPassword(body: Admin){
+    return this.http.post(RESET,body);
   }
 
   logout() {

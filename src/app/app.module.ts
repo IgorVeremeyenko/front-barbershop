@@ -26,6 +26,7 @@ import { MasterEditComponent } from './dialogs/master-edit/master-edit.component
 import { PhoneFieldComponent } from './components/master-edit-fields/phone-field/phone-field.component';
 import { DaysFieldComponent } from './components/master-edit-fields/days-field/days-field.component';
 import { AddMasterComponent } from './dialogs/add-master/add-master.component';
+import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AddMasterComponent } from './dialogs/add-master/add-master.component';
     PhoneFieldComponent,
     DaysFieldComponent,
     AddMasterComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

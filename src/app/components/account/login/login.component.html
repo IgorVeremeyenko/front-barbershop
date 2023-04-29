@@ -22,7 +22,7 @@
               <!-- <label for="rememberme1" class="text-900">Запомнить меня</label> -->
           </div>
           <!-- <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"></a> -->
-          <p-button styleClass="p-button-info p-button-text">Забыли пароль?</p-button>
+          <p-button styleClass="p-button-info p-button-text" (click)="resetPassword()">Забыли пароль?</p-button>
       </div>
       <button *ngIf="isShown" disabled="true" pButton pRipple label="Войти" icon="pi pi-spin pi-spinner" class="w-full"></button>
       <button *ngIf="!isShown" [disabled]="!isValid" type="submit" (click)="submitLoginForm()" pButton pRipple label="Войти" icon="pi pi-user" class="w-full"></button>

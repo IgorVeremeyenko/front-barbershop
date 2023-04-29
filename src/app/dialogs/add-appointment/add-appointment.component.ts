@@ -224,7 +224,7 @@ export class AddAppointmentComponent implements OnInit {
     if(!this.freeMaster){
       this.priceSelected = null;
       this.myForm.get('selectedPrice')?.enable();
-      this.myForm.get('selectedPrice')?.setValue('Сегодня мастер недоступен');
+      this.myForm.get('selectedPrice')?.setValue('Нет доступных мастеров');
       this.myForm.get('selectedPrice')?.disable();
     }
     else {
