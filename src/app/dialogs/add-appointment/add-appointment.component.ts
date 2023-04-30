@@ -55,9 +55,19 @@ export class AddAppointmentComponent implements OnInit {
 
   masters: Master[] = [];
 
+  freeMasters: Master[] = [];
+
+  selectedMaster: any;
+
+  onlyMaster: string = '';
+
+  showListBox = false;
+
   servicesList: Service[] = [];
 
   schedules: Schedule[] = [];
+
+  masterID: number[] = [];
 
   available: any;
 
@@ -73,7 +83,8 @@ export class AddAppointmentComponent implements OnInit {
       "selectedLang": new FormControl("Русский"),
       "selectedService": new FormControl("", Validators.required),
       "selectedPrice": new FormControl({value: '', disabled: true}),
-      "isAvailable": new FormControl(null, Validators.required)
+      "isAvailable": new FormControl(null, Validators.required),
+      "selectMaster": new FormControl("", Validators.required)
     });
 
     this.dataService.getMasters().subscribe(masters => this.masters = masters);
@@ -117,6 +128,7 @@ export class AddAppointmentComponent implements OnInit {
 
     dialogService.transferParams.subscribe(value => {
       this.calendarApi = value;
+      console.log(this.calendarApi)
     })
 
     this.loadClientsList();
@@ -128,6 +140,9 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset(); 
+    console.log(timezoneOffset)
 
     this.calendarService.transferCalendarApi.subscribe(value => {
       this.calendarApi = value;
@@ -186,16 +201,20 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   getCategory(event: any){
+    this.showListBox = false;
     const today = new Date(this.params.start);
     const currentDayOfWeek = today.getDay();
     const dayOfWeek = this.getDayOfWeek(currentDayOfWeek);
     const result = this.servicesList.filter(item => item.category === event.value.category);
+    this.masterID = [];
     result.map(res => {
       const m = this.masters.filter(mast => mast.id === res.masterId);
       m.map(mast => {
         const mst = this.schedules.filter(item => item.dayOfWeek === dayOfWeek && item.masterId === mast.id);
+        
         if(mst.length > 0){
-          this.available = mast.id;
+          this.available = true;
+          this.masterID.push(mast.id);
         }
       })
     })
@@ -220,7 +239,17 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   getPrice(event: any){
-    // console.log(event)
+    let arr: any[] = [];
+    this.masterID.map(item => {
+      let t = this.masters.filter(m => m.id === item)
+      t.map(item => {
+        arr.push(item);
+      })
+    })
+    
+    this.freeMasters = arr;
+    this.showListBox = true;
+    
     if(!this.freeMaster){
       this.priceSelected = null;
       this.myForm.get('selectedPrice')?.enable();
@@ -236,7 +265,9 @@ export class AddAppointmentComponent implements OnInit {
     }
   }
 
-  addAppointment() {        
+  addAppointment() { 
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset();       
     this.appointment_obj = new AppointmentClass(
       0,
       this.params.start,
@@ -244,6 +275,8 @@ export class AddAppointmentComponent implements OnInit {
       this.categorySelected.id,
       IN_PROGRESS,
       this.dataService.USER_ID,
+      this.myForm.value.selectMaster.id,
+      timezoneOffset
     );
     
     this.dataService.addNewAppointment(this.appointment_obj).subscribe(
@@ -288,6 +321,10 @@ export class AddAppointmentComponent implements OnInit {
 
   onHide(){
     this.available = null;
+  }
+
+  onClick(event: any){
+    
   }
 
 }

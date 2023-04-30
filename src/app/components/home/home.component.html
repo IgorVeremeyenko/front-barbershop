@@ -21,8 +21,9 @@
             <h2>Все записи ({{currentEvents.length}})</h2>
             <ul>
                 <li *ngFor='let event of currentEvents'>
-                    <b>{{event.startStr | date: 'MMMM d, h:mm a'}}</b>
-                    <i>{{event.title}}</i>
+                    <b>{{event.startStr | date: 'd MMMM, H:mm' : locale}}</b>
+                    <i>{{event.title}}, </i> <br>
+                    <b>Мастер:</b><i> {{event.groupId}}</i>
                 </li>
             </ul>
         </div>

@@ -22,6 +22,8 @@ export class AppointmentClass implements Appointment {
   serviceId: number;
   userId: number;
   status: string;
+  masterId: number;
+  timezoneOffset: number;
 
   constructor(
     @Inject(Number) id: number, 
@@ -29,7 +31,9 @@ export class AppointmentClass implements Appointment {
     @Inject(String) costumerId: number, 
     @Inject(String) serviceId: number,
     @Inject(String) status: string,
-    @Inject(String) userId: number
+    @Inject(Number) userId: number,
+    @Inject(Number) masterId: number,
+    @Inject(Number) timezoneOffset: number
     ){
       this.id = id;
       this.date = date;
@@ -37,6 +41,8 @@ export class AppointmentClass implements Appointment {
       this.costumerId = costumerId;
       this.status = status;
       this.userId = userId;
+      this.masterId = masterId;
+      this.timezoneOffset = timezoneOffset
   }
 
 }

@@ -38,7 +38,12 @@
                     [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem', 'borderTopLeftRadius': 0, 'borderBottomLeftRadius': 0}"></p-cascadeSelect>
                     <p-inputNumber class="w-11" *ngIf="priceSelected && freeMaster" formControlName="selectedPrice" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
                     <div class="w-full card flex justify-content-center">
-                        <input class="w-11" pInputText type="text" *ngIf="!freeMaster" formControlName="selectedPrice" />                        
+                        <p-button (click)="op.show($event)" *ngIf="showListBox" icon="pi pi-user" pTooltip="Выберите мастера" label="Show"></p-button>
+                        <input class="w-11" pInputText type="text" *ngIf="!freeMaster" formControlName="selectedPrice" />  
+                        <p-overlayPanel #op>
+                            <p-listbox [options]="freeMasters" formControlName="selectMaster" (onChange)="onClick($event)" optionLabel="name" [listStyle]="{ 'max-height': '250px' }" [style]="{ width: '100%', marginLeft: 0 }"></p-listbox>
+                    
+                        </p-overlayPanel>
                     </div>
                 </div>
                 <div class="alert alert-danger"

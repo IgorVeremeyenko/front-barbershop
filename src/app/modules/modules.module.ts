@@ -45,6 +45,7 @@ import { ChipModule } from 'primeng/chip';
 import { ChipsModule } from 'primeng/chips';
 import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [],
@@ -94,7 +95,8 @@ import { DividerModule } from 'primeng/divider';
     ChipModule,
     ChipsModule,
     PasswordModule,
-    DividerModule
+    DividerModule,
+    OverlayPanelModule
   ],
   exports: [
     ButtonModule,
@@ -141,7 +143,8 @@ import { DividerModule } from 'primeng/divider';
     ChipModule,
     ChipsModule,
     PasswordModule,
-    DividerModule
+    DividerModule,
+    OverlayPanelModule
   ],
   providers: [ConfirmationService,MessageService]
 })

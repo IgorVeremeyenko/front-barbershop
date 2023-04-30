@@ -45,14 +45,17 @@ export class CalendarService  {
     const ID = parseInt(id);
    
     this.dataService.getAppointmentById(ID).subscribe(appointment_results => {
-
+      const date = new Date();
+      const timezoneOffset = date.getTimezoneOffset();
       this.appointment_class = new AppointmentClass(
         appointment_results.id,
         appointment_results.date,
         appointment_results.costumerId,
         appointment_results.serviceId,
         appointment_results.status,
-        this.dataService.USER_ID
+        this.dataService.USER_ID,
+        appointment_results.masterId,
+        timezoneOffset
       )
 
     })

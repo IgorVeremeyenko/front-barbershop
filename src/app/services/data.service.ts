@@ -32,7 +32,9 @@ export class DataService {
     costumerId: 0,
     serviceId: 0,
     status: '',
-    userId: 0
+    userId: 0,
+    masterId: 0,
+    timezoneOffset: 0
   }
 
   appointment_data_subject = new BehaviorSubject<Appointment>(this.defaults);

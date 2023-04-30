@@ -7,5 +7,7 @@ export interface Appointment {
     costumerId: number,
     serviceId: number,
     status: string,
-    userId: number
+    userId: number,
+    masterId: number,
+    timezoneOffset: number
 }

@@ -16,6 +16,9 @@ import { COMPLETED, CURRENT, IN_PROGRESS, MISSED, OLD, REJECTED, SUCCESS, WARNIN
 import { AuthService } from 'src/app/services/auth.service';
 import { Statistics } from 'src/app/interfaces/statistics';
 import { DialogService } from 'src/app/services/dialog.service';
+import { Master } from 'src/app/interfaces/master';
+import { Service } from 'src/app/interfaces/service';
+import localeRu from '@angular/common/locales/ru';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +51,9 @@ export class HomeComponent {
 
   currentEvents: EventApi[] = [];
 
+  masters: Master[] = [];
+  services: Service[] = [];
+
   dateAppointment!: string;
   selectInfo2!: DateSelectArg;
   clickInfoCurrent!: EventClickArg;
@@ -58,6 +64,8 @@ export class HomeComponent {
 
   isLoading = false;
   isShown = false;
+
+  locale = 'ru'
 
   appointment_data$ = this.dataService.appointment_data_subject;
 
@@ -75,8 +83,8 @@ export class HomeComponent {
   ) {
 
     this.primengConfig.ripple = true;
-
-    
+    this.dataService.getMasters().subscribe(masters => this.masters = masters);
+    this.dataService.getServices().subscribe(services => this.services = services);
     
   }
 
@@ -101,7 +109,9 @@ export class HomeComponent {
         costumerId: 0,
         serviceId: 0,
         status: '',
-        userId: 0
+        userId: 0,
+        masterId: 0,
+        timezoneOffset: 0
       }
       this.statistic_obj = {
         id: 0,
@@ -216,14 +226,17 @@ export class HomeComponent {
               break;
             }
             
-           
+            const y = this.masters.filter(master => master.id === calendar_results.masterId);
+            let name = '';
+            y.map(item => name = item.name)
             this.events.push({
               start: calendar_results.date,
               end: minutes,
               id: calendar_results.id.toString(),
               title: service_results.name,
               backgroundColor: colors.background,
-              color: colors.color
+              color: colors.color,
+              groupId: name //имя мастера
             })
           });
         }
@@ -285,6 +298,8 @@ export class HomeComponent {
     this.clickInfoCurrent = clickInfo;
     this.calendarService.temporaryForm = clickInfo;
     const ID = parseInt(clickInfo.event.id);
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset();
     this.dataService.getAppointmentById(ID).subscribe(result => {
       const appointment: Appointment = {
         id: result.id,
@@ -293,6 +308,8 @@ export class HomeComponent {
         serviceId: result.serviceId,
         status: result.status,
         userId: this.dataService.USER_ID,
+        masterId: result.masterId,
+        timezoneOffset: timezoneOffset
       }
       this.dataService.updateAppointmentData(appointment);
       
@@ -306,6 +323,12 @@ export class HomeComponent {
   handleEvents(events: EventApi[]) {
     this.currentEvents = events;
     this.changeDetector.detectChanges();
+  }
+
+  currentMaster(){
+    // console.log(this.masters);
+    // console.log(this.currentEvents);
+    // console.log(this.services);
   }
 
   // calendar options methods
