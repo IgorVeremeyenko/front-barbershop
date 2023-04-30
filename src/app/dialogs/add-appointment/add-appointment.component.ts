@@ -128,7 +128,6 @@ export class AddAppointmentComponent implements OnInit {
 
     dialogService.transferParams.subscribe(value => {
       this.calendarApi = value;
-      console.log(this.calendarApi)
     })
 
     this.loadClientsList();
@@ -140,10 +139,7 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const date = new Date();
-    const timezoneOffset = date.getTimezoneOffset(); 
-    console.log(timezoneOffset)
-
+    
     this.calendarService.transferCalendarApi.subscribe(value => {
       this.calendarApi = value;
     })

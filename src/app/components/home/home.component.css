@@ -146,6 +146,11 @@ h2 {
     max-height: 40%;
     overflow-y: auto;
   }
+
+  ::ng-deep li.p-ripple.p-element.p-listbox-item.ng-star-inserted{
+    align-items: flex-start;
+    flex-direction: column;
+  }
   
   @keyframes enter {
     from {

@@ -12,20 +12,23 @@
         </div>
     
         <div class='app-sidebar-section'>
-            <label>
-                <input type='checkbox' [checked]='calendarOptions.weekends' (change)='handleWeekendsToggle()' />
-                Показывать выходные
-            </label>
+            
+            <p-toggleButton onLabel="Показать выходные" offLabel="Скрыть выходные" (onChange)="handleWeekendsToggle()" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
+           
         </div>
         <div *ngIf="dataLoaded" class='app-sidebar-section'>
+            
             <h2>Все записи ({{currentEvents.length}})</h2>
-            <ul>
-                <li *ngFor='let event of currentEvents'>
-                    <b>{{event.startStr | date: 'd MMMM, H:mm' : locale}}</b>
-                    <i>{{event.title}}, </i> <br>
-                    <b>Мастер:</b><i> {{event.groupId}}</i>
-                </li>
-            </ul>
+            <p-listbox [filter]="true" (onClick)="currentMaster($event)" [options]="currentEvents" emptyFilterMessage="Ничего не найдено" optionLabel="groupId" [listStyle]="{ 'max-height': '250px' }" [style]="{ width: '15rem' }">
+                
+                <ng-template let-event pTemplate="item">
+                    <div>
+                        <b>{{event.startStr | date: 'd MMMM, H:mm' : locale}}</b>
+                        <i>{{event.title}}, </i> <br>
+                    </div>
+                        <b>Мастер:</b><i> {{event.groupId}}</i>
+                </ng-template>
+            </p-listbox>
         </div>
     </div>
     

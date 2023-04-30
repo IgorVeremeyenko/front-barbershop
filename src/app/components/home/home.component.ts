@@ -33,6 +33,8 @@ export class HomeComponent {
   data$ = this.dataService.data$;
   costumer_data$ = this.dataService.appointment_data_subject;
 
+  checked: boolean = false;
+
   userName!: string;
   events: EventInput[] = [];
 
@@ -135,6 +137,7 @@ export class HomeComponent {
       if(this.events.length > 0) this.events = [];
       this.updateData();
     })
+
   }
 
   showSuccess() {
@@ -325,10 +328,24 @@ export class HomeComponent {
     this.changeDetector.detectChanges();
   }
 
-  currentMaster(){
-    // console.log(this.masters);
-    // console.log(this.currentEvents);
-    // console.log(this.services);
+  currentMaster(event: any){
+    const ID = parseInt(event.value.id);
+    const date = new Date();
+    const timezoneOffset = date.getTimezoneOffset();
+    this.dataService.getAppointmentById(ID).subscribe(result => {
+      const appointment: Appointment = {
+        id: result.id,
+        date: result.date,
+        costumerId: result.costumerId,
+        serviceId: result.serviceId,
+        status: result.status,
+        userId: this.dataService.USER_ID,
+        masterId: result.masterId,
+        timezoneOffset: timezoneOffset
+      }
+      this.dataService.updateAppointmentData(appointment);
+      
+    })
   }
 
   // calendar options methods
