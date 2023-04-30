@@ -32,6 +32,7 @@
     "@fullcalendar/interaction": "^6.1.4",
     "@fullcalendar/list": "^6.1.4",
     "@fullcalendar/timegrid": "^6.1.4",
+    "angular-http-server": "^1.11.1",
     "canvg": "^4.0.1",
     "core-js": "^3.29.1",
     "dialog": "^0.3.1",
