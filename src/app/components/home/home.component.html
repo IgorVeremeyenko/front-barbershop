@@ -3,13 +3,13 @@
 <p-blockUI [blocked]="blockedDocument"></p-blockUI>
 <div *ngIf="dataLoaded" class="app">
     <div class='app-sidebar'>
-        <div class='app-sidebar-section'>
+        <!-- <div class='app-sidebar-section'>
             <h2>Инструкции</h2>
             <ul>
                 <li>Выберите дату и Вам будет предложено создать новую запись</li>
                 <li>Нажмите на запись, чтобы посмотреть детально</li>
             </ul>
-        </div>
+        </div> -->
     
         <div class='app-sidebar-section'>
             
@@ -32,9 +32,9 @@
         </div>
     </div>
     
-    <div class='app-main'>
-        <full-calendar #calendar *ngIf='calendarVisible' [options]='calendarOptions'>
-            <ng-template #eventContent let-arg>
+    <div class="app-main">
+        <full-calendar [options]="calendarOptions">
+            <ng-template let-arg>
                 <b>{{ arg.timeText }}</b>
                 <i>{{ arg.event.title }}</i>
             </ng-template>
@@ -43,4 +43,4 @@
 </div>
 
 <app-add-appointment></app-add-appointment>
-<app-view-appointment *ngIf="isShown"></app-view-appointment>
+<!-- <app-view-appointment *ngIf="isShown"></app-view-appointment> -->

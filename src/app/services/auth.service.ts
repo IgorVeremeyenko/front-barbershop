@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Admin } from '../interfaces/admin';
-import { BehaviorSubject, catchError, map, throwError } from 'rxjs';
-import { LOGIN, REGISTRATION, RESET, TOKEN_VALIDATION } from 'src/assets/constants';
+import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
+import { ADMIN_BY_ID, LOGIN, REGISTRATION, RESET, RESET_ADMIN, TOKEN_VALIDATION, VALIDATE_OTP } from 'src/assets/constants';
 import { Router } from '@angular/router';
+import { ResetPassword } from '../interfaces/reset-password';
+import { ResponseOTP } from '../interfaces/responseOTP';
 
 @Injectable({
   providedIn: 'root'
@@ -61,8 +63,16 @@ export class AuthService {
     return this.http.post(REGISTRATION, body);
   }
 
-  resetPassword(body: Admin){
-    return this.http.post(RESET,body);
+  sendCodeForAdmin(body: ResetPassword){
+    return this.http.post(RESET_ADMIN,body);
+  }
+
+  editAdminById(id: number, body: Admin){
+    return this.http.put(`${ADMIN_BY_ID}${id}`, body);
+  }
+
+  validateOtp(otp: number): Observable<ResponseOTP>{
+    return this.http.post<ResponseOTP>(`${VALIDATE_OTP}${otp}`, otp);
   }
 
   logout() {

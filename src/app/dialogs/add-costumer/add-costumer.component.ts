@@ -27,7 +27,6 @@ export class AddCostumerComponent {
 
     this.dialogService.showModalAddNewCostumer.subscribe(value => {
       this.displayModal = value;
-      console.log(this.myForm.value.userPhone)
     })
 
     this.myForm = new FormGroup({
@@ -56,10 +55,11 @@ export class AddCostumerComponent {
       email: this.myForm.value.userEmail || '',
       phone: this.myForm.value.userPhone,
       language: this.myForm.value.userLang || 'Русский',
-      userId: this.dataService.USER_ID
+      userId: this.dataService.USER_ID,
+      rating: 0,
+      appointments: []
     }
     this.dataService.addNewCostumer(body).subscribe(result => {
-      console.log(result);
       this.isSubmiting = false;
       this.msg.showSuccess('Успешно добавлен');
       this.displayModal = false;

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MasterList } from 'src/app/interfaces/master-list';
 import { Schedule } from 'src/app/interfaces/schedule';
 import { DataService } from 'src/app/services/data.service';
 import { DialogService } from 'src/app/services/dialog.service';
@@ -33,23 +34,12 @@ export class DaysFieldComponent {
 
   clicked = false;
 
-  master: Mast = {
+  master: MasterList = {
     id: 0,
     name: '',
-    category: '',
-    days: [{
-      dayOfWeek: ''
-    }],
-    service: [
-      { name: '', category: '' }
-    ],
-    phone: ''
-  };
-
-  schedule: Schedule = {
-    id: 0,
-    masterId: 0,
-    dayOfWeek: ''
+    category: [],
+    phone: '',
+    days: []
   }
 
   days: any[] = [];
@@ -60,19 +50,18 @@ export class DaysFieldComponent {
 
   constructor(private dialogService: DialogService, private dataService: DataService, private msg: MyMessageService){
     this.dialogService.transferEditMasterDetails.subscribe(value => {
+      this.dataService.getDays().subscribe(value => {
+        this.days = value;
+      })
       this.master = value;
-      this.dataService.getSchedules().subscribe(items => {
-        this.currentSchedules = items.filter(item => item.masterId === this.master.id).reduce(acc => acc + 1, 0);
-      });
-      this.master.days.sort((a, b) => {
-        const correct = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const dayA = correct.indexOf(a.dayOfWeek);
-        const dayB = correct.indexOf(b.dayOfWeek);
-        return dayA - dayB;
-      });
-    })
-    this.dataService.getDays().subscribe(value => {
-      this.days = value;
+      
+      const sortedDays = this.master.days.sort((a, b) => {
+          const correct = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          const dayA = correct.indexOf(a.dayOfWeek);
+          const dayB = correct.indexOf(b.dayOfWeek);
+          return dayA - dayB;
+        });
+        this.master.days = sortedDays;
     })
     
   }
@@ -85,13 +74,13 @@ export class DaysFieldComponent {
   onSave(){
     this.isEditing = true;
     this.clicked = false;
-    this.schedule.masterId = this.master.id;
+    // this.schedule.masterId = this.master.id;
     if(this.currentSchedules > 0){
       this.dataService.deleteSchedule(this.master.id).subscribe(() => {
 
         this.selectedDays.map(item => {
-          this.schedule.dayOfWeek = item.payload;
-          this.dataService.postSchedule(this.schedule);
+          // this.schedule.dayOfWeek = item.payload;
+          // this.dataService.postSchedule(this.schedule);
         })    
         this.editingSchedule = false;
         this.isEditing = false;
@@ -100,8 +89,8 @@ export class DaysFieldComponent {
     }
     else {
       this.selectedDays.map(item => {
-        this.schedule.dayOfWeek = item.payload;
-        this.dataService.postSchedule(this.schedule).subscribe(res => console.log(res));
+        // this.schedule.dayOfWeek = item.payload;
+        // this.dataService.postSchedule(this.schedule).subscribe(res => console.log(res));
         this.editingSchedule = false;
         this.isEditing = false;
       })  

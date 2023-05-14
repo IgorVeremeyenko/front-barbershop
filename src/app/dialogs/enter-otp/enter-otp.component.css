@@ -1,0 +1,5 @@
+::ng-deep input.p-inputtext.p-component.p-element.p-inputmask{
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    text-align: center;
+}

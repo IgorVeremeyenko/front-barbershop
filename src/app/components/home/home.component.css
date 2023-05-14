@@ -35,8 +35,6 @@ h2 {
     background: #F8F9FA;
     border-right: 1px solid #E9ECEF;
     color: black;
-    height: max-content;
-    min-height: 100%;
   }
   
   .ng-tns-c22-0 {
@@ -123,10 +121,18 @@ h2 {
     animation: enter 150ms forwards;
   }
 
+  ::ng-deep .p-listbox.p-component{
+    margin-left: 0;
+  }
+
   :host ::ng-deep full-calendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.ng-star-inserted{
     max-height: 90vh;
   }
   
+  ::ng-deep full-calendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
+    max-height: 100%;
+  }
+
   :host ::ng-deep .p-component-overlay-leave .pi.pi-lock {
     animation: leave 150ms forwards;
   }
@@ -143,7 +149,6 @@ h2 {
   }
 
   :host ::ng-deep .app-sidebar-section.ng-star-inserted {
-    max-height: 40%;
     overflow-y: auto;
   }
 

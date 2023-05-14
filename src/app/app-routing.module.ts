@@ -11,6 +11,7 @@ import { CostumerListComponent } from './components/costumer-list/costumer-list.
 import { ServiceListComponent } from './components/service-list/service-list.component';
 import { MasterListComponent } from './components/master-list/master-list.component';
 import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
+import { PasswordComponent } from './components/account/password/password.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'services', component: ServiceListComponent, canActivate: [AuthGuard] },
   { path: 'colleagues', component: MasterListComponent, canActivate: [AuthGuard] },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'password', component: PasswordComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

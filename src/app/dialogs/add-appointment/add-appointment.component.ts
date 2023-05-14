@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateSelectArg } from '@fullcalendar/core';
-import { AppointmentClass, CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
+import { CostumerClass, ServiceClass } from 'src/app/classes/classes.module';
+import { Appointment } from 'src/app/interfaces/appointment';
 import { Costumer } from 'src/app/interfaces/costumer';
 import { Master } from 'src/app/interfaces/master';
 import { Schedule } from 'src/app/interfaces/schedule';
@@ -31,7 +32,7 @@ export class AddAppointmentComponent implements OnInit {
 
   @Input() isAddedNewCostumer: boolean = false;
 
-  appointment_obj!: AppointmentClass;
+  appointment_obj!: Appointment;
   costumer_obj!: CostumerClass;
   service_obj!: ServiceClass;
   myForm!: FormGroup;
@@ -263,25 +264,27 @@ export class AddAppointmentComponent implements OnInit {
 
   addAppointment() { 
     const date = new Date();
-    const timezoneOffset = date.getTimezoneOffset();       
-    this.appointment_obj = new AppointmentClass(
-      0,
-      this.params.start,
-      this.selectedCostumer.id,
-      this.categorySelected.id,
-      IN_PROGRESS,
-      this.dataService.USER_ID,
-      this.myForm.value.selectMaster.id,
-      timezoneOffset
-    );
-    
+    const timezoneOffset = date.getTimezoneOffset();
+    this.appointment_obj = {
+      id: 0, costumerId: this.selectedCostumer.id,
+      serviceId: this.categorySelected.id,
+      status: IN_PROGRESS,
+      serviceName: this.myForm.value.selectedService.cname,
+      servicePrice: this.priceSelected,
+      userId: this.dataService.USER_ID,
+      masterId: this.myForm.value.selectMaster.id,
+      timezoneOffset: timezoneOffset,
+      date: this.params.start
+    };
+
+   
     this.dataService.addNewAppointment(this.appointment_obj).subscribe(
       () => {
         try {
           this.addEventToCalendarApi(this.params);
           this.messages.showSuccess('Успешно добавлено');
           this.isSubmiting = false;
-          this.dataService.updateData(true);
+          // this.dataService.updateData(true);
           this.closeModal();
         } catch (error) {
           console.log('catch add appointment', error);
@@ -317,6 +320,15 @@ export class AddAppointmentComponent implements OnInit {
 
   onHide(){
     this.available = null;
+  }
+
+  filterData(event: any) {
+    // if (this.selectedValue) {
+    //   // фильтрация данных на основе выбранного значения
+    //   this.filteredData = this.data.filter((item) => item.category === this.selectedValue.category);
+    // } else {
+    //   this.filteredData = this.data; // если ничего не выбрано, отображаем все данные
+    // }
   }
 
   onClick(event: any){

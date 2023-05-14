@@ -1,13 +1,12 @@
-import { Costumer } from "./costumer";
-import { Service } from "./service";
-
 export interface Appointment {
     id: number,
-    date: Date | string,
+    date: Date
     costumerId: number,
     serviceId: number,
     status: string,
     userId: number,
     masterId: number,
-    timezoneOffset: number
+    timezoneOffset: number,
+    serviceName: string | undefined,
+    servicePrice: number | undefined
 }

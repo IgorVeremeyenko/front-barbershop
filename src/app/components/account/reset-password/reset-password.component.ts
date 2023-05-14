@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Admin } from 'src/app/interfaces/admin';
+import { ResetPassword } from 'src/app/interfaces/reset-password';
 import { AuthService } from 'src/app/services/auth.service';
+import { DialogService } from 'src/app/services/dialog.service';
 import { MyMessageService } from 'src/app/services/my-message.service';
 
 @Component({
@@ -15,17 +16,16 @@ export class ResetPasswordComponent {
   registerForm !: FormGroup;
   submitted = true;
   isValid = false;
-  isShown = false;
+  isShown = true;
 
-  constructor(private authService: AuthService, private mesgs: MyMessageService, private router: Router){
+  constructor(private authService: AuthService, private mesgs: MyMessageService, private router: Router, private dialogService: DialogService){
     this.registerForm = new FormGroup({
-      username: new FormControl("", Validators.required),
-      password: new FormControl("", [Validators.minLength(6), Validators.required]),
-      confirmPassword: new FormControl("", [Validators.minLength(6), Validators.required])
+      login: new FormControl("", Validators.required),      
+      email: new FormControl("", [Validators.email, Validators.required])
     })
 
     this.registerForm.valueChanges.subscribe(changes => {
-      if(this.password(this.registerForm) && this.registerForm.value.password.length > 0){
+      if(this.registerForm.valid){
         this.isValid = true;
       }
       else {
@@ -35,43 +35,23 @@ export class ResetPasswordComponent {
     this.authService.blockMenu.emit(true);
   }
 
-  password(formGroup: FormGroup) {
-    const pass = formGroup.value.password;
-    const confirm = formGroup.value.confirmPassword;
-    return pass === confirm;
-  }
-
   onSubmit(){
-    this.isShown = true;
-    const newAdmin: Admin = {
-      userName: this.registerForm.value.username,
-      Password: this.registerForm.value.password
+    this.isShown = false;
+    const resetAdmin: ResetPassword = {
+      login: this.registerForm.value.login,
+      email: this.registerForm.value.email
     }
-    let correct = this.password(this.registerForm);
-    if(correct){
-      this.authService.resetPassword(newAdmin).subscribe(res => {
-        console.log(res);
-        this.isShown = false
-        this.authService.login(newAdmin).subscribe(success => {
-          this.mesgs.showInfo('Идет перенаправление');
-          this.router.navigateByUrl('');
-        },err => console.log(err))
-      },err => {
-       
-        this.mesgs.showError(err);
-        setTimeout(() => {
-          this.isShown = false;
-        }, 1000);
-      })
-    }
-    else {
-      this.mesgs.showError('Пароли не совпадают');
-      this.isShown = false;
-    }
-    
+    this.authService.sendCodeForAdmin(resetAdmin).subscribe(result => {
+      this.mesgs.showSuccess(result);
+      this.isShown = true;
+      this.dialogService.showModalEnterOtp.emit(true);
+      
+    }, error => {this.mesgs.showError(error); this.isShown = true}, () => this.isShown = true)
+        
   }
 
   goToLogin(){
     this.router.navigateByUrl('login');
   }
+
 }

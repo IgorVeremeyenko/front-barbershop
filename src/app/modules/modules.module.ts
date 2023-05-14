@@ -47,6 +47,7 @@ import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { AutoFocusModule } from 'primeng/autofocus';
 
 @NgModule({
   declarations: [],
@@ -98,7 +99,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     PasswordModule,
     DividerModule,
     OverlayPanelModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    AutoFocusModule
   ],
   exports: [
     ButtonModule,
@@ -147,7 +149,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     PasswordModule,
     DividerModule,
     OverlayPanelModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    AutoFocusModule
   ],
   providers: [ConfirmationService,MessageService]
 })

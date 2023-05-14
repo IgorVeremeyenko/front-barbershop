@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { APPOINTMENT } from 'src/assets/constants';
 import { DataService } from './data.service';
 import { AppointmentClass } from '../classes/classes.module';
+import { Service } from '../interfaces/service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class CalendarService  {
   clickInfoCurrent!: EventClickArg;
   temporaryForm: any;
   currentEvents: EventApi[] = [];
+  serviceList: Service[] = [];
 
   public calendarOptions!: CalendarOptions;
   costumer_class: any;
@@ -47,15 +49,26 @@ export class CalendarService  {
     this.dataService.getAppointmentById(ID).subscribe(appointment_results => {
       const date = new Date();
       const timezoneOffset = date.getTimezoneOffset();
+      let serviceName: string = "";
+      this.serviceList.map(serv => {
+        if(appointment_results.serviceId === serv.id) serviceName = serv.name;
+      })
+      let servicePrice = 0;
+      this.serviceList.map(serv => {
+        if(appointment_results.serviceId === serv.id) servicePrice = serv.price;
+      })
       this.appointment_class = new AppointmentClass(
         appointment_results.id,
         appointment_results.date,
         appointment_results.costumerId,
         appointment_results.serviceId,
         appointment_results.status,
+        serviceName,
         this.dataService.USER_ID,
+        servicePrice,
         appointment_results.masterId,
         timezoneOffset
+
       )
 
     })

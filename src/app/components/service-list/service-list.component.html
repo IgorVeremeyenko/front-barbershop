@@ -1,5 +1,5 @@
 <p-progressBar *ngIf="!isLoaded" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
-<p-treeTable *ngIf="isLoaded" [value]="files" [columns]="cols">
+<p-treeTable *ngIf="isLoaded" [value]="files" [columns]="cols" selectionMode="single">
     <ng-template pTemplate="caption">
         Перечень услуг и относящиеся к ним мастера
     </ng-template>
@@ -31,5 +31,4 @@
             </div>
     </ng-template>
 </p-treeTable>
-<app-add-costumer></app-add-costumer>
 <app-edit-service></app-edit-service>

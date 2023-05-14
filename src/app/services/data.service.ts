@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
-import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS } from 'src/assets/constants';
+import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS, SERVICES_TREENODE, MASTERS_COUNTER, MASTER_APPOINTMENTS, MASTER_LIST, RESET_ADMIN } from 'src/assets/constants';
 import { BehaviorSubject, map } from 'rxjs';
 import { Master } from '../interfaces/master';
 import { Schedule } from '../interfaces/schedule';
 import { Statistics } from '../interfaces/statistics';
+import { TreeNode } from 'primeng/api';
+import { MasterList } from '../interfaces/master-list';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ export class DataService {
   USER_NAME = ''
   SERVICE_ID = 0;
   MASTER_ID = 0;
+  ADMIN_ID_FOR_RESET_PASS = 0;
 
   dataSubject = new BehaviorSubject(false);
   data$ = this.dataSubject.asObservable();
@@ -26,15 +29,19 @@ export class DataService {
   service_data_subject = new BehaviorSubject<any>({});
   services$ = this.service_data_subject.asObservable();
 
+  serviceList: EventEmitter<TreeNode[]> = new EventEmitter<TreeNode[]>();
+
   defaults: Appointment = {
     id: 0,
-    date: "",
+    date: new Date(),
     costumerId: 0,
     serviceId: 0,
     status: '',
     userId: 0,
     masterId: 0,
-    timezoneOffset: 0
+    timezoneOffset: 0,
+    serviceName: "",
+    servicePrice: 0
   }
 
   appointment_data_subject = new BehaviorSubject<Appointment>(this.defaults);
@@ -43,8 +50,22 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
+  countDigitsInString(value: string){
+    let digits = value.match(/\d/g);
+    if(digits){
+      return digits.length;
+    }
+    else {
+      return 0;
+    }
+  }
+
   updateData(newData: boolean) {
     this.dataSubject.next(newData);
+  }
+
+  updateServiceList(newData: TreeNode[]){
+    this.serviceList.emit(newData);
   }
 
   updateServData(newData: Service) {
@@ -61,6 +82,14 @@ export class DataService {
 
   getMasterById(id: number) {
     return this.http.get<Master>(`${MASTERS}${id}`);
+  }
+
+  getAppointmentsForMaster(masterId: number): Observable<Appointment[]>{
+    return this.http.get<Appointment[]>(`${MASTER_APPOINTMENTS}${masterId}`);
+  }
+
+  getMasterCountOfSchedules(id: number): Observable<number>{
+    return this.http.get<number>(`${MASTERS_COUNTER}${id}`);
   }
 
   getClients() {
@@ -112,11 +141,19 @@ export class DataService {
   addNewMaster(body: Master){
     return this.http.post(MASTERS, body);
   }
+
+  getMasterList(): Observable<MasterList[]>{
+    return this.http.get<MasterList[]>(MASTER_LIST);
+  }
+
   loadCalendarData() {
     return this.http.get<Appointment[]>(APPOINTMENT);
   }
   getSericeById(id: number) {
     return this.http.get<Service>(`${SERVICE}${id}`);
+  }
+  getServicesTreeNode(){
+    return this.http.get<TreeNode[]>(SERVICES_TREENODE);
   }
   getCostumerById(id: number) {
     return this.http.get<Costumer>(`${COSTUMERS}${id}`);

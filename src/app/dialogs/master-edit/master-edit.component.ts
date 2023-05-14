@@ -1,22 +1,8 @@
 import { Component } from '@angular/core';
 import { Appointment } from 'src/app/interfaces/appointment';
-import { Service } from 'src/app/interfaces/service';
+import { MasterList } from 'src/app/interfaces/master-list';
 import { DataService } from 'src/app/services/data.service';
 import { DialogService } from 'src/app/services/dialog.service';
-import { IN_PROGRESS } from 'src/assets/constants';
-
-interface Mast {
-  id: number,
-  name: string,
-  category: string,
-  service: [
-    { name: string, category: string }
-  ],
-  days: [
-    { dayOfWeek: string }
-  ],
-  phone: ''
-} 
 
 @Component({
   selector: 'app-master-edit',
@@ -27,33 +13,18 @@ export class MasterEditComponent {
 
   visible = false;
 
-  appointments: Appointment[] = [];
-
-  services: Service[] = [];
-
   total = 0;
-
-  editingSchedule = false;
-
-  editingPhone = false;
-
-  editField: any;
-
-  isEditing = true;
 
   selectedDays: any[] = [];
 
-  master: Mast = {
+  isLoading = false;
+
+  master: MasterList = {
     id: 0,
     name: '',
-    category: '',
-    days: [{
-      dayOfWeek: ''
-    }],
-    service: [
-      { name: '', category: '' }
-    ],
-    phone: ''
+    category: [],
+    phone: '',
+    days: []
   };
 
   constructor(private dialogService: DialogService, private dataService: DataService){
@@ -62,49 +33,26 @@ export class MasterEditComponent {
     })
     this.dialogService.showModalEditMaster.subscribe(value => {
       this.visible = value;
-      this.totalCurrentAppointments();
+      this.dataService.getMasterCountOfSchedules(this.master.id).subscribe(result => {
+        this.total = result;
+      })
     });
-    this.dataService.getAppointments().subscribe(app => this.appointments = app);
-    this.dataService.getServices().subscribe(app => this.services = app);
+  }
+
+  showCalendar(){
+    this.isLoading = true;
+    let appointments: Appointment[] = [];
+    this.dataService.getAppointmentsForMaster(this.master.id).subscribe(result => {
+      appointments = result;
+      this.dialogService.transferDataForMastersCalendar.emit(appointments);
+      this.isLoading = false;
+    }, () => this.isLoading = false, () => this.isLoading = false)
   }
 
   
   hide(){
     this.total = 0;
   }
-  totalCurrentAppointments(){
-    const serv = this.services.filter(item => item.masterId === this.master.id);
-    serv.map(item => {
-      this.total += this.appointments.filter(t => t.serviceId === item.id && t.status === IN_PROGRESS).reduce(acc => acc + 1, 0);
-    })
-  }
-  // onEdit(content: any){
-  //   switch(content){
-  //     case 'phone': {
-  //       this.editingPhone = true;
-  //       // this.dataService.changeMasterById(this.master.id, this.master)
-  //     }
-  //   }
-    
-    
-  // }
-  // onSave(){
-
-  // }
-  // onCancel(){
-  //   this.editingPhone = false;
-  // }
-  // onComplete(){
-  //   if(this.editField.length < 19){
-  //     this.isEditing = true;
-  //   }
-  //   else {
-  //     this.isEditing = false;
-  //   }
-  // }
-
-  // onInput(ev: any){
-  //   // console.log(ev)
-  // }
+ 
   
 }
