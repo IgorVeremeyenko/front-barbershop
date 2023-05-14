@@ -1,7 +1,7 @@
 <!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
     acceptButtonStyleClass="p-button-text"></p-confirmDialog> -->
     <p-dialog header="Бронирование записи" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
-    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false" (onHide)="onHide()">
+    [modal]="true" [style]="{width: '50vw', height: '60vh'}" [draggable]="true" [resizable]="false" (onHide)="onHide()">
     <!-- добавление.component.html -->
     <div class="container">
         <form [formGroup]="myForm" (ngSubmit)="submit()">
@@ -17,7 +17,9 @@
                     formControlName="userName" 
                     placeholder="Выбрать клиента" 
                     optionLabel="phone" 
-                    [showClear]="true">
+                    [showClear]="true"
+                    (onChange)="filterData($event)"
+                    >
                     <ng-template pTemplate="selectedItem">
                         <div class="country-item country-item-value" *ngIf="selectedCostumer">
                             <div>"{{selectedCostumer.name}}" | {{selectedCostumer.phone}}</div>
@@ -72,4 +74,3 @@
         </form>
     </div>
 </p-dialog>
-<app-add-costumer></app-add-costumer>

@@ -22,13 +22,16 @@ export class ServiceListComponent implements AfterViewInit {
   cols = [
     { field: 'name', header: 'Категория/Название' },
     { field: 'price', header: 'Стоимость' },
-    { field: 'master', header: 'Мастер' }
+    { field: 'masterName', header: 'Мастер' }
   ];
 
   constructor(private dataService: DataService, private dialogService: DialogService) {
-    this.dialogService.reloadPageServiceList.subscribe(() => {
-      this.files = [];
-      this.loadData();
+    // this.dialogService.reloadPageServiceList.subscribe(() => {
+    //   this.files = [];
+    //   this.loadData();
+    // })
+    this.dataService.serviceList.subscribe(value => {
+      console.log(value)
     })
    }
 
@@ -43,58 +46,10 @@ export class ServiceListComponent implements AfterViewInit {
   loadData(){
     this.isLoaded = false;
     this.files = [];
-    this.dataService.getServices().subscribe(serviceArray => {
-      serviceArray.map(object => {
-        if(object.userId === this.dataService.USER_ID){
-          this.dataService.getMasterById(object.masterId).subscribe(master => {
-            const node: TreeNode = {
-              data: {
-                name: object.category
-              },
-              children: [{
-                data: {
-                  id: object.id,
-                  masterId: object.masterId,
-                  name: object.name,
-                  price: object.price,
-                  master: master.name
-                }
-              }]
-            };
-    
-            if(this.files.length > 0){
-              this.files.map(items => {
-                if(items.data.name === node.data.name){
-                  node.children?.map(node_children => {
-                    items.children?.push(node_children);
-                  })
-                }
-                else{
-                  this.files.push(node);
-                }
-              })
-            }
-            else {
-              this.files.push(node);
-            }
-            
-          })
-        }
-        
-        
-      });      
-      
-    }
-    );
-    setTimeout(() => {
-      let uniqueArr = this.files.filter((obj, index, self) =>
-        index === self.findIndex((t) => (
-          t.data.name === obj.data.name
-        ))
-      );
-      this.files = uniqueArr;
-      this.isLoaded = true;
-    }, 500);
+    this.dataService.getServicesTreeNode().subscribe(result => {
+      this.files = result;
+    this.isLoaded = true;
+    })
   }
 
   public openModal(value: boolean, service_info: any, data: any): void {

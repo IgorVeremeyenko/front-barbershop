@@ -1,0 +1,21 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false"
+    [resizable]="false">
+    <div>
+        <div class="text-center mb-5">
+            <div class="text-900 text-3xl font-medium mb-3">Введите код подтверждения с вашего почтового ящика</div>
+        </div>
+        <!-- <div class="login">
+          <p-button styleClass="p-button-text" (click)="goToLogin()">Назад ко входу</p-button>
+        </div> -->
+        <form [formGroup]="otp" class="flex justify-content-center">
+            <div class="flex flex-column row-gap-3 w-max align-items-center">
+                
+                <p-inputMask mask="999999" pAutoFocus [autoFocus]="true" class="border-noround-left" formControlName="code" placeholder="999999" id="code" (onInput)="complete($event)"></p-inputMask>
+                <button *ngIf="!isShown" disabled="true" pButton pRipple icon="pi pi-spin pi-spinner"
+                    class="w-full"></button>
+                <button *ngIf="isShown" [disabled]="!isValid" type="submit" (click)="onSubmit()" pButton pRipple
+                    label="Подтвердить" icon="pi pi-check" class="w-full"></button>
+            </div>
+        </form>
+    </div>
+</p-dialog>

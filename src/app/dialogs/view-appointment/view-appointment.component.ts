@@ -61,22 +61,19 @@ export class ViewAppointmentComponent {
       }
       this.dataService.getCostumerById(data.costumerId).subscribe(costumer_res => {
         this.constumer = costumer_res;
-        this.dataService.getSericeById(data.serviceId).subscribe(service_res => {
-          this.service = service_res;
           const outputDate = this.convertDate(data.date);
           const obj = {
             id: data.id,
             date: outputDate,
             name: this.constumer.name,
-            service: `${this.service.category}/${this.service.name}`,
+            service: data.serviceName,
             status: data.status,
-            price: this.service.price,
+            price: data.servicePrice,
             phone: this.constumer.phone
           }
           this.user.push(obj);
           this.appointment = data;
           this.displayModalAppointment = true;
-        })
       })
     });
 

@@ -2,10 +2,6 @@ img.mr-2 {
   cursor: pointer;
 }
 
-:host ::ng-deep .p-scrollpanel-content {
-  padding: 0 18px 18px 0;
-}
-
 ::ng-deep .ui-scrollpanel-wrapper {
   border: 1px solid #c8c8c8;
 }

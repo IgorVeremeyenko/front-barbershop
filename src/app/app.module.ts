@@ -27,6 +27,9 @@ import { PhoneFieldComponent } from './components/master-edit-fields/phone-field
 import { DaysFieldComponent } from './components/master-edit-fields/days-field/days-field.component';
 import { AddMasterComponent } from './dialogs/add-master/add-master.component';
 import { ResetPasswordComponent } from './components/account/reset-password/reset-password.component';
+import { ShowCalendarMastersComponent } from './dialogs/show-calendar-masters/show-calendar-masters.component';
+import { PasswordComponent } from './components/account/password/password.component';
+import { EnterOtpComponent } from './dialogs/enter-otp/enter-otp.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +53,9 @@ import { ResetPasswordComponent } from './components/account/reset-password/rese
     DaysFieldComponent,
     AddMasterComponent,
     ResetPasswordComponent,
+    ShowCalendarMastersComponent,
+    PasswordComponent,
+    EnterOtpComponent
   ],
   imports: [
     BrowserModule,

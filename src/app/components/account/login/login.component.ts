@@ -25,7 +25,8 @@ export class LoginComponent {
     this.authService.setAuthStatus(false);
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
-      Password: ['', [Validators.required, Validators.minLength(6)]]
+      Password: ['', [Validators.required, Validators.minLength(6)]],
+      
     });
 
     this.loginForm.valueChanges.subscribe(changed => {
@@ -42,8 +43,10 @@ export class LoginComponent {
   submitLoginForm() {
     this.isShown = true;
     const body: Admin = {
-      userName: this.loginForm.value.userName,
-      Password: this.loginForm.value.Password
+      id: 0,
+      name: this.loginForm.value.userName,
+      password: this.loginForm.value.Password,
+      email: ''
     }
     this.authService.login(body).subscribe(items => {
       this.router.navigateByUrl('');

@@ -40,6 +40,8 @@
   <div>
       <label for="username" class="block text-900 font-medium mb-2">Логин</label>
       <input type="text" pInputText class="form-control" id="username" formControlName="username" placeholder="Введите логин" class="w-full mb-3">
+      <label for="email" class="block text-900 font-medium mb-2">Почта</label>
+      <input type="text" pInputText class="form-control" id="email" formControlName="email" placeholder="Введите почту" class="w-full mb-3">
       <label for="password" class="block text-900 font-medium mb-2">Пароль</label>
       <p-password [inputStyle]="{'width':'100%'}" class="form-control" [feedback]="true" [toggleMask]="true" id="password" formControlName="password" placeholder="Введите пароль" [style]="{'width':'100%'}">
         <ng-template pTemplate="header">
@@ -59,6 +61,7 @@
               <!-- <label for="rememberme1" class="text-900">Запомнить меня</label> -->
           </div>
       </div>
+      
       <button *ngIf="isShown" disabled="true" pButton pRipple label="Войти" icon="pi pi-spin pi-spinner" class="w-full"></button>
       <button *ngIf="!isShown" [disabled]="!isValid" type="submit" (click)="onSubmit()" pButton pRipple label="Зарегистрироваться" icon="pi pi-user" class="w-full"></button>
   </div>

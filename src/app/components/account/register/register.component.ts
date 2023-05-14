@@ -22,7 +22,8 @@ export class RegisterComponent {
     this.registerForm = new FormGroup({
       username: new FormControl("", Validators.required),
       password: new FormControl("", [Validators.minLength(6), Validators.required]),
-      confirmPassword: new FormControl("", [Validators.minLength(6), Validators.required])
+      confirmPassword: new FormControl("", [Validators.minLength(6), Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email])
     })
 
     this.registerForm.valueChanges.subscribe(changes => {
@@ -45,8 +46,10 @@ export class RegisterComponent {
   onSubmit(){
     this.isShown = true;
     const newAdmin: Admin = {
-      userName: this.registerForm.value.username,
-      Password: this.registerForm.value.password
+      id: 0,
+      name: this.registerForm.value.username,
+      password: this.registerForm.value.password,
+      email: ''
     }
     let correct = this.password(this.registerForm);
     if(correct){

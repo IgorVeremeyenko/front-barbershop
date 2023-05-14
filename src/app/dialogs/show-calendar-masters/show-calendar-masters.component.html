@@ -1,0 +1,10 @@
+<p-dialog header="Расписания для " [(visible)]="visible" [style]="{width: '98vw', height: '90%'}" [maximizable]="true" (onHide)="hide()">
+    <div *ngIf="dataLoaded">
+        <full-calendar [options]="calendarOptions">
+            <ng-template let-arg>
+                <b>{{ arg.timeText }}</b>
+                <i>{{ arg.event.title }}</i>
+            </ng-template>
+        </full-calendar>
+    </div>
+</p-dialog>

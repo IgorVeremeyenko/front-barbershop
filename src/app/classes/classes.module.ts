@@ -17,21 +17,25 @@ import { MyNode } from '../interfaces/node';
 
 export class AppointmentClass implements Appointment {
   id: number;
-  date: string | Date;
+  date: Date;
   costumerId: number;
   serviceId: number;
   userId: number;
   status: string;
   masterId: number;
   timezoneOffset: number;
+  serviceName: string;
+  servicePrice: number;
 
   constructor(
     @Inject(Number) id: number, 
-    @Inject(String) date: string | Date, 
+    @Inject(String) date: Date, 
     @Inject(String) costumerId: number, 
     @Inject(String) serviceId: number,
     @Inject(String) status: string,
+    @Inject(String) serviceName: string,
     @Inject(Number) userId: number,
+    @Inject(Number) servicePrice: number,
     @Inject(Number) masterId: number,
     @Inject(Number) timezoneOffset: number
     ){
@@ -42,18 +46,24 @@ export class AppointmentClass implements Appointment {
       this.status = status;
       this.userId = userId;
       this.masterId = masterId;
-      this.timezoneOffset = timezoneOffset
+      this.timezoneOffset = timezoneOffset;
+      this.serviceName = serviceName;
+      this.servicePrice = servicePrice;
   }
 
 }
 
 export class AdminClass implements Admin {
-  userName: string;
-  Password: string;
+  id: number;
+  name: string;
+  password: string;
+  email: string;
   
-  constructor(userName: string, Password: string){
-    this.userName = userName;
-    this.Password = Password;
+  constructor(userName: string, Password: string, email: string, id: number){
+    this.id = id;
+    this.name = userName;
+    this.password = Password;
+    this.email= email;
   }
 }
 
@@ -64,6 +74,8 @@ export class CostumerClass implements Costumer {
   phone: string | any;
   language: any;
   userId: number;
+  rating: number;
+  appointments: Appointment[];
   
   constructor(
     id: number,
@@ -71,14 +83,19 @@ export class CostumerClass implements Costumer {
     email: string,
     phone: string,
     language: string,
-    userId: number
+    userId: number,
+    rating: number,
+    appointments: Appointment[]
   ){
     this.id = id;
     this.name = name;
     this.email = email;
     this.language = language;
     this.userId = userId;
-    this.phone = phone
+    this.phone = phone;
+    this.userId = userId;
+    this.appointments = appointments;
+    this.rating = rating;
   }
 }
 
