@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Appointment } from 'src/app/interfaces/appointment';
 import { Costumer } from 'src/app/interfaces/costumer';
-import { Statistics } from 'src/app/interfaces/statistics';
 import { DataService } from 'src/app/services/data.service';
 import { COMPLETED, IN_PROGRESS, REJECTED } from 'src/assets/constants';
+import { PrimeNGConfig, OverlayOptions } from 'primeng/api';
 
 @Component({
   selector: 'app-costumer-list',
@@ -22,7 +22,11 @@ export class CostumerListComponent {
 
   selectedSizeOfTable: any = '';
 
-  constructor(private dataService: DataService) { }
+  count = 10;
+
+  appointments: Appointment[] = [];
+
+  constructor(private dataService: DataService, private primengConfig: PrimeNGConfig) { }
 
   ngOnInit() {
     this.sizesOfTable = [
@@ -32,7 +36,7 @@ export class CostumerListComponent {
     ];
 
     this.loadData();
-
+    
   }
 
   convertDate(date: Date | string) {
@@ -69,7 +73,21 @@ export class CostumerListComponent {
         this.displayTable = true;
         this.loading = false;
       })
+    }, () => {this.loading = false}, () => this.loading = false)
+  }
+
+  concatDatas(data: any){
+    this.visits.map(item => {
+      item.appointments.concat(data);
     })
+  }
+
+  loadLazy(event: any){
+    this.count += 10;
+    // const startIndex = event.first;
+    // const endIndex = startIndex + event.rows;
+    this.loadData();
+    if(!this.loading) event.forceUpdate();
   }
 
 }

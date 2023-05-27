@@ -1,3 +1,4 @@
+
 <div class="cont">
     <div class="m-3">
         <p-selectButton [options]="sizesOfTable" [(ngModel)]="selectedSizeOfTable" [multiple]="false" optionLabel="name" optionValue="class"></p-selectButton>
@@ -18,7 +19,7 @@
                 <th pSortableColumn="name">Имя <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="phone">Телефон <p-sortIcon field="phone"></p-sortIcon></th>
                 <th pSortableColumn="ratingValue">Ранг <p-sortIcon field="ratingValue"></p-sortIcon></th>
-                <th pSortableColumn="total">Кол. посещений <p-sortIcon field="total"></p-sortIcon></th>
+                <th pSortableColumn="total">Кол. успешных посещений / всего посещений <p-sortIcon field="total"></p-sortIcon></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-client let-expanded="expanded">
@@ -29,14 +30,14 @@
                 <td>{{client.name}}</td>
                 <td>{{client.phone}}</td>
                 <td><p-rating [ngModel]="client.ratingValue" [readonly]="true" [cancel]="false"></p-rating></td>
-                <td>{{client.total}}</td>
+                <td>{{client.successCount}}/{{client.total}}</td>
                 </tr>
         </ng-template>
         <ng-template pTemplate="rowexpansion" let-appointment>
             <tr>
                 <td colspan="7">
                     <div class="p-3">
-                        <p-table [value]="appointment.apps" dataKey="id">
+                        <p-table [value]="appointment.apps" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" currentPageReportTemplate="Показано с {first} по {last} из {totalRecords} записей" [rowsPerPageOptions]="[5, 10, 30]">
                             <ng-template pTemplate="caption">
                                 <div class="table-header">
                                     Сеансы с клиентом
@@ -77,4 +78,5 @@
             </div> -->
         </ng-template>
     </p-table>
+    <p-scrollTop></p-scrollTop>
 </div>

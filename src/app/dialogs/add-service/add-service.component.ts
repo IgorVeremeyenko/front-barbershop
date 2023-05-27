@@ -50,13 +50,13 @@ export class AddServiceComponent {
         this.masterList = uniqueArr;
     })
 
-    this.dataService.getServices().subscribe(services => {
-      services.map(service => {
-        this.serviceList.push(service.category);
-        this.serviceNames.push(service.name);
-      })
-      const uniqueValues = [...new Set(this.serviceList)];
-      this.serviceList = uniqueValues
+    this.dataService.getServicesListByCategory().subscribe(result => {
+      this.serviceList = result;
+    })
+
+    this.dataService.getServicesListByName().subscribe(result => {
+      this.serviceNames = result;
+      
     })
 
     this.myForm = new FormGroup({
@@ -80,6 +80,9 @@ export class AddServiceComponent {
 
   hide(){
     this.displayModal = false;
+    this.serviceList = [];
+    this.serviceNames = [];
+    this.myForm.reset();
   }
 
   submit(){
@@ -94,7 +97,6 @@ export class AddServiceComponent {
       status: ''
     }
     this.dataService.addNewService(body).subscribe(result => {
-      console.log(result);
       this.msg.showSuccess('Успешно добавлено');
       this.myForm.get('isSubmiting')?.setValue(true);
       this.hide();
@@ -113,15 +115,23 @@ export class AddServiceComponent {
   search(event: any){
     const query = event.query;
     this.suggestions = this.serviceList.filter((item) =>
-      item.toLowerCase().startsWith(query.toLowerCase())
+      item.category.toLowerCase().startsWith(query.toLowerCase())
     );
   }
 
-  searchDublicates(event: any){
+  searchNames(event: any){
     const query = event.query;
-    this.suggestionNames = this.serviceNames.filter((item) =>
-      item.toLowerCase().startsWith(query.toLowerCase())
-    );
+    if(this.suggestions.length > 0){
+      const category = this.suggestions[0].category;
+      this.suggestionNames = this.serviceNames.filter((item) =>
+        item.name.toLowerCase().startsWith(query.toLowerCase()) && item.category === category
+      );
+    }
+    else {
+      this.suggestionNames = this.serviceNames.filter((item) =>
+        item.name.toLowerCase().startsWith(query.toLowerCase())
+      );
+    }
   }
 
 }

@@ -6,14 +6,15 @@
             <div class="form-container">
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">Название услуги</span>
-                    <input type="text" class="form-control" pInputText placeholder="Название" formControlName="serviceName"
+                    <input *ngIf="!isChahgedCategory" type="text" class="form-control" pInputText placeholder="Название" formControlName="serviceName"
                             name="name">
+                    <p-autoComplete *ngIf="isChahgedCategory" [style]="{width: '-webkit-fill-available'}" [loadingIcon]="null" [suggestions]="suggestions" formControlName="serviceName" field="name" placeholder="Название" (completeMethod)="search()"></p-autoComplete>
                 </div>
 
                 <div class="service-group">
                     <span class="p-inputgroup-addon" style="text-align: center;">Категория услуги</span>
                  
-                    <p-listbox [options]="serviceOptions" emptyFilterMessage="Нет результатов" [checkbox]="false" [filter]="true" [listStyle]="{'max-height':'250px'}" formControlName="serviceCategory" (onClick)="click($event)" optionLabel="name" [style]="{'width':'100%'}">
+                    <p-listbox [options]="serviceOptions" emptyFilterMessage="Нет результатов" [checkbox]="false" [filter]="true" [listStyle]="{'max-height':'250px'}" formControlName="serviceCategory" [style]="{'width':'100%'}">
                         <ng-template let-service pTemplate="item">
                             <div class="service-item">
                                 <div>{{service}}</div>
@@ -35,7 +36,7 @@
                 <div class="spinner-btn">
                     <button pButton class="submit-btn" type="submit"
                         [disabled]="!(myForm.valid && myForm.dirty)"
-                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                        class="btn btn-primary" label="Добавить/Изменить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
                             style="font-size: 1rem"></i></button>
                 </div>
             </div>

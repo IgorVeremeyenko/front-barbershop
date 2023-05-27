@@ -2,13 +2,13 @@ img.mr-2 {
   cursor: pointer;
 }
 
-::ng-deep .ui-scrollpanel-wrapper {
+/* ::ng-deep .ui-scrollpanel-wrapper {
   border: 1px solid #c8c8c8;
 }
 
 ::ng-deep .ui-scrollpanel-bar {
   background-color: #007ad9;
-}
+} */
 
 :host ::ng-deep input.p-inputtext.p-component.p-element.p-inputmask {
   width: auto;

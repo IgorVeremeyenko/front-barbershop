@@ -1,0 +1,56 @@
+<p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+<div>
+    <div *ngIf="dataLoaded" class='app-sidebar-section'>
+        <div class="m-3 font-bold text-3xl">
+            <span class="text-900">График для, </span>
+            <span class="text-blue-600">{{name}}</span>
+        </div>
+        <div class="flex justify-content-between m-5">
+            <div class="w-5">
+                <div class="surface-card p-4 shadow-2 border-round min-h-26rem">
+                    <div class="text-3xl font-medium text-900 mb-3">Все записи ({{currentEvents.length}})</div>
+                    <div class="font-medium text-500 mb-3 text-blue-600">Все встречи, связанные с {{name}}</div>
+                    <div style="height: auto" >
+                        <p-listbox [filter]="true" (onClick)="currentMaster($event)" [options]="currentEvents" emptyFilterMessage="Ничего не найдено"
+                            optionLabel="title" [listStyle]="{ 'max-height': '250px' }" [style]="{ width: '100%' }">
+
+                            <ng-template let-event pTemplate="item">
+                                <div class="flex gap-3">
+                                    <b>{{event.startStr | date: 'd MMMM, H:mm' : locale}}</b>
+                                    <i>{{event.title}} </i> <br>
+                                </div>
+                            </ng-template>
+                        </p-listbox>
+                    </div>
+                </div>
+            </div>
+            <div class="w-5">
+                <div class="surface-card p-4 shadow-2 border-round">
+                    <div class="text-3xl font-medium text-900 mb-3">Открытые ({{openedEvents.length}})</div>
+                    <div class="font-medium text-500 mb-3 text-pink-400">Не завершенные</div>
+                    <div style="height: auto">
+                        <p-listbox [filter]="true" (onClick)="currentMaster($event)" [options]="openedEvents" emptyFilterMessage="Ничего не найдено"
+                            optionLabel="title" [listStyle]="{ 'max-height': '250px' }" [style]="{ width: '100%' }" emptyMessage="Пока нету записей">
+
+                            <ng-template let-open pTemplate="item">
+                                <div class="flex gap-3">
+                                    <b>{{open.start | date: 'd MMMM, H:mm' : locale}}</b>
+                                    <i>{{open.title}} </i> <br>
+                                </div>
+                            </ng-template>
+                        </p-listbox>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <p-divider></p-divider>
+        <div *ngIf="dataLoaded" class="m-5">
+            <full-calendar [options]="calendarOptions">
+                <ng-template let-arg>
+                    <b>{{ arg.timeText }}</b>
+                    <i>{{ arg.event.title }}</i>
+                </ng-template>
+            </full-calendar>
+        </div>
+    </div>

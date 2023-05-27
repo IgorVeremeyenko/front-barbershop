@@ -9,3 +9,11 @@
     flex-direction: column;
     row-gap: 10px;
 }
+
+::ng-deep input.p-element.p-autocomplete-input.p-inputtext.p-component.ng-tns-c105-11.ng-star-inserted{
+    width: auto;
+}
+
+:host ::ng-deep .p-listbox.p-component{
+    margin-left: 0;
+}

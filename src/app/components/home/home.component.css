@@ -121,7 +121,7 @@ h2 {
     animation: enter 150ms forwards;
   }
 
-  ::ng-deep .p-listbox.p-component{
+  :host ::ng-deep .p-listbox.p-component{
     margin-left: 0;
   }
 
@@ -155,6 +155,10 @@ h2 {
   ::ng-deep li.p-ripple.p-element.p-listbox-item.ng-star-inserted{
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .hide-all-day-slot .fc-day-grid-event.fc-h-event.fc-not-start.fc-end {
+    display: none !important;
   }
   
   @keyframes enter {

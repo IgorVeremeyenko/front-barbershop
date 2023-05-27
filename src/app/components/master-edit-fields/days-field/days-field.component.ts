@@ -28,18 +28,23 @@ export class DaysFieldComponent {
 
   selectedDays: any[] = [];
 
+  schedule!: Schedule;
+
   isEditing = false;
 
   editingSchedule = false;
 
   clicked = false;
 
+  isLoading = false;
+
   master: MasterList = {
     id: 0,
     name: '',
     category: [],
     phone: '',
-    days: []
+    days: [],
+    serviceName: []
   }
 
   days: any[] = [];
@@ -49,19 +54,17 @@ export class DaysFieldComponent {
   currentSchedules = 0;
 
   constructor(private dialogService: DialogService, private dataService: DataService, private msg: MyMessageService){
+    this.dataService.getDays().subscribe(value => {
+      this.days = value;
+    })
     this.dialogService.transferEditMasterDetails.subscribe(value => {
-      this.dataService.getDays().subscribe(value => {
-        this.days = value;
-      })
       this.master = value;
-      
-      const sortedDays = this.master.days.sort((a, b) => {
-          const correct = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          const dayA = correct.indexOf(a.dayOfWeek);
-          const dayB = correct.indexOf(b.dayOfWeek);
-          return dayA - dayB;
-        });
-        this.master.days = sortedDays;
+      this.updateData();
+      this.sortMasterDays();
+    })
+
+    this.dialogService.isModalEditMasterClosed.subscribe(()=> {
+      this.convertedDays = [];
     })
     
   }
@@ -69,34 +72,71 @@ export class DaysFieldComponent {
   onEdit(){
     this.editingSchedule = true;
     this.isEditing = true;
+    this.selectedDays = [];
+  }
+
+  sortMasterDays(){
+    const sortedDays = this.master.days.sort((a, b) => {
+      const correct = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const dayA = correct.indexOf(a.dayOfWeek);
+      const dayB = correct.indexOf(b.dayOfWeek);
+      return dayA - dayB;
+    });
+    this.master.days = sortedDays;
+    
+    let array: any[] = [];
+    this.master.days.forEach(element => {
+      const t = this.days.filter(item => item.payload === element.dayOfWeek)[0];
+      array.push(t);
+    });
+    this.convertedDays = array;    
+    this.isLoading = false;
   }
 
   onSave(){
     this.isEditing = true;
     this.clicked = false;
-    // this.schedule.masterId = this.master.id;
-    if(this.currentSchedules > 0){
-      this.dataService.deleteSchedule(this.master.id).subscribe(() => {
-
-        this.selectedDays.map(item => {
-          // this.schedule.dayOfWeek = item.payload;
-          // this.dataService.postSchedule(this.schedule);
-        })    
-        this.editingSchedule = false;
-        this.isEditing = false;
-        this.msg.showSuccess('Успешные изменения')
-      }, err => console.log(err))
-    }
-    else {
+    this.dataService.deleteSchedule(this.master.id).subscribe(() => {
       this.selectedDays.map(item => {
-        // this.schedule.dayOfWeek = item.payload;
-        // this.dataService.postSchedule(this.schedule).subscribe(res => console.log(res));
-        this.editingSchedule = false;
-        this.isEditing = false;
-      })  
-      this.msg.showSuccess('Успешные изменения')
-    }
+        this.schedule = {
+          id: 0,
+          masterId: this.master.id,
+          dayOfWeek: item.payload
+        }
+        this.dataService.postSchedule(this.schedule).subscribe(()=> {
+          this.isLoading = true;
+          this.updateData();
+          this.editingSchedule = false;
+          this.isEditing = false;
+          
+        }, er => {this.msg.showError(er); console.log(er.error); this.editingSchedule = false; this.isEditing = false}, ()=> {this.editingSchedule = false; this.isEditing = false; this.sortMasterDays()})
+      })    
+    }, err => {
+      //if nothing to delete
+      this.selectedDays.map(item => {
+        this.schedule = {
+          id: 0,
+          masterId: this.master.id,
+          dayOfWeek: item.payload
+        }
+        this.dataService.postSchedule(this.schedule).subscribe(()=> {
+          this.isLoading = true;
+          this.updateData();
+          this.editingSchedule = false;
+          this.isEditing = false;
+        }, er => {this.msg.showError(er); console.log(er.error); this.editingSchedule = false; this.isEditing = false}, ()=> {this.editingSchedule = false; this.isEditing = false; this.sortMasterDays()})
+      })   
+    })   
     
+  }
+
+  updateData(){
+    this.dataService.getMasterList().subscribe(result => {
+      const selected: any = result.find(m => m.id === this.master.id);//any, because automatically adds type undefined
+      this.master = selected;
+      this.sortMasterDays();
+      this.dialogService.isUpdatedEditMaster.emit(true);
+    })
   }
 
   onCancel(){

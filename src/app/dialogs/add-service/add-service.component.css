@@ -43,14 +43,15 @@
 }
 
 ::ng-deep span.ng-tns-c75-4.p-autocomplete.p-component{
-    width: 100%;
+    width: 100%!important;
 }
 
-::ng-deep input.p-element.p-autocomplete-input.p-inputtext.p-component.ng-tns-c75-3.ng-star-inserted{
+::ng-deep input.p-element.p-autocomplete-input.p-inputtext.p-component{
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    width: auto;
 }
 
 ::ng-deep span.ng-tns-c105-4.p-autocomplete.p-component{
-    width: 100%;
+    width: 100%!important;
 }

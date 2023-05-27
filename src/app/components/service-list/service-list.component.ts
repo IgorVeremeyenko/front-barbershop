@@ -9,7 +9,7 @@ import { DialogService } from 'src/app/services/dialog.service';
   templateUrl: './service-list.component.html',
   styleUrls: ['./service-list.component.css']
 })
-export class ServiceListComponent implements AfterViewInit {
+export class ServiceListComponent {
 
   files: TreeNode[] = [];
 
@@ -26,18 +26,11 @@ export class ServiceListComponent implements AfterViewInit {
   ];
 
   constructor(private dataService: DataService, private dialogService: DialogService) {
-    // this.dialogService.reloadPageServiceList.subscribe(() => {
-    //   this.files = [];
-    //   this.loadData();
-    // })
-    this.dataService.serviceList.subscribe(value => {
-      console.log(value)
-    })
+    this.dialogService.isDataChangedForEditServiceComponent.subscribe(value => {
+      if(value) this.loadData();
+    })   
    }
 
-
-  ngAfterViewInit(): void {
-  }
 
   ngOnInit() {
     this.files = [];

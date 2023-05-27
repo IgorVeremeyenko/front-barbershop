@@ -1,5 +1,14 @@
 <div class="card">
-    <p-table [value]="options" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <p-contextMenu #cm [model]="items"></p-contextMenu>
+    <p-table #dt1 [value]="options" [contextMenu]="cm" dataKey="id" styleClass="p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}" [globalFilterFields]="['name', 'category', 'serviceName', 'days.dayOfWeek', 'phone']">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target).value, 'contains')" placeholder="Поиск мастера" />
+                </span>
+            </div>
+        </ng-template>
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 10px">#</th>

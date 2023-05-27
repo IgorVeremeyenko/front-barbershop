@@ -1,50 +1,46 @@
-<!-- <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" defaultFocus="reject" [closable]="false"
-    acceptButtonStyleClass="p-button-text"></p-confirmDialog> -->
-    <p-dialog header="Бронирование записи" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
+<p-dialog header="Бронирование записи" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
     [modal]="true" [style]="{width: '50vw', height: '60vh'}" [draggable]="true" [resizable]="false" (onHide)="onHide()">
-    <!-- добавление.component.html -->
     <div class="container">
         <form [formGroup]="myForm" (ngSubmit)="submit()">
             <div class="form-container">
                 <div class="dropdown">
-                    <p-dropdown 
-                    [options]="clients" 
-                    [style]="{width: '100%'}" 
-                    [filter]="true" 
-                    emptyMessage="Нет данных" 
-                    emptyFilterMessage="Нет совпадений" 
-                    filterPlaceholder="Поиск по ном. тел." 
-                    formControlName="userName" 
-                    placeholder="Выбрать клиента" 
-                    optionLabel="phone" 
-                    [showClear]="true"
-                    (onChange)="filterData($event)"
-                    >
-                    <ng-template pTemplate="selectedItem">
-                        <div class="country-item country-item-value" *ngIf="selectedCostumer">
-                            <div>"{{selectedCostumer.name}}" | {{selectedCostumer.phone}}</div>
-                        </div>
-                    </ng-template>
-                    <ng-template let-costumer pTemplate="item">
-                        <div class="costumer-item">
-                            <div>"{{costumer.name}}" | Тел.: {{costumer.phone}}</div>
-                        </div>
-                    </ng-template>
+                    <p-dropdown [options]="clients" [style]="{width: '100%'}" [filter]="true" emptyMessage="Нет данных"
+                        emptyFilterMessage="Нет совпадений" filterPlaceholder="Поиск по ном. тел."
+                        formControlName="userName" placeholder="Выбрать клиента" optionLabel="name" filterBy="phone"
+                        [showClear]="true" [style]="{borderRadius: '3px', width: '100%'}">
+                        <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value" *ngIf="selectedCostumer">
+                                <div>"{{selectedCostumer.name}}" | {{selectedCostumer.phone}}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-costumer pTemplate="item">
+                            <div class="costumer-item">
+                                <div>"{{costumer.name}}" | Тел.: {{costumer.phone}}</div>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <button pButton pRipple type="button" label="Добавить нового клиента" (click)="openNewCostumerModal()" class="p-button-info"></button>
+                    <button pButton pRipple type="button" label="Добавить нового клиента"
+                        (click)="openNewCostumerModal()" class="p-button-info m-0"></button>
                 </div>
 
                 <div class="service-group">
-                    <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>                   
-                    <p-cascadeSelect (onGroupChange)="getCategory($event)" (onChange)="getPrice($event)" placeholder="Выберите услугу" formControlName="selectedService" [options]="services" optionLabel="cname" optionGroupLabel="category"
-                    [optionGroupChildren]="['services']" [style]="{'minWidth': '14rem', 'borderTopLeftRadius': 0, 'borderBottomLeftRadius': 0}"></p-cascadeSelect>
-                    <p-inputNumber class="w-11" *ngIf="priceSelected && freeMaster" formControlName="selectedPrice" mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
-                    <div class="w-full card flex justify-content-center">
-                        <p-button (click)="op.show($event)" *ngIf="showListBox" icon="pi pi-user" pTooltip="Выберите мастера" label="Show"></p-button>
-                        <input class="w-11" pInputText type="text" *ngIf="!freeMaster" formControlName="selectedPrice" />  
+                    <span class="p-inputgroup-addon"><i class="pi pi-shopping-cart"></i></span>
+                    <p-cascadeSelect (onGroupChange)="getCategory($event)" (onChange)="getPrice($event)"
+                        placeholder="Выберите услугу" formControlName="selectedService" [options]="services"
+                        optionLabel="name" optionGroupLabel="category" [optionGroupChildren]="['children']"
+                        [style]="{'minWidth': '14rem', 'borderTopLeftRadius': 0, 'borderBottomLeftRadius': 0}"></p-cascadeSelect>
+                    <p-inputNumber class="w-11" *ngIf="priceSelected && freeMaster" formControlName="selectedPrice"
+                        mode="currency" inputId="currency-germany" currency="EUR" locale="de-DE"></p-inputNumber>
+                    <div class="w-full card flex justify-content-center ml-2">
+                        <p-button (click)="op.show($event)" *ngIf="showListBox" icon="pi pi-user"
+                            pTooltip="Выберите мастера" label="Выбрать"></p-button>
+                        <input class="ml-1" pInputText type="text" *ngIf="!freeMaster"
+                            formControlName="selectedPrice" />
                         <p-overlayPanel #op>
-                            <p-listbox [options]="freeMasters" formControlName="selectMaster" (onChange)="onClick($event)" optionLabel="name" [listStyle]="{ 'max-height': '250px' }" [style]="{ width: '100%', marginLeft: 0 }"></p-listbox>
-                    
+                            <p-listbox [options]="freeMasters" formControlName="selectMaster"
+                                (onChange)="onClick($event)" optionLabel="name" [listStyle]="{ 'max-height': '250px' }"
+                                [style]="{ width: '100%', marginLeft: 0 }"></p-listbox>
+
                         </p-overlayPanel>
                     </div>
                 </div>
@@ -54,15 +50,12 @@
                 </div>
 
                 <div class="inputs">
-                    
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-calendar"></i></span>
                         <input type="text" [value]="date" disabled pInputText name="date">
                     </div>
-
-                    
                 </div>
-                
+
                 <div class="spinner-btn">
                     <button pButton class="submit-btn" type="submit"
                         [disabled]="myForm.invalid && (myForm.controls['userName'].untouched || myForm.controls['userName'].touched)"

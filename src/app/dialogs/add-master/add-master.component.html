@@ -1,5 +1,5 @@
 <p-dialog header="Добавление мастера" [(visible)]="displayModal" [closeOnEscape]="true" [dismissableMask]="true"
-    [modal]="true" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
+    [modal]="true" [style]="{width: '50vw', maxHeight: '98%'}" [draggable]="true" [resizable]="false" (onHide)="hide()">
     <!-- добавление.component.html -->
     <div class="container">
         <form [formGroup]="myForm" (ngSubmit)="submit()">
@@ -8,19 +8,52 @@
                 <div class="inputs">
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                        <input type="text" class="form-control" pInputText placeholder="Имя" formControlName="userName"
-                            name="name" required>
+                        <p-autoComplete [style]="{width: '-webkit-fill-available'}" [loadingIcon]="null" [suggestions]="suggestions" formControlName="userName" placeholder="Имя" (completeMethod)="search($event)"></p-autoComplete>
                     </div>
                     <div class="alert alert-danger"
                         *ngIf="myForm.controls['userName']?.invalid && myForm.controls['userName']?.touched">
                         Не указано имя
                     </div>
-
+                    <div class="alert alert-danger"
+                        *ngIf="isWrong">
+                        Мастер под данным именем уже существует, выберите другое имя
+                    </div>
+                    <div class="service-group flex ">
+                        <span class="p-inputgroup-addon" style="text-align: center;"><i class="pi pi-align-right"></i></span> 
+                        <p-dropdown [options]="serviceList" [style]="{width: '-webkit-fill-available'}" [filter]="true"
+                            emptyFilterMessage="Нет совпадений" filterPlaceholder="Поиск" formControlName="serviceCategory"
+                            placeholder="Название категории" [showClear]="true">                            
+                            <ng-template let-category pTemplate="item">
+                                <div class="category-item">
+                                    <div>{{category}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>                       
+                        
+                    </div>
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon" style="text-align: center;"><i class="pi pi-file-edit"></i></span> 
+                        <p-dropdown [options]="serviceNames" [style]="{width: '-webkit-fill-available'}" [filter]="true"
+                            emptyFilterMessage="Нет совпадений" filterPlaceholder="Поиск" formControlName="serviceName"
+                            placeholder="Название услуги" [showClear]="true" optionLabel="name" emptyMessage="Выберите категорию">                            
+                            <ng-template let-name pTemplate="item">
+                                <div class="category-item">
+                                    <div>{{name.name}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>   
+                        
+                    </div>
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
 
                         <p-inputMask formControlName="userPhone" mask="+99 (999) 999-99999"
                             placeholder="+99 (999) 999-99999"></p-inputMask>
+                    </div>
+                    <div class="text-500 w-6 md:w-2 font-medium">Рабочие дни</div>
+                    <div class="p-inputgroup">
+                        <p-listbox [options]="days" formControlName="userWorkDays" optionLabel="day" (onChange)="onClick($event)" [style]="{'width':'15rem'}"
+                        [multiple]="true" [metaKeySelection]="false"></p-listbox>
                     </div>
                     <div class="alert alert-danger"
                         *ngIf="myForm.controls['userPhone']?.invalid && myForm.controls['userPhone']?.touched">
@@ -30,7 +63,7 @@
                 <div class="spinner-btn">
                     <button pButton class="submit-btn" type="submit"
                         [disabled]="myForm.invalid && (myForm.controls['userPhone'].untouched || myForm.controls['userPhone'].touched)"
-                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                        class="btn btn-primary" label="Добавить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
                             style="font-size: 1rem"></i></button>
                 </div>
             </div>
