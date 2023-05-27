@@ -8,12 +8,7 @@
                     <p-dropdown [options]="masterList" [style]="{width: '100%'}" [filter]="true"
                         emptyFilterMessage="Нет совпадений" filterPlaceholder="Поиск" formControlName="masterID"
                         placeholder="Назначьте мастера" optionLabel="name" [showClear]="true">
-                        <!-- <ng-template pTemplate="selectedItem">
-                                    <div class="master-item master-item-value" *ngIf="selectedMaster">
-                                        <img src="{{selectedCountry.url}}"/>
-                                        <div>{{selectedCountry.name}}</div>
-                                    </div>
-                                </ng-template> -->
+                        
                         <ng-template let-master pTemplate="item">
                             <div class="master-item">
                                 <div>{{master.name}}</div>
@@ -25,17 +20,17 @@
 
                 <div class="service-group">
                     <span class="p-inputgroup-addon" style="text-align: center;"><i class="pi pi-align-right"></i></span>                        
-                    <p-autoComplete formControlName="serviceCategory" class="form-control" placeholder="Название категории" [suggestions]="suggestions" (completeMethod)="search($event)"></p-autoComplete>
+                    <p-autoComplete class="w-auto" formControlName="serviceCategory" field="category" class="form-control" placeholder="Название категории" [suggestions]="suggestions" (completeMethod)="search($event)"></p-autoComplete>
                 </div>
 
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon" style="text-align: center;"><i class="pi pi-file-edit"></i></span> 
-                    <p-autoComplete formControlName="serviceName" class="form-control" placeholder="Название услуги" [suggestions]="suggestionNames" (completeMethod)="searchDublicates($event)"></p-autoComplete>
+                    <p-autoComplete class="w-6" formControlName="serviceName" field="name" class="form-control" placeholder="Название услуги" [suggestions]="suggestionNames" (completeMethod)="searchNames($event)"></p-autoComplete>
                 </div>
 
                 <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">€</span>
-                    <p-inputNumber [showClear]="true" formControlName="servicePrice" inputId="locale-german" mode="decimal" locale="de-DE"
+                    <p-inputNumber [showClear]="true" placeholder="Стоимость" formControlName="servicePrice" inputId="locale-german" mode="decimal" locale="de-DE"
                         [minFractionDigits]="2">
                     </p-inputNumber>
                 </div>
@@ -47,7 +42,7 @@
 
                 <div class="spinner-btn">
                     <button pButton class="submit-btn" type="submit" [disabled]="!(myForm.valid && myForm.dirty)"
-                        class="btn btn-primary" label="Отправить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
+                        class="btn btn-primary" label="Добавить"><i *ngIf="isSubmiting" class="pi pi-spin pi-spinner"
                             style="font-size: 1rem"></i></button>
                 </div>
             </div>

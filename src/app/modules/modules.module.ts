@@ -48,6 +48,8 @@ import { DividerModule } from 'primeng/divider';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { AutoFocusModule } from 'primeng/autofocus';
+import { ScrollTopModule } from 'primeng/scrolltop';
+import { OverlayModule } from 'primeng/overlay';
 
 @NgModule({
   declarations: [],
@@ -100,7 +102,9 @@ import { AutoFocusModule } from 'primeng/autofocus';
     DividerModule,
     OverlayPanelModule,
     ToggleButtonModule,
-    AutoFocusModule
+    AutoFocusModule,
+    ScrollTopModule,
+    OverlayModule
   ],
   exports: [
     ButtonModule,
@@ -150,7 +154,9 @@ import { AutoFocusModule } from 'primeng/autofocus';
     DividerModule,
     OverlayPanelModule,
     ToggleButtonModule,
-    AutoFocusModule
+    AutoFocusModule,
+    ScrollTopModule,
+    OverlayModule
   ],
   providers: [ConfirmationService,MessageService]
 })

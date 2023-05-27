@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
-import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS, SERVICES_TREENODE, MASTERS_COUNTER, MASTER_APPOINTMENTS, MASTER_LIST, RESET_ADMIN } from 'src/assets/constants';
+import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS, SERVICES_TREENODE, MASTERS_COUNTER, MASTER_APPOINTMENTS, MASTER_LIST, RESET_ADMIN, MASTER_BY_NAME, APPOINTMENT_FILTERED, SERVICES_FILTERED_BY_CATEGORY, SERVICE_LIST_BY_CATEGORIES, SERVICE_LIST_BY_NAMES } from 'src/assets/constants';
 import { BehaviorSubject, map } from 'rxjs';
 import { Master } from '../interfaces/master';
 import { Schedule } from '../interfaces/schedule';
@@ -47,6 +47,9 @@ export class DataService {
   appointment_data_subject = new BehaviorSubject<Appointment>(this.defaults);
   costumers$ = this.appointment_data_subject.asObservable();
 
+  master_component_data = new BehaviorSubject<Appointment[]>([]);
+  master$ = this.master_component_data.asObservable();
+
 
   constructor(private http: HttpClient) { }
 
@@ -64,6 +67,10 @@ export class DataService {
     this.dataSubject.next(newData);
   }
 
+  updateMasterComponent(data: Appointment[]){
+    this.master_component_data.next(data);
+  }
+
   updateServiceList(newData: TreeNode[]){
     this.serviceList.emit(newData);
   }
@@ -78,6 +85,22 @@ export class DataService {
 
   getServices() {
     return this.http.get<Service[]>(SERVICE);
+  }
+
+  getServicesListByCategory():Observable<Service[]>{
+    return this.http.get<Service[]>(SERVICE_LIST_BY_CATEGORIES);
+  }
+
+  getServicesListByName():Observable<Service[]>{
+    return this.http.get<Service[]>(SERVICE_LIST_BY_NAMES);
+  }
+
+  getServicesFilteredByCategory(cat: string):Observable<Service[]>{
+    return this.http.get<Service[]>(`${SERVICES_FILTERED_BY_CATEGORY}${cat}`);
+  }
+
+  getServicesForAddAppointmentComponent(): Observable<Service[]>{
+    return this.http.get<Service[]>(APPOINTMENT_FILTERED);
   }
 
   getMasterById(id: number) {
@@ -138,12 +161,15 @@ export class DataService {
   addNewCostumer(body: Costumer){
     return this.http.post(COSTUMERS,body);
   }
-  addNewMaster(body: Master){
-    return this.http.post(MASTERS, body);
+  addNewMaster(body: Master): Observable<Master>{
+    return this.http.post<Master>(MASTERS, body);
   }
 
   getMasterList(): Observable<MasterList[]>{
     return this.http.get<MasterList[]>(MASTER_LIST);
+  }
+  getMasterByName(name: string): Observable<Master>{
+    return this.http.get<Master>(`${MASTER_BY_NAME}${name}`);
   }
 
   loadCalendarData() {

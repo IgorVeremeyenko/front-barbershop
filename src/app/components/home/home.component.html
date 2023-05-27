@@ -3,14 +3,7 @@
 <p-blockUI [blocked]="blockedDocument"></p-blockUI>
 <div *ngIf="dataLoaded" class="app">
     <div class='app-sidebar'>
-        <!-- <div class='app-sidebar-section'>
-            <h2>Инструкции</h2>
-            <ul>
-                <li>Выберите дату и Вам будет предложено создать новую запись</li>
-                <li>Нажмите на запись, чтобы посмотреть детально</li>
-            </ul>
-        </div> -->
-    
+        
         <div class='app-sidebar-section'>
             
             <p-toggleButton onLabel="Показать выходные" offLabel="Скрыть выходные" (onChange)="handleWeekendsToggle()" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
@@ -33,7 +26,7 @@
     </div>
     
     <div class="app-main">
-        <full-calendar [options]="calendarOptions">
+        <full-calendar [options]="calendarOptions" [styleClass]="'hide-all-day-slot'">
             <ng-template let-arg>
                 <b>{{ arg.timeText }}</b>
                 <i>{{ arg.event.title }}</i>

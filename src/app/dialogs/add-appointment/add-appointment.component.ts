@@ -91,34 +91,8 @@ export class AddAppointmentComponent implements OnInit {
     this.dataService.getMasters().subscribe(masters => this.masters = masters);
     this.dataService.getServices().subscribe(services => this.servicesList = services);
     this.dataService.getSchedules().subscribe(schedules => this.schedules = schedules);
-    
-    dataService.getServices().subscribe(serv_res => {
-      
-      serv_res.map(item => {
-        if(item.userId === dataService.USER_ID){
-          const children = {
-            cname: item.name,
-            cprice: item.price
-          }
-          const cat: Cat = {
-            id: item.id,
-            category: item.category,
-            services: [children]
-          }
-          let flag = false;
-          this.services.map(items => {
-            if(items.category === cat.category){
-              items.services.push(children);
-              flag = true;
-            }
-          })
-          if(!flag){
-            this.services.push(cat);
-          }
-        }
-        
-      })
-      
+    this.dataService.getServicesForAddAppointmentComponent().subscribe(value => {
+      this.services = value;
     })
 
     this.dialogService.isAddedNewCostumer.subscribe(value => {
@@ -175,10 +149,6 @@ export class AddAppointmentComponent implements OnInit {
 
   }
 
-  // ngAfterViewInit() {
-  //   let calendarApi = this.fullCalendar.getApi();
-  //   console.log(calendarApi)
-  // }
 
   loadClientsList(){
     this.dataService.getClients().subscribe(clients => {
@@ -217,11 +187,9 @@ export class AddAppointmentComponent implements OnInit {
     })
     if(this.available) {
       this.freeMaster = true;
-      this.categorySelected = event.value;
     }
     else {
       this.freeMaster = false;
-      this.categorySelected = null;
       this.available = null;
       this.myForm.get('isAvailable')?.reset();
     }
@@ -246,6 +214,7 @@ export class AddAppointmentComponent implements OnInit {
     
     this.freeMasters = arr;
     this.showListBox = true;
+    this.categorySelected = event.value;
     
     if(!this.freeMaster){
       this.priceSelected = null;
@@ -254,7 +223,7 @@ export class AddAppointmentComponent implements OnInit {
       this.myForm.get('selectedPrice')?.disable();
     }
     else {
-      this.priceSelected = event.value?.cprice;
+      this.priceSelected = event.value?.price;
       this.myForm.get('selectedPrice')?.enable();
       this.myForm.get('selectedPrice')?.setValue(this.priceSelected);
       this.myForm.get('selectedPrice')?.disable();
@@ -269,7 +238,7 @@ export class AddAppointmentComponent implements OnInit {
       id: 0, costumerId: this.selectedCostumer.id,
       serviceId: this.categorySelected.id,
       status: IN_PROGRESS,
-      serviceName: this.myForm.value.selectedService.cname,
+      serviceName: this.myForm.value.selectedService.name,
       servicePrice: this.priceSelected,
       userId: this.dataService.USER_ID,
       masterId: this.myForm.value.selectMaster.id,
@@ -277,7 +246,6 @@ export class AddAppointmentComponent implements OnInit {
       date: this.params.start
     };
 
-   
     this.dataService.addNewAppointment(this.appointment_obj).subscribe(
       () => {
         try {
@@ -320,15 +288,25 @@ export class AddAppointmentComponent implements OnInit {
 
   onHide(){
     this.available = null;
+    this.myForm.reset();
   }
 
-  filterData(event: any) {
-    // if (this.selectedValue) {
-    //   // фильтрация данных на основе выбранного значения
-    //   this.filteredData = this.data.filter((item) => item.category === this.selectedValue.category);
-    // } else {
-    //   this.filteredData = this.data; // если ничего не выбрано, отображаем все данные
-    // }
+  searchDublicates(array: any[]) {
+
+    const uniqueArray: any[] = [];
+
+    const encounteredNames: any = {};
+
+    array.forEach(obj => {
+      
+      if (!encounteredNames[obj.name]) {
+        
+        uniqueArray.push(obj);
+        
+        encounteredNames[obj.name] = true;
+      }
+    });
+    return uniqueArray;
   }
 
   onClick(event: any){

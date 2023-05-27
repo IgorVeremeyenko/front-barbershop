@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { DataService } from 'src/app/services/data.service';
 import autoTable from 'jspdf-autotable';
@@ -10,7 +10,8 @@ import { Appointment } from 'src/app/interfaces/appointment';
 import { font } from 'src/assets/fonts/font';
 import { Costumer } from 'src/app/interfaces/costumer';
 import { Service } from 'src/app/interfaces/service';
-import { COMPLETED, CURRENT, MISSED, REJECTED, SUCCESS, WARNING } from 'src/assets/constants';
+import { COMPLETED, MISSED, REJECTED, SUCCESS, WARNING } from 'src/assets/constants';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-view-appointment',
@@ -50,7 +51,7 @@ export class ViewAppointmentComponent {
 
   isConfirmedStatus = false;
 
-  constructor(private msg: MyMessageService, private dataService: DataService, private confirmationService: ConfirmationService, private calendarService: CalendarService) {
+  constructor(private dataService: DataService, private calendarService: CalendarService, private dialogService: DialogService) {
 
     this.costumer_data$.subscribe(data => {
       if(data.costumerId === 0){
@@ -77,9 +78,14 @@ export class ViewAppointmentComponent {
       })
     });
 
+    this.dialogService.transferServiceDetailsToViewAppComponent.subscribe(value => {
+      this.service = value;
+    })
+
     dataService.getButtonItems().subscribe(items => {
       this.optionsChoise = items;
     })
+    
 
     this.cols = [
       { field: 'date', header: 'Дата' },
@@ -160,7 +166,7 @@ export class ViewAppointmentComponent {
           body: [
             [this.appointment.id,
              this.constumer.name,
-            `${this.service.category}/${this.service.name}`,
+             this.service.name,
               outputDate,
             this.constumer.phone,
             this.service.price
@@ -202,6 +208,7 @@ export class ViewAppointmentComponent {
     this.user = [];
     this.displayModalAppointment = false;
     this.isConfirmedStatus = false;
+    this.selectedChoise = null;
   }
 
 }

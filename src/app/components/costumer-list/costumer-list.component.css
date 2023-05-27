@@ -24,3 +24,15 @@ span {
     align-items: center;
     justify-content: space-between;
 }
+
+::ng-deep .p-dropdown-panel.p-component.ng-star-inserted{
+    position: absolute;
+}
+
+::ng-deep .p-datatable-footer.ng-star-inserted{
+    height: 8rem;
+}
+
+::ng-deep .p-datatable-wrapper{
+    overflow: unset!important;
+}

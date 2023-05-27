@@ -17,6 +17,10 @@ export class DialogService {
   public showModalCalendarMasters: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showModalEnterOtp: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  public isUpdatedEditMaster: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public isModalEditMasterClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public isDataChangedForEditServiceComponent: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   public transferIdForAdmin: EventEmitter<number> = new EventEmitter<number>();
   public transferParamsToPhoneField: EventEmitter<any> = new EventEmitter<any>();
   public isAddedNewCostumer: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -26,6 +30,7 @@ export class DialogService {
   public transferEditMasterDetails: EventEmitter<any> = new EventEmitter<any>();
   public reloadPageServiceList: EventEmitter<boolean> = new EventEmitter<boolean>();
   public transferDataForMastersCalendar: EventEmitter<Appointment[]> = new EventEmitter<Appointment[]>();
+  public transferServiceDetailsToViewAppComponent: EventEmitter<Service> = new EventEmitter<Service>();
 
   constructor() { }
 }

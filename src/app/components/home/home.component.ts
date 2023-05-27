@@ -47,7 +47,7 @@ export class HomeComponent {
   currentEvents: EventApi[] = [];
 
   masters: Master[] = [];
-  services: Service[] = [];
+  service!: Service;
 
   dateAppointment!: string;
   selectInfo2!: DateSelectArg;
@@ -79,7 +79,7 @@ export class HomeComponent {
 
     this.primengConfig.ripple = true;
     this.dataService.getMasters().subscribe(masters => this.masters = masters);
-    this.dataService.getServices().subscribe(services => this.services = services);
+    // this.dataService.getServices().subscribe(services => this.services = services);
 
   }
 
@@ -238,7 +238,6 @@ export class HomeComponent {
       
 
     }, (error) => {
-      console.log(error);
       this.isLoading = false;
     }, () => this.isLoading = false);
   }
@@ -311,6 +310,17 @@ export class HomeComponent {
         serviceName: result.serviceName,
         servicePrice: result.servicePrice
       }
+
+      this.service = {
+        id: 0,
+        name: result.serviceName,
+        price: result.servicePrice,
+        category: '',
+        masterId: 0,
+        userId: this.dataService.USER_ID,
+        status: ''
+      }
+      this.dialogService.transferServiceDetailsToViewAppComponent.emit(this.service)
       this.dataService.updateAppointmentData(appointment);
 
     })

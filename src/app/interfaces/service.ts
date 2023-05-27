@@ -1,7 +1,7 @@
 export interface Service {
     id: number,
     name: string | any,
-    price: number,
+    price: number | any,
     userId: number,
     masterId: number,
     category: string,

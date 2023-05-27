@@ -1,12 +1,12 @@
-<p-scrollPanel [style]="{width: '100%', height: '-webkit-fill-available'}">
-    <app-toasts></app-toasts>
+<!-- <p-scrollPanel [style]="{width: '100%', height: '-webkit-fill-available'}">
+</p-scrollPanel> -->
+<app-toasts></app-toasts>
 <p-menubar [model]="items">
-    <ng-template pTemplate="start">
-        <img src="../assets/img/scissors-solid.svg" height="40" class="mr-2"  (click)="goToMain()">
-    </ng-template>
-    <ng-template pTemplate="end">
-        <input type="text" [(ngModel)]="searchQuery" (input)="filterMenuItems($event)" pInputText placeholder="Поиск" name="search"/>
-    </ng-template>
+<ng-template pTemplate="start">
+    <img src="../assets/img/scissors-solid.svg" height="40" class="mr-2"  (click)="goToMain()">
+</ng-template>
+<ng-template pTemplate="end">
+    <input type="text" [(ngModel)]="searchQuery" (input)="filterMenuItems($event)" pInputText placeholder="Поиск по меню" name="search"/>
+</ng-template>
 </p-menubar>
-    <router-outlet></router-outlet>
-</p-scrollPanel>
+<router-outlet></router-outlet>
