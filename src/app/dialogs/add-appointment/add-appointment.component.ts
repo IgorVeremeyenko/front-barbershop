@@ -97,6 +97,7 @@ export class AddAppointmentComponent implements OnInit {
 
     this.dialogService.isAddedNewCostumer.subscribe(value => {
       if(value){
+        this.clients = [];
         this.loadClientsList();
       }
     })
@@ -245,7 +246,6 @@ export class AddAppointmentComponent implements OnInit {
       timezoneOffset: timezoneOffset,
       date: this.params.start
     };
-
     this.dataService.addNewAppointment(this.appointment_obj).subscribe(
       () => {
         try {
@@ -265,10 +265,6 @@ export class AddAppointmentComponent implements OnInit {
 
   addEventToCalendarApi(params: DateSelectArg){
     this.calendarService.addEventToCalendar.emit(params);
-  }
-
-  showSuccess(){
-    this.messages.showSuccess('Успешно добавлено');
   }
 
   addMinutes(date: Date, minutes: number) {

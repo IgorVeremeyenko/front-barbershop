@@ -3,7 +3,7 @@ import { Appointment } from 'src/app/interfaces/appointment';
 import { Costumer } from 'src/app/interfaces/costumer';
 import { DataService } from 'src/app/services/data.service';
 import { COMPLETED, IN_PROGRESS, REJECTED } from 'src/assets/constants';
-import { PrimeNGConfig, OverlayOptions } from 'primeng/api';
+import { PrimeNGConfig, OverlayOptions, LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-costumer-list',
@@ -66,6 +66,7 @@ export class CostumerListComponent {
     let clientsArray: Costumer[] = [];
     this.dataService.getClients().subscribe(clients => {
       clients.map(client => {
+        console.log(client, this.dataService.USER_ID);
         if(client.userId = this.dataService.USER_ID){
           clientsArray.push(client);
         }
@@ -74,20 +75,6 @@ export class CostumerListComponent {
         this.loading = false;
       })
     }, () => {this.loading = false}, () => this.loading = false)
-  }
-
-  concatDatas(data: any){
-    this.visits.map(item => {
-      item.appointments.concat(data);
-    })
-  }
-
-  loadLazy(event: any){
-    this.count += 10;
-    // const startIndex = event.first;
-    // const endIndex = startIndex + event.rows;
-    this.loadData();
-    if(!this.loading) event.forceUpdate();
   }
 
 }

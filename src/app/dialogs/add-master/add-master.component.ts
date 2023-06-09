@@ -64,8 +64,8 @@ export class AddMasterComponent {
       "userPhone": new FormControl("", [Validators.required, Validators.pattern(/^\+\d{2}\s\(\d{3}\)\s\d{3}-\d{5}$/)]),
       "userWorkDays": new FormControl([], Validators.required),
       "correctName": new FormControl(false, [Validators.required, Validators.requiredTrue]),
-      "serviceCategory": new FormControl("", Validators.required),
-      "serviceName": new FormControl("", Validators.required)
+      "serviceCategory": new FormControl(""),
+      "serviceName": new FormControl("")
     });
     this.dataService.getDays().subscribe(value => {
       this.days = value;
@@ -97,7 +97,8 @@ export class AddMasterComponent {
     const body: Master = {
       id: 0,
       name: this.myForm.value.userName,
-      phone: this.myForm.value.userPhone
+      phone: this.myForm.value.userPhone,
+      userId: this.dataService.USER_ID,
     };
     this.dataService.addNewMaster(body).subscribe(value => {
 
@@ -116,7 +117,8 @@ export class AddMasterComponent {
         this.hide();
       })
     }, error => {
-      this.msg.showError(`Что-то пошло не так... ${error}`)
+      this.msg.showError(`Что-то пошло не так... ${error}`);
+      this.hide();
     })
 
 

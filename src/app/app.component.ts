@@ -11,7 +11,7 @@ import { DialogService } from './services/dialog.service';
   styleUrls: ['./app.component.css'],
   providers: [ConfirmationService]
 })
-export class AppComponent implements OnChanges  {
+export class AppComponent  {
   isLogged$ = this.authService.authInfo;
   showToolbar = true;
   items: MenuItem[] = [];
@@ -22,7 +22,6 @@ export class AppComponent implements OnChanges  {
     private router: Router,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
-    private dataService: DataService,
     private primengConfig: PrimeNGConfig,
     private dialogService: DialogService
   ) {
@@ -46,10 +45,6 @@ export class AppComponent implements OnChanges  {
       this.blockMenu = value;
       this.resetMenu();
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes.isLogged$.currentValue)
   }
 
   goToMain() {

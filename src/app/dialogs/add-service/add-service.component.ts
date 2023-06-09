@@ -38,27 +38,6 @@ export class AddServiceComponent {
     private dialogService: DialogService, 
     private msg: MyMessageService
     ){
-
-    this.dataService.getMasters().subscribe(masters => {
-      const arr = new Array;
-        masters.map(item => {
-          arr.push(item);            
-        });
-        let uniqueArr = arr.filter((elem, index) => {
-          return arr.indexOf(elem) === index;
-        });
-        this.masterList = uniqueArr;
-    })
-
-    this.dataService.getServicesListByCategory().subscribe(result => {
-      this.serviceList = result;
-    })
-
-    this.dataService.getServicesListByName().subscribe(result => {
-      this.serviceNames = result;
-      
-    })
-
     this.myForm = new FormGroup({
       "serviceName": new FormControl("", Validators.required),
       "servicePrice": new FormControl("", Validators.required),
@@ -73,8 +52,21 @@ export class AddServiceComponent {
   }
 
   ngOnInit(){
+    
     this.dialogService.showModalAddService.subscribe(value => {
       this.displayModal = value;  
+      this.myForm.get('isSubmiting')?.setValue(true);
+      this.dataService.getServicesListByCategory().subscribe(result => {
+        this.serviceList = result;
+      })
+  
+      this.dataService.getServicesListByName().subscribe(result => {
+        this.serviceNames = result;
+        
+      })
+      this.dataService.getMasters().subscribe(masters => {
+        this.masterList = masters;
+      })
     });
   }
 
@@ -99,9 +91,9 @@ export class AddServiceComponent {
     this.dataService.addNewService(body).subscribe(result => {
       this.msg.showSuccess('Успешно добавлено');
       this.myForm.get('isSubmiting')?.setValue(true);
+      this.dialogService.isNewServiceAdded.emit(true);
       this.hide();
-    }, error => console.log(error))
-    console.log(this.myForm)
+    }, error => {console.log(error); this.hide()})
   }
 
   getMasterInfo(event: any){
@@ -132,6 +124,7 @@ export class AddServiceComponent {
         item.name.toLowerCase().startsWith(query.toLowerCase())
       );
     }
+    
   }
 
 }

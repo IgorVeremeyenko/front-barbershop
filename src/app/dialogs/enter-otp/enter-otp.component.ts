@@ -21,6 +21,8 @@ export class EnterOtpComponent {
 
   isShown = true;
 
+  email = '' ;
+
   constructor(private dataService: DataService, private authService: AuthService, private mesgs: MyMessageService, private router: Router, private dialogService: DialogService){
     this.otp = new FormGroup({
       code: new FormControl("", [Validators.required, Validators.minLength(6)])
@@ -29,11 +31,15 @@ export class EnterOtpComponent {
       this.visible = value;
     })
 
+    this.dialogService.transferEmailToModalOTP.subscribe(email => {
+      this.email = email;
+    })
+
   }
 
   onSubmit(){
     this.isShown = false;
-    this.authService.validateOtp(this.otp.value.code).subscribe(result => {
+    this.authService.validateOtp(this.otp.value.code, this.email).subscribe(result => {
       this.dialogService.transferIdForAdmin.emit(result.code)
       this.router.navigateByUrl('password');
       this.isShown = true;

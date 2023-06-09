@@ -28,7 +28,10 @@ export class ServiceListComponent {
   constructor(private dataService: DataService, private dialogService: DialogService) {
     this.dialogService.isDataChangedForEditServiceComponent.subscribe(value => {
       if(value) this.loadData();
-    })   
+    })  
+    this.dialogService.isNewServiceAdded.subscribe(value => {
+      if(value) this.loadData();
+    })
    }
 
 
@@ -41,6 +44,7 @@ export class ServiceListComponent {
     this.files = [];
     this.dataService.getServicesTreeNode().subscribe(result => {
       this.files = result;
+      console.log(result);
     this.isLoaded = true;
     })
   }

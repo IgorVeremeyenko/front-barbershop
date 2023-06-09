@@ -12,6 +12,7 @@ import { Costumer } from 'src/app/interfaces/costumer';
 import { Service } from 'src/app/interfaces/service';
 import { COMPLETED, MISSED, REJECTED, SUCCESS, WARNING } from 'src/assets/constants';
 import { DialogService } from 'src/app/services/dialog.service';
+import { Statistics } from 'src/app/interfaces/statistics';
 
 @Component({
   selector: 'app-view-appointment',
@@ -51,7 +52,7 @@ export class ViewAppointmentComponent {
 
   isConfirmedStatus = false;
 
-  constructor(private dataService: DataService, private calendarService: CalendarService, private dialogService: DialogService) {
+  constructor(private dataService: DataService, private calendarService: CalendarService, private dialogService: DialogService, private msg: MyMessageService) {
 
     this.costumer_data$.subscribe(data => {
       if(data.costumerId === 0){
@@ -82,7 +83,7 @@ export class ViewAppointmentComponent {
       this.service = value;
     })
 
-    dataService.getButtonItems().subscribe(items => {
+    this.dataService.getButtonItems().subscribe(items => {
       this.optionsChoise = items;
     })
     
@@ -112,22 +113,13 @@ export class ViewAppointmentComponent {
   save(){
     let eventColour = '';
     let status = '';
-    switch(this.selectedChoise.code){
-      case "canceled" : {
-        eventColour = WARNING;
-        status = REJECTED;
-      }
-      break;
-      case "success" : {
-        eventColour = SUCCESS;
-        status = COMPLETED;
-      }
-      break;
-      case "missed" : {
-        eventColour = WARNING;
-        status = MISSED;
-      }
-      break;
+    if(this.selectedChoise.code === 'canceled' || this.selectedChoise.code === 'missed'){
+      this.deleteAppIfCanceledOrMissed(this.appointment.id);
+      return;
+    }
+    else {
+      eventColour = SUCCESS;
+      status = COMPLETED;
     }
     this.calendarService.addEventToCalendarClickInfo.emit({
       info: this.calendarService.temporaryForm, 
@@ -135,9 +127,35 @@ export class ViewAppointmentComponent {
       status: status,
       costumerId: this.constumer.id
     });
-    this.optionsChoise = [];
+    // this.optionsChoise = [];
     this.selectedChoise = undefined;
     this.displayModalAppointment = false;
+  }
+
+  deleteAppIfCanceledOrMissed(id: number): void {
+    this.dataService.removeAppointment(id).subscribe(res => {
+      const costumerID = this.appointment.costumerId;
+      this.postStatistic(costumerID);
+      this.calendarService.addEventToCalendar.emit(true);
+      this.displayModalAppointment = false;
+      this.msg.showSuccess('Данные обновлены');
+      return;
+    }, er => {
+      this.msg.showError('Не удалось подтвердить');
+      console.log(er)
+    })
+  }
+
+  postStatistic(id: number){
+    const body: Statistics = {
+      id: 0,
+      costumerId: id,
+      complete: 0,
+      userId: this.dataService.USER_ID
+    }
+    this.dataService.postStatistic(body).subscribe(res => {
+      console.log(res);
+    })
   }
 
   convertDate(date: Date | string) {

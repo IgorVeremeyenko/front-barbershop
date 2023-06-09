@@ -53,7 +53,7 @@ export class AuthService {
       .pipe(
         // сохраняем токен доступа в localStorage
         map(response => {
-          localStorage.setItem('access_token', response.tokenString);
+          localStorage.setItem('access_token', response);
           return response;
         })
       );
@@ -71,8 +71,8 @@ export class AuthService {
     return this.http.put(`${ADMIN_BY_ID}${id}`, body);
   }
 
-  validateOtp(otp: number): Observable<ResponseOTP>{
-    return this.http.post<ResponseOTP>(`${VALIDATE_OTP}${otp}`, otp);
+  validateOtp(otp: number, email: string): Observable<ResponseOTP>{
+    return this.http.post<ResponseOTP>(`${VALIDATE_OTP}${otp}?email=${email}`, otp);
   }
 
   logout() {

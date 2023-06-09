@@ -45,6 +45,7 @@ export class ResetPasswordComponent {
       this.mesgs.showSuccess(result);
       this.isShown = true;
       this.dialogService.showModalEnterOtp.emit(true);
+      this.dialogService.transferEmailToModalOTP.emit(resetAdmin.email);
       
     }, error => {this.mesgs.showError(error); this.isShown = true}, () => this.isShown = true)
         
