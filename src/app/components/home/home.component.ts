@@ -90,6 +90,10 @@ export class HomeComponent {
 
     this.updateData();
 
+    this.calendarService.deleteEvent.subscribe(event => {
+      this.updateData();
+    })
+
     this.calendarService.addEventToCalendarClickInfo.subscribe(value => {
       const ID = parseInt(value.info.event.id)
       const costumer_ID = value.costumerId;
@@ -122,14 +126,6 @@ export class HomeComponent {
       this.updateData();
     })
 
-  }
-
-  showSuccess() {
-    this.messages.showSuccess('Успешно добавлено');
-  }
-
-  goToToasts() {
-    this.router.navigateByUrl('toasts');
   }
 
   unlockDocument() {
@@ -214,9 +210,9 @@ export class HomeComponent {
               break;
           }
 
-          const y = this.masters.filter(master => master.id === calendar_results.masterId);
-          let name = '';
-          y.map(item => name = item.name)
+          const y = this.masters.find(master => master.id === calendar_results.masterId);
+          let name = y === undefined ? "" : y.name;
+          console.log(this.masters)
           this.events.push({
             start: calendar_results.date,
             end: minutes,
@@ -283,7 +279,6 @@ export class HomeComponent {
     newEvent.find(t => t.id === eventInfo.id)!.backgroundColor = eventInfo.backgroundColor;
     this.events = newEvent;
     const url = this.events.find(t => t.id === eventInfo.id)!.url;
-    console.log(url);
     this.addEventToCalendarApi(this.events);
   }
 

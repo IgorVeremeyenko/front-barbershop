@@ -27,7 +27,7 @@ export class RegisterComponent {
     })
 
     this.registerForm.valueChanges.subscribe(changes => {
-      if(this.registerForm.valid){
+      if(this.registerForm.valid && this.password()){
         this.isValid = true;
       }
       else {
@@ -37,9 +37,9 @@ export class RegisterComponent {
     this.authService.blockMenu.emit(true);
   }
 
-  password(formGroup: FormGroup) {
-    const pass = formGroup.value.password;
-    const confirm = formGroup.value.confirmPassword;
+  password() {
+    const pass = this.registerForm.value.password;
+    const confirm = this.registerForm.value.confirmPassword;
     return pass === confirm;
   }
 
@@ -51,16 +51,14 @@ export class RegisterComponent {
       password: this.registerForm.value.password,
       email: ''
     }
-    let correct = this.password(this.registerForm);
+    let correct = this.password();
     if(correct){
       this.authService.registerUser(newAdmin).subscribe(res => {
-        console.log(res);
         this.isShown = false
         this.mesgs.showSuccess('Успешная регистрация');
         this.authService.login(newAdmin).subscribe(success => {
           this.mesgs.showInfo('Идет перенаправление');
           this.router.navigateByUrl('');
-          console.log(success)
         },err => console.log(err))
       },err => {
         if(err.status === 500){

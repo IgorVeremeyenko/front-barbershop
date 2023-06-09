@@ -52,19 +52,9 @@ export class LoginComponent {
       this.router.navigateByUrl('');
       this.isShown = false;
     },error => {
-      setTimeout(() => {
-        if(error.error === "User not found"){
-
-          this.mesgs.showError("Логин и/или пароль неверные");
-        }
-        else {
-          
-          this.mesgs.showError(error.error);
-        }
-        this.isShown = false;
-        if(error.status === 404){
-        }
-      }, 500);
+      console.log(error)
+      this.mesgs.showError("Логин и/или пароль неверные");
+      this.isShown = false;
     })
   }
 

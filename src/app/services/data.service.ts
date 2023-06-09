@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Appointment } from '../interfaces/appointment';
 import { Service } from '../interfaces/service';
 import { Costumer } from '../interfaces/costumer';
-import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS, SERVICES_TREENODE, MASTERS_COUNTER, MASTER_APPOINTMENTS, MASTER_LIST, RESET_ADMIN, MASTER_BY_NAME, APPOINTMENT_FILTERED, SERVICES_FILTERED_BY_CATEGORY, SERVICE_LIST_BY_CATEGORIES, SERVICE_LIST_BY_NAMES } from 'src/assets/constants';
+import { APPOINTMENT, COSTUMERS, COUNTRIES_JSON, MASTERS, SERVICE, BUTTON_ITEMS, SCHEDULES, DAYS_JSON, STATISTICS, SERVICES_TREENODE, MASTERS_COUNTER, MASTER_APPOINTMENTS, MASTER_LIST, RESET_ADMIN, MASTER_BY_NAME, APPOINTMENT_FILTERED, SERVICES_FILTERED_BY_CATEGORY, SERVICE_LIST_BY_CATEGORIES, SERVICE_LIST_BY_NAMES, ALL_APPOINTMENTS, ALL_COSTUMERS, ALL_MASTERS, ALL_SERVICES } from 'src/assets/constants';
 import { BehaviorSubject, map } from 'rxjs';
 import { Master } from '../interfaces/master';
 import { Schedule } from '../interfaces/schedule';
@@ -84,23 +84,23 @@ export class DataService {
   }
 
   getServices() {
-    return this.http.get<Service[]>(SERVICE);
+    return this.http.get<Service[]>(`${ALL_SERVICES}${this.USER_ID}`);
   }
 
   getServicesListByCategory():Observable<Service[]>{
-    return this.http.get<Service[]>(SERVICE_LIST_BY_CATEGORIES);
+    return this.http.get<Service[]>(`${SERVICE_LIST_BY_CATEGORIES}${this.USER_ID}`);
   }
 
   getServicesListByName():Observable<Service[]>{
-    return this.http.get<Service[]>(SERVICE_LIST_BY_NAMES);
+    return this.http.get<Service[]>(`${SERVICE_LIST_BY_NAMES}${this.USER_ID}`);
   }
 
   getServicesFilteredByCategory(cat: string):Observable<Service[]>{
-    return this.http.get<Service[]>(`${SERVICES_FILTERED_BY_CATEGORY}${cat}`);
+    return this.http.get<Service[]>(`${SERVICES_FILTERED_BY_CATEGORY}${cat}?id=${this.USER_ID}`);
   }
 
   getServicesForAddAppointmentComponent(): Observable<Service[]>{
-    return this.http.get<Service[]>(APPOINTMENT_FILTERED);
+    return this.http.get<Service[]>(`${APPOINTMENT_FILTERED}${this.USER_ID}`);
   }
 
   getMasterById(id: number) {
@@ -116,11 +116,11 @@ export class DataService {
   }
 
   getClients() {
-    return this.http.get<Costumer[]>(COSTUMERS);
+    return this.http.get<Costumer[]>(`${ALL_COSTUMERS}${this.USER_ID}`);
   }
 
   getMasters(){
-    return this.http.get<Master[]>(MASTERS);
+    return this.http.get<Master[]>(`${ALL_MASTERS}${this.USER_ID}`);
   }
 
   getSchedules(){
@@ -140,56 +140,53 @@ export class DataService {
   }
 
   getAppointments() {
-    return this.http.get<Appointment[]>(APPOINTMENT);
+    return this.http.get<Appointment[]>(`${ALL_APPOINTMENTS}${this.USER_ID}`);
   }
 
   changeServiceById(id: number, body: Service) {
     return this.http.put(`${SERVICE}${id}`, body);
   }
   changeAppointmentById(id: number, body: any){
-    return this.http.put(`${APPOINTMENT}/${id}`,body);
+    return this.http.put(`${APPOINTMENT}${id}?adminId=${this.USER_ID}`,body);
   }
   changeMasterById(id: number, body: Master){
     return this.http.put(`${MASTERS}${id}`, body);
   }
   addNewAppointment(body: Appointment): Observable<any> {
-    return this.http.post(APPOINTMENT, body);
+    return this.http.post(`${APPOINTMENT}${this.USER_ID}`, body);
   }
   addNewService(body: Service){
     return this.http.post(SERVICE, body);
   }
   addNewCostumer(body: Costumer){
-    return this.http.post(COSTUMERS,body);
+    return this.http.post(`${COSTUMERS}${this.USER_ID}`,body);
   }
   addNewMaster(body: Master): Observable<Master>{
     return this.http.post<Master>(MASTERS, body);
   }
 
   getMasterList(): Observable<MasterList[]>{
-    return this.http.get<MasterList[]>(MASTER_LIST);
+    return this.http.get<MasterList[]>(`${MASTER_LIST}${this.USER_ID}`);
   }
   getMasterByName(name: string): Observable<Master>{
-    return this.http.get<Master>(`${MASTER_BY_NAME}${name}`);
+    return this.http.get<Master>(`${MASTER_BY_NAME}${name}?adminId=${this.USER_ID}`);
   }
 
-  loadCalendarData() {
-    return this.http.get<Appointment[]>(APPOINTMENT);
-  }
   getSericeById(id: number) {
     return this.http.get<Service>(`${SERVICE}${id}`);
   }
   getServicesTreeNode(){
-    return this.http.get<TreeNode[]>(SERVICES_TREENODE);
+    return this.http.get<TreeNode[]>(`${SERVICES_TREENODE}${this.USER_ID}`);
   }
   getCostumerById(id: number) {
     return this.http.get<Costumer>(`${COSTUMERS}${id}`);
   }
   getAppointmentById(id: number) {
-    return this.http.get<Appointment>(`${APPOINTMENT}/${id}`);
+    return this.http.get<Appointment>(`${APPOINTMENT}${id}`);
   }
 
   removeAppointment(id: number) {
-    return this.http.delete(`${APPOINTMENT}/${id}`);
+    return this.http.delete(`${APPOINTMENT}${id}?adminId=${this.USER_ID}`);
   }
 
   getCountries(): Observable<any> {

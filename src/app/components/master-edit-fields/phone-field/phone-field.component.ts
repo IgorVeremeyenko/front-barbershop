@@ -19,7 +19,8 @@ export class PhoneFieldComponent {
   master: Master = {
     id: 0,
     name: '',
-    phone: ''
+    phone: '',
+    userId: this.dataService.USER_ID
   };
 
   constructor(private dialogService: DialogService, private dataService: DataService){
